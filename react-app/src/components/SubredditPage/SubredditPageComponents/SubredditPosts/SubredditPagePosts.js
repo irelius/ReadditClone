@@ -172,7 +172,7 @@ const SubredditPagePosts = () => {
 
                 // figure out like status of each post on the front page
                 let postLikeStatus = "neutral"
-                let postLikes = Object.values(el["likes"])
+                let postLikes = Object.values(el["post_likes"])
                 postLikes.forEach(el => {
                     if (el["user_id"] === currentUser["id"] && el["like_status"] === "like") {
                         postLikeStatus = "like"
