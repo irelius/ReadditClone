@@ -1,20 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import LoginForm from './components/auth/LoginForm';
-import SignUpForm from './components/auth/SignUpForm';
-import NavBar from './components/NavBar';
-import ProtectedRoute from './components/auth/ProtectedRoute';
-import UsersList from './components/UsersList';
-import User from './components/User';
 import { authenticate } from './store/session';
+
+import LoginForm from './components/Modals/LoginModal/LoginForm';
+import SignUpForm from './components/Modals/SignUpModal/SignUpForm';
+import NavBar from './components/NavBar/NavBar';
+import UsersPage from './components/Users/UsersPage';
+import LandingPage from './components/LandingPage/LandingPage';
+
+import SubredditPage from './components/SubredditPage';
+import CreatePostPage from './components/CreatePostPage';
+import PostsIndividual from './components/PostsIndividual';
+import SearchPage from './components/SearchPage';
+import ErrorPage from './components/ErrorPage';
+import TestPage from './components/TestPage/TestPage';
+
+
+// import TestPage from './components/TestPage/TestPage';
 
 function App() {
   const [loaded, setLoaded] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    (async() => {
+    (async () => {
       await dispatch(authenticate());
       setLoaded(true);
     })();
@@ -28,21 +38,43 @@ function App() {
     <BrowserRouter>
       <NavBar />
       <Switch>
+        <Route path='/' exact={true} >
+          <LandingPage />
+        </Route>
+
+        {/*<Route path="/r/:subreddit_name/:post_id" exact={true}>
+          <PostsIndividualBackup />
+        </Route> */}
+
+        <Route path='/test' exact={true}>
+          <TestPage />
+        </Route>
+
+
         <Route path='/login' exact={true}>
           <LoginForm />
         </Route>
-        <Route path='/sign-up' exact={true}>
+        <Route path='/signup' exact={true}>
           <SignUpForm />
         </Route>
-        <ProtectedRoute path='/users' exact={true} >
-          <UsersList/>
-        </ProtectedRoute>
-        <ProtectedRoute path='/users/:userId' exact={true} >
-          <User />
-        </ProtectedRoute>
-        <ProtectedRoute path='/' exact={true} >
-          <h1>My Home Page</h1>
-        </ProtectedRoute>
+        <Route path='/users/:username' exact={true} >
+          <UsersPage />
+        </Route>
+        <Route path="/r/:subreddit_name/new" exact={true}>
+          <CreatePostPage />
+        </Route>
+        <Route path="/r/:subreddit_name/:post_id" exact={true}>
+          <PostsIndividual />
+        </Route>
+        <Route path="/r/:subreddit_name" exact={true}>
+          <SubredditPage />
+        </Route>
+        <Route path="/search/:search_param" exact={true}>
+          <SearchPage />
+        </Route>
+        <Route path="">
+          <ErrorPage />
+        </Route>
       </Switch>
     </BrowserRouter>
   );

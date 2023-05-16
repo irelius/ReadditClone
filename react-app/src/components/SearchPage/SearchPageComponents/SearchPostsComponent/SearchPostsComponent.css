@@ -1,0 +1,263 @@
+/* -----------------------------------------------------------------------*/
+
+
+/* SearchPostsComponent CSS */
+
+
+/* -----------------------------------------------------------------------*/
+/* SearchPostsComponent Main Container */
+
+#search-posts-component-main-container {
+    display: flex;
+    flex-direction: row;
+
+    justify-content: center;
+
+    border-radius: 5px;
+
+    color: white;
+    background-color: black;
+}
+
+
+/* -----------------------------------------------------------------------*/
+/* SearchPostsComponent Left Section */
+
+#search-posts-component-left-section {
+    margin-right: 30px;
+}
+
+
+/* -----------------------------------------------------------------------*/
+/* SearchPostsComponent Left Section Left Container */
+
+#search-posts-left-section-main-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    border: 1px solid rgb(52, 53, 54);
+    border-radius: 5px;
+
+    height: fit-content;
+    width: 600px;
+
+    background-color: #1A1A1B;
+}
+
+#search-posts-left-section-main-container:hover {
+    cursor: pointer;
+    border: 1px solid rgb(129, 131, 132);
+}
+
+#search-posts-left-section-left-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#search-posts-left-section-header-container {
+    display: flex;
+    flex-direction: row;
+    margin-left: 10px;
+
+    font-size: 13px;
+}
+
+#search-posts-left-section-subreddit-name {
+    margin-right: 10px;
+}
+
+#search-posts-left-section-subreddit-name:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+#search-posts-left-section-posted-by {
+    margin-right: 5px;
+    color: rgb(129, 131, 132)
+}
+
+#search-posts-left-section-poster-name {
+    color: rgb(129, 131, 132)
+}
+
+#search-posts-left-section-poster-name:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+#search-posts-left-section-body-container {
+    font-size: 16px;
+    margin-top: 3px;
+    margin-left: 10px;
+}
+
+#search-posts-left-section-footer-container {
+    display: flex;
+    flex-direction: row;
+    margin-left: 10px;
+    margin-top: 10px;
+
+    font-size: 13px;
+    color: rgb(129, 131, 132)
+}
+
+#search-posts-left-section-likes-value {
+    margin-right: 10px;
+}
+
+
+/* -----------------------------------------------------------------------*/
+/* SearchPostsComponent Left Section Right Container */
+
+#search-posts-left-section-right-container {
+    margin-right: 25px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+    width: 120px;
+
+    border-radius: 5px;
+}
+
+#search-posts-left-section-right-container * {
+    object-fit: cover;
+
+    border-radius: 5px;
+}
+
+
+/* -----------------------------------------------------------------------*/
+/* SearchPostsComponent Right Section - Communities Container*/
+
+#search-posts-right-section-communities-container {
+    margin-bottom: 15px;
+    padding: 15px;
+    padding-bottom: 0px;
+
+    height: fit-content;
+    width: 250px;
+
+    border: 1px solid rgb(52, 53, 54);
+    border-radius: 5px;
+
+    background-color: #1A1A1B;
+}
+
+#search-posts-right-section-header-container {
+    font-size: 18px;
+    margin-bottom: 20px;
+    width: 150px;
+}
+
+#search-posts-communities {
+    margin-bottom: 15px;
+}
+
+#search-posts-communities:hover {
+    cursor: pointer;
+}
+
+#search-posts-no-communities-header {
+    margin-bottom: 10px;
+}
+
+#search-posts-create-community-button {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    padding: 10px;
+}
+
+#search-posts-create-community-button * {
+    font-weight: bold;
+
+    height: 40px;
+    width: 100%;
+
+    border-radius: 30px;
+    border: 1px solid white;
+}
+
+#search-posts-create-community-button *:hover {
+    cursor: pointer;
+}
+
+
+/* -----------------------------------------------------------------------*/
+/* SearchPostsComponent Right Section - People Container*/
+
+#search-posts-right-section-peoples-container {
+    padding: 15px;
+
+    height: fit-content;
+    width: 250px;
+
+    border: 1px solid rgb(52, 53, 54);
+    border-radius: 5px;
+
+    background-color: #1A1A1B;
+}
+
+#search-posts-people-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    margin-top: 10px;
+}
+
+#search-posts-people-container:hover {
+    cursor: pointer;
+}
+
+#search-posts-people-profile-image {
+    margin-right: 10px;
+    border-radius: 90%;
+}
+
+#search-posts-people-username {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+#search-posts-people-username:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+
+/* -----------------------------------------------------------------------*/
+/* Search Posts No Results */
+
+#search-posts-left-section-no-results-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid rgb(52, 53, 54);
+    border-radius: 5px;
+
+    height: 100px;
+    width: 600px;
+
+    background-color: #1A1A1B;
+}
+
+
+#search-posts-left-section-no-posts-header {
+    width: 500px;
+    font-size: larger;
+    word-break: break-all;
+}
+
+#search-posts-left-section-no-posts-subtitle {
+    margin-top: 10px;
+    font-size: small;
+    color: rgb(129, 131, 132)
+}

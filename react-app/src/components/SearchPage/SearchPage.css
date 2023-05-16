@@ -1,0 +1,58 @@
+/* -----------------------------------------------------------------------*/
+
+
+/* Search Page CSS */
+
+
+/* -----------------------------------------------------------------------*/
+/* SearchPage Main Container */
+
+#search-page-main-container {
+    margin-top: 75px;
+    background-color: #1A1A1B;
+}
+
+
+/* -----------------------------------------------------------------------*/
+/* SearchPage Tabs Container */
+
+#search-page-tabs-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    font-weight: bold;
+    background-color: black;
+    color: white;
+}
+
+#search-page-tabs-container * {
+    margin-bottom: 30px;
+    margin-right: 40px;
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+
+    border-radius: 30px;
+}
+
+#search-page-tabs-container *:hover {
+    cursor: pointer;
+    background-color: rgb(47, 47, 49);
+}
+
+#search-page-posts-selected-posts {
+    background-color: rgb(39, 39, 41);
+}
+
+#search-page-comments-selected-comments {
+    background-color: rgb(39, 39, 41);
+}
+
+#search-page-communities-selected-communities {
+    background-color: rgb(39, 39, 41);
+}
+
+#search-page-people-selected-people {
+    background-color: rgb(39, 39, 41);
+}
