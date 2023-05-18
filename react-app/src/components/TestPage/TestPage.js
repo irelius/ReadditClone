@@ -29,8 +29,6 @@ const TestPage = () => {
     const currentComments = Object.values(useSelector(commentActions.loadAllComments))
     const commentLikes = Object.values(useSelector(likeActions.loadLikes))[0]
 
-    console.log('booba', commentLikes)
-
     return state && currentComments.length > 0 ? (
         <div id="testpage">
             {TestOne(dispatch, useState)}

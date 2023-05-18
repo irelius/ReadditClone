@@ -10,6 +10,8 @@ import * as likeActions from "../../../../store/like"
 import redirectToUserPage from "../../../HelperFunctions/redirectToUserPage";
 // import IndividualComment from "./IndividualComment";
 import IndividualComment from "./IndividualComment/IndividualComment"
+import { Modal } from "../../../../context/Modal";
+import LogInOrSignUpModal from "../../../Modals/LogInOrSignUpModal/LogInOrSignUpModal";
 
 const PostComments = ({ currentPost, currentSubreddit, allUsers, currentUser, post_id, load }) => {
     const dispatch = useDispatch()
@@ -19,7 +21,7 @@ const PostComments = ({ currentPost, currentSubreddit, allUsers, currentUser, po
     const [commentBody, setCommentBody] = useState("")
     const [newCommentBody, setNewCommentBody] = useState(null)
     const [loadEditCommentComponent, setLoadEditCommentComponent] = useState(false)
-    // const [askUserToLogin, setAskUserToLogin] = useState(false)
+    const [askUserToLogin, setAskUserToLogin] = useState(false)
 
 
     useEffect(() => {
@@ -33,10 +35,7 @@ const PostComments = ({ currentPost, currentSubreddit, allUsers, currentUser, po
     }, [dispatch])
 
     const currentComments = Object.values(useSelector(commentActions.loadAllComments))
-    const commentLikes = Object.values(useSelector(likeActions.loadLikes))[0]
-
-
-    console.log('booba', '\n', commentLikes, '\n', currentComments)
+    // const commentLikes = Object.values(useSelector(likeActions.loadLikes))[0]
 
 
     // const CommentsComponent = () => {
@@ -67,6 +66,7 @@ const PostComments = ({ currentPost, currentSubreddit, allUsers, currentUser, po
 
         setLoadEditCommentComponent(false)
     }
+
     // Comment Removal/Deletion
     const handleCommentDelete = (el) => {
         const confirmDelete = prompt(
@@ -86,6 +86,14 @@ const PostComments = ({ currentPost, currentSubreddit, allUsers, currentUser, po
             dispatch(commentActions.deleteCommentThunk(el))
         }
     }
+
+    const likeHandler = async () => {
+        let likeInfo = {
+            like_status: "like"
+        }
+    }
+
+
     // -------------------------------------------------------------------------------------------------- //
 
 
@@ -117,39 +125,44 @@ const PostComments = ({ currentPost, currentSubreddit, allUsers, currentUser, po
         )
     }
 
-    const loadCommentFooter = (el) => {
-        console.log('booba', el)
+    const loadCommentFooter = (el, initialCommentLikeTotal, initialLikeStatus) => {
+
+
         return (
             currentUser === -1 ? (
                 <div id="comments-remove-no-user"></div>
             ) : (
 
                 <div id="comment-footer-main-container">
-                    {/* TO DO: Implement a comment edit function */}
-                    <aside onClick={() => setLoadEditCommentComponent(true)} id="comments-edit-container">
-                    {
-                        currentUser["id"] === el["user_id"] ? (
-                            <div id="comments-footer-create-comment">
-                                <i className="fa-solid fa-pen" />
-                                <aside>
-                                    Edit
-                                </aside>
-                            </div>
-                        ) : (
-                            <div></div>
-                        )
-                    }
-                    </aside>
                     <aside id="comment-footer-vote-container">
-                        <aside>
+                        <aside onClick={(e) => {
+                            e.preventDefault()
+                            e.stopPropagation()
+                            // likeHandler
+                        }}>
                             <i className="fa-solid fa-up-long fa-lg" />
                         </aside>
-                        <aside>
-                            Vote
-                        </aside>
+
+                        {initialCommentLikeTotal}
+
                         <aside>
                             <i className="fa-solid fa-down-long fa-lg" />
                         </aside>
+                    </aside>
+                    {/* TO DO: Implement a comment edit function */}
+                    <aside onClick={() => setLoadEditCommentComponent(true)} id="comments-edit-container">
+                        {
+                            currentUser["id"] === el["user_id"] ? (
+                                <div id="comments-footer-create-comment">
+                                    <i className="fa-solid fa-pen" />
+                                    <aside>
+                                        Edit
+                                    </aside>
+                                </div>
+                            ) : (
+                                <div></div>
+                            )
+                        }
                     </aside>
                     <aside id="comments-footer-delete-container">
                         {currentUser["id"] === el["user_id"] ? (
@@ -176,6 +189,11 @@ const PostComments = ({ currentPost, currentSubreddit, allUsers, currentUser, po
     const CommentsComponent = () => {
         if (currentComments.length > 0) {
             const commentsToLoad = Object.values(currentComments[0])
+            const commentLikeReference = currentComments[0]
+
+
+
+            console.log('booba1', commentLikeReference)
 
             return (
                 Array.isArray(commentsToLoad) && commentsToLoad.map((el, i) => {
@@ -183,6 +201,12 @@ const PostComments = ({ currentPost, currentSubreddit, allUsers, currentUser, po
                     if (allUsers[1]) {
                         commentPoster = allUsers[1][el["user_id"]]
                     }
+
+                    let initialCommentLikes = currentComments[0][el.id].comment_likes
+                    let initialCommentDislikes = currentComments[0][el.id].comment_dislikes
+                    let initialCommentLikeTotal = Object.values(initialCommentLikes).length - Object.values(initialCommentDislikes).length
+                    let initialLikeStatus;
+
 
                     let commentDate = el["created_at"].split(" ")
                     commentDate = commentDate[2] + " " + commentDate[1] + ", " + commentDate[3]
@@ -218,7 +242,7 @@ const PostComments = ({ currentPost, currentSubreddit, allUsers, currentUser, po
                                 )}
                             </section>
                             <section id="comments-section-footer">
-                                {loadCommentFooter(el)}
+                                {loadCommentFooter(el, initialCommentLikeTotal)}
                             </section>
                         </div>
                     )

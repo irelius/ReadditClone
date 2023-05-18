@@ -52,8 +52,6 @@ const PostsAll = () => {
     const allUsers = Object.values(useSelector(sessionActions.loadAllUsers))
     const currentUserLikes = Object.values(useSelector(likeActions.loadLikes))
 
-    // console.log('booba', currentUserLikes)
-
     // Like/Dislike Handling
     const initialTempPostsLiked = () => {
         setInitialPostLikeStatus(true)

@@ -31,7 +31,9 @@ class Comment(db.Model):
             "subreddit_id": self.subreddit_id,
             "reply_to_id": self.reply_to_id,
             "body": self.body,
-            "comment_likes": {comment_likes.id: comment_likes.to_dict() for comment_likes in self.comment_likes},
+            # "comment_likes": {comment_likes.id: comment_likes.to_dict() for comment_likes in self.comment_likes},
+            "comment_likes": {comment_likes.id: comment_likes.to_dict() for comment_likes in self.comment_likes if comment_likes.like_status == "like"},
+            "comment_dislikes": {comment_likes.id: comment_likes.to_dict() for comment_likes in self.comment_likes if comment_likes.like_status == "dislike"},
             'created_at': self.created_at,
             'updated_at': self.updated_at
         }

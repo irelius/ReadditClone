@@ -1,6 +1,6 @@
 from flask import Blueprint
 from flask_login import current_user, login_required
-from app.models import db, CommentLike, Comment
+from app.models import db, CommentLike, Comment, Post
 from app.forms import LikeForm
 
 comment_like_routes = Blueprint("comment_likes", __name__)
@@ -74,6 +74,27 @@ def likes_specific_comment(comment_id):
     return return_likes(comment_id, likes, dislikes)
 
 
+# Get all likes and dislikes made to comments for a specific post
+@comment_like_routes.route('/posts/<int:post_id>')
+def likes_specific_post(post_id):
+    comments = Comment.query.filter(Comment.post_id == post_id).all()
+
+    return(comments[0].to_dict())
+
+    # obj = {}
+    # for x in comments:
+
+
+    # return {
+    #     id: {
+    #         "likes_total": likes_total,
+    #         "likes": {like.id: like.to_dict() for like in likes},
+    #         "dislikes": {dislike.id: dislike.to_dict() for dislike in dislikes}
+    #     }
+    # }
+
+    # likes = CommentLi
+
 
 # Create a new like on a comment
 @comment_like_routes.route("/comments/<int:comment_id>", methods=["POST"])
@@ -95,23 +116,6 @@ def likes_create_new_to_comment(comment_id):
     db.session.commit()
 
     return new_like.to_dict()
-
-
-# Update specific post like status to neutral
-@comment_like_routes.route("/posts/<int:post_id>", methods=["PUT"])
-@login_required
-def likes_update_to_post(post_id):
-    current_user_id = int(current_user.get_id())
-    like_to_edit_post = CommentLike.query.filter((CommentLike.post_id == int(post_id)), (CommentLike.user_id == current_user_id)).all()[0]
-
-    if current_user_id == None:
-        return {"errors": "You must be logged in before liking/disliking a post"}, 401
-
-    like_to_edit_post.like_status = "neutral"
-
-    db.session.commit()
-
-    return like_to_edit_post.to_dict()
 
 
 # Update specific comment like status to neutral
