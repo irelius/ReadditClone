@@ -49,13 +49,7 @@ def likes_comments_per_post(post_id):
 
     comment = Comment.query.filter(Comment.post_id == post_id).all()
 
-    print('booba', comment[0].to_dict())
-    # likes = PostLike.query.filter(PostLike.like_status == "like").filter(PostLike.comment_id != None).all()
-    # dislikes = PostLike.query.filter(PostLike.like_status == "dislike").filter(PostLike.comment_id != None).all()
-
-    # return 'booba'
-
-    return return_likes(current_user_id, likes, dislikes)
+    # return return_likes(current_user_id, likes, dislikes)
 
 
 # Get all likes and dislikes made by current user to posts

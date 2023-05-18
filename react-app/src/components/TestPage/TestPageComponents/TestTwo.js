@@ -8,8 +8,6 @@ import * as likeActions from "../../../store/like"
 
 const TestTwo = (el) => {
     // const commentsToLoad = Object.values(currentComments[0])
-    console.log('booba asdf', el)
-
     const dispatch = useDispatch()
 
     useEffect(() => {

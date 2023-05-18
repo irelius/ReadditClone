@@ -18,7 +18,6 @@ const IndividualComment = (comment) => {
     // }, [dispatch])
 
     // const commentLikes = Object.values(likeActions.loadLikes())
-    // console.log('booba component', commentLikes)
 
 
     return (

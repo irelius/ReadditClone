@@ -139,7 +139,7 @@ export const loadAllLikesCommentThunk = () => async (dispatch) => {
 // }
 
 
-// Thunk action to load likes from current user
+// Thunk action to load post likes from current user
 export const loadUserPostLikesThunk = () => async (dispatch) => {
     const res = await fetch(`/api/post_likes/users/current`)
 

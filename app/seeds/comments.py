@@ -63,7 +63,7 @@ def seed_comments():
     )
     comment_ten = Comment(
         user_id = 2,
-        post_id = 4,
+        post_id = 5,
         subreddit_id = 4,
         body = "tax season is coming up"
     )
