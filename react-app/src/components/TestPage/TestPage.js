@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import * as commentActions from "../../store/comment"
-import * as likeActions from "../../store/like"
+import * as postLikeActions from "../../store/postLike"
 
 import TestOne from "./TestPageComponents/TestOne";
 
@@ -18,7 +18,7 @@ const TestPage = () => {
 
     useEffect(() => {
         dispatch(commentActions.loadPostCommentsThunk(post_id))
-        dispatch(likeActions.loadLikesPostThunk(post_id))
+        dispatch(postLikeActions.loadLikesPostThunk(post_id))
         setState(true)
 
         return (() => {
@@ -27,7 +27,7 @@ const TestPage = () => {
     }, [dispatch])
 
     const currentComments = Object.values(useSelector(commentActions.loadAllComments))
-    const commentLikes = Object.values(useSelector(likeActions.loadLikes))[0]
+    const commentLikes = Object.values(useSelector(postLikeActions.loadPostLikes))[0]
 
     return state && currentComments.length > 0 ? (
         <div id="testpage">

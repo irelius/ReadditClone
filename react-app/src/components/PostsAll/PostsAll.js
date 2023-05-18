@@ -8,7 +8,7 @@ import { Modal } from "../../context/Modal";
 import * as postActions from "../../store/post"
 import * as subredditActions from "../../store/subreddit"
 import * as sessionActions from "../../store/session"
-import * as likeActions from "../../store/like"
+import * as postLikeActions from "../../store/postLike"
 
 import redirectToPostPage from "../HelperFunctions/redirectToPostPage";
 import redirectToSubredditPage from "../HelperFunctions/redirectToSubredditPage";
@@ -35,22 +35,22 @@ const PostsAll = () => {
         dispatch(sessionActions.loadAllUserThunk())
         dispatch(subredditActions.loadSubredditsThunk())
         dispatch(postActions.loadPostsThunk())
-        dispatch(likeActions.loadUserPostLikesThunk())
+        dispatch(postLikeActions.loadUserPostLikesThunk())
 
         setLoad(true)
 
         return (() => {
             dispatch(subredditActions.clearSubreddit())
             dispatch(postActions.clearPost())
-            dispatch(likeActions.clearLikes())
+            dispatch(postLikeActions.clearPostLikes())
         })
     }, [dispatch])
-
 
     const allPosts = Object.values(useSelector(postActions.loadAllPosts))
     const allSubreddits = Object.values(useSelector(subredditActions.loadAllSubreddit))
     const allUsers = Object.values(useSelector(sessionActions.loadAllUsers))
-    const currentUserLikes = Object.values(useSelector(likeActions.loadLikes))
+    const currentUserLikes = Object.values(useSelector(postLikeActions.loadPostLikes))
+
 
     // Like/Dislike Handling
     const initialTempPostsLiked = () => {
@@ -95,11 +95,11 @@ const PostsAll = () => {
         let updateValue = {}
 
         if (postLikeStatus === "like") {
-            dispatch(likeActions.deleteLikePostThunk(post["id"]))
+            dispatch(postLikeActions.deleteLikePostThunk(post["id"]))
             updateValue[post["id"]] = "neutral"
         } else {
-            dispatch(likeActions.deleteLikePostThunk(post["id"]))
-            dispatch(likeActions.createLikePostThunk(likeInfo, post["id"]))
+            dispatch(postLikeActions.deleteLikePostThunk(post["id"]))
+            dispatch(postLikeActions.createLikePostThunk(likeInfo, post["id"]))
             updateValue[post["id"]] = "like"
         }
 
@@ -118,11 +118,11 @@ const PostsAll = () => {
         let updateValue = {}
 
         if (postLikeStatus === "dislike") {
-            dispatch(likeActions.deleteLikePostThunk(post["id"]))
+            dispatch(postLikeActions.deleteLikePostThunk(post["id"]))
             updateValue[post["id"]] = "neutral"
         } else {
-            dispatch(likeActions.deleteLikePostThunk(post["id"]))
-            dispatch(likeActions.createLikePostThunk(likeInfo, post["id"]))
+            dispatch(postLikeActions.deleteLikePostThunk(post["id"]))
+            dispatch(postLikeActions.createLikePostThunk(likeInfo, post["id"]))
             updateValue[post["id"]] = "dislike"
         }
 

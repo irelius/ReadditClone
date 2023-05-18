@@ -1,14 +1,14 @@
 // ------------------------------- ACTIONS ------------------------------- //
-const LOAD_LIKES = '/likes/LOAD_LIKES'
-const CREATE_LIKES = '/likes/CREATE_LIKES'
-// const PUT_LIKES = '/likes/PUT_LIKES'
-const DELETE_LIKES = '/likes/DELETE_LIKES'
-const CLEAR_LIKES = "/likes/CLEAR_LIKES"
+const LOAD_POST_LIKES = '/likes/LOAD_POST_LIKES'
+const CREATE_POST_LIKES = '/likes/CREATE_POST_LIKES'
+// const PUT_POST_LIKES = '/likes/PUT_POST_LIKES'
+const DELETE_POST_LIKES = '/likes/DELETE_POST_LIKES'
+const CLEAR_POST_LIKES = "/likes/CLEAR_POST_LIKES"
 
 // Get likes for a post
 export const loadLikesPost = (likes) => {
     return {
-        type: LOAD_LIKES,
+        type: LOAD_POST_LIKES,
         likes
     }
 }
@@ -16,7 +16,7 @@ export const loadLikesPost = (likes) => {
 // Get likes for a comment
 export const loadLikesComment = (likes) => {
     return {
-        type: LOAD_LIKES,
+        type: LOAD_POST_LIKES,
         likes
     }
 }
@@ -24,7 +24,7 @@ export const loadLikesComment = (likes) => {
 // Get likes from user
 export const loadUserLikes = (likes) => {
     return {
-        type: LOAD_LIKES,
+        type: LOAD_POST_LIKES,
         likes
     }
 }
@@ -32,7 +32,7 @@ export const loadUserLikes = (likes) => {
 // create likes/dislikes for a post
 export const createLikePost = (likes) => {
     return {
-        type: CREATE_LIKES,
+        type: CREATE_POST_LIKES,
         likes
     }
 }
@@ -40,7 +40,7 @@ export const createLikePost = (likes) => {
 // create likes for comment
 export const createLikeComment = (commentId) => {
     return {
-        type: CREATE_LIKES,
+        type: CREATE_POST_LIKES,
         commentId
     }
 }
@@ -48,7 +48,7 @@ export const createLikeComment = (commentId) => {
 // // edit like for a post
 // export const putLikesPost = (postId) => {
 //     return {
-//         type: PUT_LIKES,
+//         type: PUT_POST_LIKES,
 //         postId
 //     }
 // }
@@ -56,7 +56,7 @@ export const createLikeComment = (commentId) => {
 // // edit like for a comment
 // export const putLikesComment = (commentId) => {
 //     return {
-//         type: PUT_LIKES,
+//         type: PUT_POST_LIKES,
 //         commentId
 //     }
 // }
@@ -64,14 +64,14 @@ export const createLikeComment = (commentId) => {
 // delete like for a post
 export const deleteLikePost = (postId) => {
     return {
-        type: DELETE_LIKES,
+        type: DELETE_POST_LIKES,
         postId
     }
 }
 
-export const clearLikes = () => {
+export const clearPostLikes = () => {
     return {
-        type: CLEAR_LIKES,
+        type: CLEAR_POST_LIKES,
     }
 }
 
@@ -220,28 +220,27 @@ export const deleteLikePostThunk = (postId) => async (dispatch) => {
 
 // ------------------------- SELECTOR FUNCTIONS ------------------------- //
 
-export const loadLikes = (state) => state.likes
-export const loadPostLikes = (state) => state.likes;
+export const loadPostLikes = (state) => state.postLikes
 
 
 // ------------------------------ REDUCERS ------------------------------ //
 
 const initialState = {};
 
-const likesReducer = (state = initialState, action) => {
+const postLikesReducer = (state = initialState, action) => {
     const newState = { ...state }
 
     switch (action.type) {
-        case LOAD_LIKES:
+        case LOAD_POST_LIKES:
             return Object.assign({}, newState, action.likes);
 
-        case CREATE_LIKES:
-            return Object.assign({}, newState, action.likes);
+        case CREATE_POST_LIKES:
+            return Object.assign({}, newState, action.postLikes);
 
-        case DELETE_LIKES:
+        case DELETE_POST_LIKES:
             return Object.assign({}, newState, action.postId);
 
-        case CLEAR_LIKES:
+        case CLEAR_POST_LIKES:
             return initialState
 
         default:
@@ -250,4 +249,4 @@ const likesReducer = (state = initialState, action) => {
 }
 
 
-export default likesReducer
+export default postLikesReducer

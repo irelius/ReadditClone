@@ -4,21 +4,21 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import * as commentActions from "../../../store/comment"
-import * as likeActions from "../../../store/like"
+import * as postLikeActions from "../../../store/postLike"
 
 const TestTwo = (el) => {
     // const commentsToLoad = Object.values(currentComments[0])
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(likeActions.loadLikesCommentThunk(el.id))
+        dispatch(postLikeActions.loadLikesCommentThunk(el.id))
 
         return (
-            likeActions.clearLikes
+            postLikeActions.clearPostLikes()
         )
     }, [dispatch])
 
-    const commentLikes = Object.values(likeActions.loadLikes)
+    const commentLikes = Object.values(postLikeActions.loadPostLikes)
 
     return (
         <div className="test">

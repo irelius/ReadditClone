@@ -6,7 +6,7 @@ import { useHistory } from "react-router-dom"
 import { Modal } from "../../../../context/Modal";
 
 import * as postActions from "../../../../store/post"
-import * as likeActions from "../../../../store/like"
+import * as postLikeActions from "../../../../store/postLike"
 
 import ErrorPage from "../../../ErrorPage";
 import redirectToUserPage from "../../../HelperFunctions/redirectToUserPage";
@@ -107,15 +107,15 @@ const PostBody = ({ currentPostLikes, currentPost, currentSubreddit, allUsers, c
         }
 
         if (postLikeStatus === "like") {
-            dispatch(likeActions.deleteLikePostThunk(postToLoad.id)).then(() => (
-                dispatch(likeActions.loadLikesPostThunk(postToLoad.id))
+            dispatch(postLikeActions.deleteLikePostThunk(postToLoad.id)).then(() => (
+                dispatch(postLikeActions.loadLikesPostThunk(postToLoad.id))
             ))
 
             setPostLikeStatus("neutral")
         } else {
-            dispatch(likeActions.deleteLikePostThunk(postToLoad.id))
-            dispatch(likeActions.createLikePostThunk(likeInfo, postToLoad.id)).then(() => (
-                dispatch(likeActions.loadLikesPostThunk(postToLoad.id))
+            dispatch(postLikeActions.deleteLikePostThunk(postToLoad.id))
+            dispatch(postLikeActions.createLikePostThunk(likeInfo, postToLoad.id)).then(() => (
+                dispatch(postLikeActions.loadLikesPostThunk(postToLoad.id))
             ))
 
             setPostLikeStatus("like")
@@ -129,15 +129,15 @@ const PostBody = ({ currentPostLikes, currentPost, currentSubreddit, allUsers, c
         }
 
         if (postLikeStatus === "dislike") {
-            dispatch(likeActions.deleteLikePostThunk(postToLoad.id)).then(() => (
-                dispatch(likeActions.loadLikesPostThunk(postToLoad.id))
+            dispatch(postLikeActions.deleteLikePostThunk(postToLoad.id)).then(() => (
+                dispatch(postLikeActions.loadLikesPostThunk(postToLoad.id))
             ))
 
             setPostLikeStatus("neutral")
         } else {
-            dispatch(likeActions.deleteLikePostThunk(postToLoad.id)).then(() => {
-                dispatch(likeActions.createDislikePostThunk(likeInfo, postToLoad.id)).then(() => (
-                    dispatch(likeActions.loadLikesPostThunk(postToLoad.id))
+            dispatch(postLikeActions.deleteLikePostThunk(postToLoad.id)).then(() => {
+                dispatch(postLikeActions.createDislikePostThunk(likeInfo, postToLoad.id)).then(() => (
+                    dispatch(postLikeActions.loadLikesPostThunk(postToLoad.id))
                 ))
             })
 
@@ -325,7 +325,6 @@ const PostBody = ({ currentPostLikes, currentPost, currentSubreddit, allUsers, c
             </div>
         )
     }
-
 
     return currentSubreddit.length > 0 && allUsers.length > 1 && currentPostLikes.length > 0 && load ? (
         <div id="post-page-background-1">

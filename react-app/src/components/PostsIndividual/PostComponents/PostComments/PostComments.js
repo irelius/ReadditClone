@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom"
 
 import * as commentActions from "../../../../store/comment"
-import * as likeActions from "../../../../store/like"
+import * as commentLikeActions from "../../../../store/commentLike"
 
 import redirectToUserPage from "../../../HelperFunctions/redirectToUserPage";
 // import IndividualComment from "./IndividualComment";
@@ -22,20 +22,28 @@ const PostComments = ({ currentPost, currentSubreddit, allUsers, currentUser, po
     const [newCommentBody, setNewCommentBody] = useState(null)
     const [loadEditCommentComponent, setLoadEditCommentComponent] = useState(false)
     const [askUserToLogin, setAskUserToLogin] = useState(false)
+    const [commentLikeStatus, setCommentLikeStatus] = useState({})
 
 
     useEffect(() => {
         dispatch(commentActions.loadPostCommentsThunk(post_id))
-        dispatch(likeActions.loadLikesPostThunk(post_id))
+        // dispatch(commentLikeActions.loadUserCommentLikesThunk())
 
         return (() => {
             dispatch(commentActions.clearComment())
-            dispatch(likeActions.clearLikes())
+            dispatch(commentLikeActions.clearLikes())
         })
     }, [dispatch])
 
     const currentComments = Object.values(useSelector(commentActions.loadAllComments))
-    // const commentLikes = Object.values(useSelector(likeActions.loadLikes))[0]
+    const currentLikes = Object.values(useSelector(commentLikeActions.loadCommentLikes))
+    let currentUserLikes;
+    let currentUserDislikes;
+
+    if (currentLikes.length > 0) {
+        currentUserLikes = currentLikes[0]['likes']
+        currentUserDislikes = currentLikes[0]['dislikes']
+    }
 
 
     // const CommentsComponent = () => {
@@ -134,7 +142,7 @@ const PostComments = ({ currentPost, currentSubreddit, allUsers, currentUser, po
             ) : (
 
                 <div id="comment-footer-main-container">
-                    <aside id="comment-footer-vote-container">
+                    {/* <aside id="comment-footer-vote-container">
                         <aside onClick={(e) => {
                             e.preventDefault()
                             e.stopPropagation()
@@ -148,6 +156,9 @@ const PostComments = ({ currentPost, currentSubreddit, allUsers, currentUser, po
                         <aside>
                             <i className="fa-solid fa-down-long fa-lg" />
                         </aside>
+                    </aside> */}
+                    <aside>
+                        {/* {IndividualComment({commentLikeStatus, setCommentLikeStatus})} */}
                     </aside>
                     {/* TO DO: Implement a comment edit function */}
                     <aside onClick={() => setLoadEditCommentComponent(true)} id="comments-edit-container">
@@ -189,12 +200,6 @@ const PostComments = ({ currentPost, currentSubreddit, allUsers, currentUser, po
     const CommentsComponent = () => {
         if (currentComments.length > 0) {
             const commentsToLoad = Object.values(currentComments[0])
-            const commentLikeReference = currentComments[0]
-
-
-
-            console.log('booba1', commentLikeReference)
-
             return (
                 Array.isArray(commentsToLoad) && commentsToLoad.map((el, i) => {
                     let commentPoster = -1;
@@ -205,7 +210,7 @@ const PostComments = ({ currentPost, currentSubreddit, allUsers, currentUser, po
                     let initialCommentLikes = currentComments[0][el.id].comment_likes
                     let initialCommentDislikes = currentComments[0][el.id].comment_dislikes
                     let initialCommentLikeTotal = Object.values(initialCommentLikes).length - Object.values(initialCommentDislikes).length
-                    let initialLikeStatus;
+                    let initialLikeStatus = "neutral";
 
 
                     let commentDate = el["created_at"].split(" ")

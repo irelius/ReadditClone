@@ -3,26 +3,39 @@ import "./IndividualComment.css"
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
-import * as likeActions from "../../../../../store/like"
+import * as postLikeActions from "../../../../../store/postLike"
 
 
 
-const IndividualComment = (comment) => {
+const IndividualComment = ({commentLikeStatus, setCommentLikeStatus}) => {
     // const commentId = comment.id
 
     const dispatch = useDispatch()
-    const [commentLikeTotal, setCommentLikeTotal] = useState(0)
 
-    // useEffect(() => {
-    //     dispatch(likeActions.loadLikesCommentThunk(commentId))
-    // }, [dispatch])
 
-    // const commentLikes = Object.values(likeActions.loadLikes())
+    {/* <aside id="comment-footer-vote-container">
+        <aside onClick={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            // likeHandler
+        }}>
+            <i className="fa-solid fa-up-long fa-lg" />
+        </aside>
+
+        {initialCommentLikeTotal}
+
+        <aside>
+            <i className="fa-solid fa-down-long fa-lg" />
+        </aside>
+    </aside> */}
 
 
     return (
-        <div>
-            booba
+        <div onClick={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+        }}>
+            individual comment
         </div>
     )
 }

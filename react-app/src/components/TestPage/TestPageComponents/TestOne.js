@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import * as userActions from "../../../store/session"
 
 import * as commentActions from "../../../store/comment"
-import * as likeActions from "../../../store/like"
+import * as postLikeActions from "../../../store/postLike"
 
 import TestTwo from "./TestTwo";
 
@@ -13,11 +13,11 @@ const TestOne = (dispatch) => {
 
     // const [test, setTest] = useState(true)
 
-    // const testDispatch = dispatch(likeActions.loadLikesCommentThunk(testId))
+    // const testDispatch = dispatch(postLikeActions.loadLikesCommentThunk(testId))
 
     return (
         <div>
-            booba
+            test one
         </div>
     )
 
@@ -31,22 +31,20 @@ const TestOne = (dispatch) => {
 
     // useEffect(() => {
     //     dispatch(commentActions.loadPostCommentsThunk(post_id))
-    //     dispatch(likeActions.loadAllCommentLikesPerPostThunk(post_id))
+    //     dispatch(postLikeActions.loadAllCommentLikesPerPostThunk(post_id))
 
     //     setState(true)
 
     //     return (() => {
     //         dispatch(commentActions.clearComment())
-    //         dispatch(likeActions.clearLikes())
+    //         dispatch(postLikeActions.clearLikes())
     //     })
     // }, [dispatch])
 
     // const users = Object.values(useSelector(state => state.session))
     // const currentComments = Object.values(useSelector(commentActions.loadAllComments))
-    // const commentLikes = Object.values(useSelector(likeActions.loadLikes))[0]
+    // const commentLikes = Object.values(useSelector(postLikeActions.loadPostLikes))[0]
 
-
-    // // console.log('booba', '\n', commentLikes, '\n', currentComments)
 
 
     // const testComponent = () => {
@@ -55,7 +53,7 @@ const TestOne = (dispatch) => {
     //         currentComments.map((el, i) => {
     //             return (
     //                 <div>
-    //                     booba
+    //                     test one component
     //                 </div>
     //             )
     //         })

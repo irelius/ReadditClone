@@ -12,7 +12,7 @@ import PostCreateComment from "./PostComponents/PostCreateComment/PostCreateComm
 import * as subredditActions from "../../store/subreddit"
 import * as postActions from "../../store/post"
 import * as userActions from "../../store/session"
-import * as likeActions from "../../store/like"
+import * as postLikeActions from "../../store/postLike"
 import * as commentActions from "../../store/comment"
 
 
@@ -29,23 +29,24 @@ const PostsIndividual = () => {
         dispatch(subredditActions.loadCurrentSubredditThunk(subreddit_name))
         dispatch(postActions.loadPostThunk(post_id))
         // dispatch(commentActions.loadPostCommentsThunk(post_id))
-        dispatch(likeActions.loadLikesPostThunk(post_id))
+        dispatch(postLikeActions.loadLikesPostThunk(post_id))
         setLoad(true)
 
         return (() => {
             dispatch(subredditActions.clearSubreddit())
             dispatch(postActions.clearPost())
             dispatch(commentActions.clearComment())
-            dispatch(likeActions.clearLikes())
+            dispatch(postLikeActions.clearPostLikes())
         })
     }, [dispatch])
 
-    const currentPostLikes = Object.values(useSelector(likeActions.loadPostLikes))
     const currentPost = Object.values(useSelector(postActions.loadAllPosts))
+    const currentPostLikes = Object.values(useSelector(postLikeActions.loadPostLikes))
     const currentSubreddit = Object.values(useSelector(subredditActions.loadAllSubreddit))
     const allUsers = Object.values(useSelector(state => state.session))
     // const currentComments = Object.values(useSelector(commentActions.loadAllComments))
     const currentUser = allUsers[0] || -1
+
 
     return (
         <div id="post-main-container">

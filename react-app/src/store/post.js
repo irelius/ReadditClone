@@ -166,7 +166,7 @@ export const deletePostThunk = (post) => async (dispatch) => {
 
 // ------------------------- SELECTOR FUNCTIONS ------------------------- //
 
-export const loadAllPosts = (state) => state.post;
+export const loadAllPosts = (state) => state.post
 
 
 

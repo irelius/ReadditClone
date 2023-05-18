@@ -1,5 +1,5 @@
 import * as sessionActions from "../../store/session"
-import * as likeActions from "../../store/like"
+import * as postLikeActions from "../../store/postLike"
 
 const postLikeHandler = (post, dispatch, postLikeStatus, e) => {
     e.preventDefault()
@@ -10,10 +10,10 @@ const postLikeHandler = (post, dispatch, postLikeStatus, e) => {
     }
 
     if (postLikeStatus === "like") {
-        dispatch(likeActions.deleteLikePostThunk(post["id"]))
+        dispatch(postLikeActions.deleteLikePostThunk(post["id"]))
     } else {
-        dispatch(likeActions.deleteLikePost(post["id"])).then(() => {
-            dispatch(likeActions.createLikePostThunk(likeInfo, post["id"]))
+        dispatch(postLikeActions.deleteLikePost(post["id"])).then(() => {
+            dispatch(postLikeActions.createLikePostThunk(likeInfo, post["id"]))
         })
     }
 
