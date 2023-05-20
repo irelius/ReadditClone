@@ -13,16 +13,8 @@ export const loadLikesPost = (likes) => {
     }
 }
 
-// Get likes for a comment
-export const loadLikesComment = (likes) => {
-    return {
-        type: LOAD_POST_LIKES,
-        likes
-    }
-}
-
 // Get likes from user
-export const loadUserLikes = (likes) => {
+export const loadUserPostLikes = (likes) => {
     return {
         type: LOAD_POST_LIKES,
         likes
@@ -37,13 +29,6 @@ export const createLikePost = (likes) => {
     }
 }
 
-// create likes for comment
-export const createLikeComment = (commentId) => {
-    return {
-        type: CREATE_POST_LIKES,
-        commentId
-    }
-}
 
 // // edit like for a post
 // export const putLikesPost = (postId) => {
@@ -91,33 +76,9 @@ export const loadLikesPostThunk = (postId) => async (dispatch) => {
 }
 
 
-// Thunk action to load likes for a comment
-export const loadLikesCommentThunk = (commentId) => async (dispatch) => {
-    const res = await fetch(`/api/comment_likes/comments/${commentId}`)
-
-    if (res.ok) {
-        const likes = await res.json()
-        dispatch(loadLikesComment(likes))
-        return likes
-    }
-}
-
-
 // Thunk action to load all likes made to posts
 export const loadAllLikesPostThunk = () => async (dispatch) => {
     const res = await fetch(`/api/post_likes/`)
-
-    if (res.ok) {
-        const likes = await res.json()
-        dispatch(loadLikesPost(likes))
-        return likes
-    }
-}
-
-
-// Thunk action to load all likes made to comments
-export const loadAllLikesCommentThunk = () => async (dispatch) => {
-    const res = await fetch(`/api/comment_likes/`)
 
     if (res.ok) {
         const likes = await res.json()
@@ -145,18 +106,7 @@ export const loadUserPostLikesThunk = () => async (dispatch) => {
 
     if (res.ok) {
         const likes = await res.json()
-        dispatch(loadUserLikes(likes))
-        return likes
-    }
-}
-
-// Thunk action to load likes from current user
-export const loadUserCommentLikesThunk = () => async (dispatch) => {
-    const res = await fetch(`/api/comment_likes/users/current`)
-
-    if (res.ok) {
-        const likes = await res.json()
-        dispatch(loadUserLikes(likes))
+        dispatch(loadUserPostLikes(likes))
         return likes
     }
 }
@@ -196,11 +146,6 @@ export const createDislikePostThunk = (dislikeInfo, postId) => async (dispatch) 
     }
 
     return null
-}
-
-
-export const createLikeCommentThunk = (likeInfo, commentId) => async (dispatch) => {
-    // TO DO
 }
 
 

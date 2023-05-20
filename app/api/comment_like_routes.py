@@ -53,7 +53,15 @@ def likes_current_user():
     likes = CommentLike.query.filter(CommentLike.like_status == "like").filter(CommentLike.user_id == current_user_id).all()
     dislikes = CommentLike.query.filter(CommentLike.like_status == "dislike").filter(CommentLike.user_id == current_user_id).all()
 
-    return return_likes(current_user_id, likes, dislikes)
+    currentUserLikesAndDislikes = {}
+
+    for x in likes:
+        currentUserLikesAndDislikes[x.comment_id] = x.to_dict()
+
+    for x in dislikes:
+        currentUserLikesAndDislikes[x.comment_id] = x.to_dict()
+
+    return {"userLikesAndDislikes": currentUserLikesAndDislikes}
 
 
 # Get all likes and dislikes made by specific user

@@ -28,7 +28,7 @@ const PostsIndividual = () => {
         dispatch(userActions.loadAllUserThunk())
         dispatch(subredditActions.loadCurrentSubredditThunk(subreddit_name))
         dispatch(postActions.loadPostThunk(post_id))
-        // dispatch(commentActions.loadPostCommentsThunk(post_id))
+        dispatch(commentActions.loadPostCommentsThunk(post_id))
         dispatch(postLikeActions.loadLikesPostThunk(post_id))
         setLoad(true)
 
@@ -44,9 +44,8 @@ const PostsIndividual = () => {
     const currentPostLikes = Object.values(useSelector(postLikeActions.loadPostLikes))
     const currentSubreddit = Object.values(useSelector(subredditActions.loadAllSubreddit))
     const allUsers = Object.values(useSelector(state => state.session))
-    // const currentComments = Object.values(useSelector(commentActions.loadAllComments))
+    const currentComments = Object.values(useSelector(commentActions.loadAllComments))
     const currentUser = allUsers[0] || -1
-
 
     return (
         <div id="post-main-container">

@@ -11,7 +11,7 @@ const TestTwo = (el) => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(postLikeActions.loadLikesCommentThunk(el.id))
+        dispatch(postLikeActions.loadLikesPostThunk(el.id))
 
         return (
             postLikeActions.clearPostLikes()

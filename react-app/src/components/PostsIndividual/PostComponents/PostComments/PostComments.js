@@ -24,26 +24,29 @@ const PostComments = ({ currentPost, currentSubreddit, allUsers, currentUser, po
     const [askUserToLogin, setAskUserToLogin] = useState(false)
     const [commentLikeStatus, setCommentLikeStatus] = useState({})
 
-
     useEffect(() => {
         dispatch(commentActions.loadPostCommentsThunk(post_id))
-        // dispatch(commentLikeActions.loadUserCommentLikesThunk())
+
+        // if(currentUser !== -1) {
+            dispatch(commentLikeActions.loadUserCommentLikesThunk())
+        // }
+
 
         return (() => {
             dispatch(commentActions.clearComment())
-            dispatch(commentLikeActions.clearLikes())
+            dispatch(commentLikeActions.clearCommentLikes())
         })
     }, [dispatch])
 
     const currentComments = Object.values(useSelector(commentActions.loadAllComments))
     const currentLikes = Object.values(useSelector(commentLikeActions.loadCommentLikes))
-    let currentUserLikes;
-    let currentUserDislikes;
+    // let currentUserLikes;
+    // let currentUserDislikes;
 
-    if (currentLikes.length > 0) {
-        currentUserLikes = currentLikes[0]['likes']
-        currentUserDislikes = currentLikes[0]['dislikes']
-    }
+    // if (currentLikes.length > 0) {
+    //     currentUserLikes = currentLikes[0]['likes']
+    //     currentUserDislikes = currentLikes[0]['dislikes']
+    // }
 
 
     // const CommentsComponent = () => {
@@ -134,15 +137,13 @@ const PostComments = ({ currentPost, currentSubreddit, allUsers, currentUser, po
     }
 
     const loadCommentFooter = (el, initialCommentLikeTotal, initialLikeStatus) => {
-
-
         return (
             currentUser === -1 ? (
                 <div id="comments-remove-no-user"></div>
             ) : (
 
                 <div id="comment-footer-main-container">
-                    {/* <aside id="comment-footer-vote-container">
+                    <aside id="comment-footer-vote-container">
                         <aside onClick={(e) => {
                             e.preventDefault()
                             e.stopPropagation()
@@ -156,7 +157,7 @@ const PostComments = ({ currentPost, currentSubreddit, allUsers, currentUser, po
                         <aside>
                             <i className="fa-solid fa-down-long fa-lg" />
                         </aside>
-                    </aside> */}
+                    </aside>
                     <aside>
                         {/* {IndividualComment({commentLikeStatus, setCommentLikeStatus})} */}
                     </aside>
@@ -200,6 +201,8 @@ const PostComments = ({ currentPost, currentSubreddit, allUsers, currentUser, po
     const CommentsComponent = () => {
         if (currentComments.length > 0) {
             const commentsToLoad = Object.values(currentComments[0])
+            const commentLikesReference = currentLikes[0]
+
             return (
                 Array.isArray(commentsToLoad) && commentsToLoad.map((el, i) => {
                     let commentPoster = -1;
@@ -211,6 +214,12 @@ const PostComments = ({ currentPost, currentSubreddit, allUsers, currentUser, po
                     let initialCommentDislikes = currentComments[0][el.id].comment_dislikes
                     let initialCommentLikeTotal = Object.values(initialCommentLikes).length - Object.values(initialCommentDislikes).length
                     let initialLikeStatus = "neutral";
+
+                    // console.log('booba', el, commentLikesReference[1])
+
+                    if(currentLikes[0] && commentLikesReference[el.id]) {
+                        initialLikeStatus = commentLikesReference[el.id]["like_status"]
+                    }
 
 
                     let commentDate = el["created_at"].split(" ")
@@ -247,7 +256,7 @@ const PostComments = ({ currentPost, currentSubreddit, allUsers, currentUser, po
                                 )}
                             </section>
                             <section id="comments-section-footer">
-                                {loadCommentFooter(el, initialCommentLikeTotal)}
+                                {loadCommentFooter(el, initialCommentLikeTotal, initialLikeStatus)}
                             </section>
                         </div>
                     )
