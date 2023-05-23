@@ -22,15 +22,12 @@ const PostComments = ({ currentPost, currentSubreddit, allUsers, currentUser, po
     const [newCommentBody, setNewCommentBody] = useState(null)
     const [loadEditCommentComponent, setLoadEditCommentComponent] = useState(false)
     const [askUserToLogin, setAskUserToLogin] = useState(false)
-    const [commentLikeStatus, setCommentLikeStatus] = useState({})
+    const [allCommentLikeStatus, setAllCommentLikeStatus] = useState({})
 
     useEffect(() => {
         dispatch(commentActions.loadPostCommentsThunk(post_id))
 
-        // if(currentUser !== -1) {
-            dispatch(commentLikeActions.loadUserCommentLikesThunk())
-        // }
-
+        dispatch(commentLikeActions.loadUserCommentLikesThunk())
 
         return (() => {
             dispatch(commentActions.clearComment())
@@ -48,6 +45,18 @@ const PostComments = ({ currentPost, currentSubreddit, allUsers, currentUser, po
     //     currentUserDislikes = currentLikes[0]['dislikes']
     // }
 
+
+
+    useEffect(() => {
+        if (currentLikes.length > 0) {
+            const likeDict = {};
+
+            console.log('booba', currentLikes)
+            setAllCommentLikeStatus((allCommentLikeStatus) => ({ ...allCommentLikeStatus, ...likeDict }));
+
+
+        }
+    }, []);
 
     // const CommentsComponent = () => {
     //     const commentsToLoad = Object.values(currentComments[0])
@@ -98,10 +107,41 @@ const PostComments = ({ currentPost, currentSubreddit, allUsers, currentUser, po
         }
     }
 
-    const likeHandler = async () => {
+    const likeHandler = async (commentToLoad, commentLikeStatus, e) => {
         let likeInfo = {
             like_status: "like"
         }
+        let toUpdateCommentState = {
+            [commentToLoad.id]: "neutral"
+        }
+
+        // console.log('booba', commentLikeStatus)
+
+        if (commentLikeStatus === "like") {
+            // dispatch(commentLikeActions.delete)
+        } else {
+            dispatch(commentLikeActions.createLikeCommentThunk(likeInfo, commentToLoad.id))
+            toUpdateCommentState[commentToLoad.id] = "like"
+        }
+
+        setAllCommentLikeStatus({ ...toUpdateCommentState })
+
+        // console.log('booba asdf', allCommentLikeStatus, toUpdateCommentState)
+
+        // if (postLikeStatus === "like") {
+        //     dispatch(postLikeActions.deleteLikePostThunk(postToLoad.id)).then(() => (
+        //         dispatch(postLikeActions.loadLikesPostThunk(postToLoad.id))
+        //     ))
+
+        //     setPostLikeStatus("neutral")
+        // } else {
+        //     dispatch(postLikeActions.deleteLikePostThunk(postToLoad.id))
+        //     dispatch(postLikeActions.createLikePostThunk(likeInfo, postToLoad.id)).then(() => (
+        //         dispatch(postLikeActions.loadLikesPostThunk(postToLoad.id))
+        //     ))
+
+        //     setPostLikeStatus("like")
+        // }
     }
 
 
@@ -136,7 +176,7 @@ const PostComments = ({ currentPost, currentSubreddit, allUsers, currentUser, po
         )
     }
 
-    const loadCommentFooter = (el, initialCommentLikeTotal, initialLikeStatus) => {
+    const loadCommentFooter = (el, initialCommentLikeTotal, initialLikeStatus, commentToLoad) => {
         return (
             currentUser === -1 ? (
                 <div id="comments-remove-no-user"></div>
@@ -147,14 +187,18 @@ const PostComments = ({ currentPost, currentSubreddit, allUsers, currentUser, po
                         <aside onClick={(e) => {
                             e.preventDefault()
                             e.stopPropagation()
-                            // likeHandler
+                            likeHandler(commentToLoad, initialLikeStatus, e)
                         }}>
                             <i className="fa-solid fa-up-long fa-lg" />
                         </aside>
 
                         {initialCommentLikeTotal}
 
-                        <aside>
+                        <aside onClick={(e) => {
+                            e.preventDefault()
+                            e.stopPropagation()
+                            console.log('booba test 2')
+                        }}>
                             <i className="fa-solid fa-down-long fa-lg" />
                         </aside>
                     </aside>
@@ -215,12 +259,9 @@ const PostComments = ({ currentPost, currentSubreddit, allUsers, currentUser, po
                     let initialCommentLikeTotal = Object.values(initialCommentLikes).length - Object.values(initialCommentDislikes).length
                     let initialLikeStatus = "neutral";
 
-                    // console.log('booba', el, commentLikesReference[1])
-
-                    if(currentLikes[0] && commentLikesReference[el.id]) {
+                    if (currentLikes[0] && commentLikesReference[el.id]) {
                         initialLikeStatus = commentLikesReference[el.id]["like_status"]
                     }
-
 
                     let commentDate = el["created_at"].split(" ")
                     commentDate = commentDate[2] + " " + commentDate[1] + ", " + commentDate[3]
@@ -256,7 +297,7 @@ const PostComments = ({ currentPost, currentSubreddit, allUsers, currentUser, po
                                 )}
                             </section>
                             <section id="comments-section-footer">
-                                {loadCommentFooter(el, initialCommentLikeTotal, initialLikeStatus)}
+                                {loadCommentFooter(el, initialCommentLikeTotal, initialLikeStatus, el)}
                             </section>
                         </div>
                     )

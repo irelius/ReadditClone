@@ -14,6 +14,7 @@ import * as postActions from "../../store/post"
 import * as userActions from "../../store/session"
 import * as postLikeActions from "../../store/postLike"
 import * as commentActions from "../../store/comment"
+import * as commentLikeActions from "../../store/commentLike"
 
 
 const PostsIndividual = () => {
@@ -30,6 +31,7 @@ const PostsIndividual = () => {
         dispatch(postActions.loadPostThunk(post_id))
         dispatch(commentActions.loadPostCommentsThunk(post_id))
         dispatch(postLikeActions.loadLikesPostThunk(post_id))
+        dispatch(commentLikeActions.loadUserCommentLikesThunk())
         setLoad(true)
 
         return (() => {
@@ -37,6 +39,7 @@ const PostsIndividual = () => {
             dispatch(postActions.clearPost())
             dispatch(commentActions.clearComment())
             dispatch(postLikeActions.clearPostLikes())
+            dispatch(commentLikeActions.clearCommentLikes())
         })
     }, [dispatch])
 
@@ -46,8 +49,11 @@ const PostsIndividual = () => {
     const allUsers = Object.values(useSelector(state => state.session))
     const currentComments = Object.values(useSelector(commentActions.loadAllComments))
     const currentUser = allUsers[0] || -1
+    const currentCommentLikes = Object.values(useSelector(commentLikeActions.loadCommentLikes))
 
-    return (
+    console.log('booba', currentCommentLikes)
+
+    return currentCommentLikes.length > 0 ? (
         <div id="post-main-container">
             <section id="post-close-button-container">
                 <button onClick={() => history.goBack()} id="post-close-button">
@@ -58,23 +64,76 @@ const PostsIndividual = () => {
             <section id="post-main-body-container">
                 <aside id="post-left-section">
                     <section id="post-body-container">
-                        {PostBody({ currentPostLikes, currentPost, currentSubreddit, allUsers, currentUser, load })}
+                        <PostBody
+                            currentPostLikes={currentPostLikes}
+                            currentPost={currentPost}
+                            currentSubreddit={currentSubreddit}
+                            allUsers={allUsers}
+                            currentUser={currentUser}
+                            load={load}
+                        />
                     </section>
                     <section id="post-create-comment-container">
-                        {PostCreateComment({ currentPost, currentSubreddit, allUsers, currentUser, load })}
+                        <PostCreateComment
+                            currentPost={currentPost}
+                            currentSubreddit={currentSubreddit}
+                            allUsers={allUsers}
+                            currentUser={currentUser}
+                            load={load}
+                        />
                     </section>
                     <section id="post-comments-container">
-                        {PostComments({ currentPost, currentSubreddit, allUsers, currentUser, post_id, load })}
+                        <PostComments
+                            currentPost={currentPost}
+                            currentSubreddit={currentSubreddit}
+                            allUsers={allUsers}
+                            currentUser={currentUser}
+                            post_id={post_id}
+                            load={load}
+                        />
                     </section>
                 </aside>
                 <aside id="post-right-section">
                     <section id="post-subreaddit-bar-container">
-                        {PostSubreadditBar({ currentSubreddit })}
+                        <PostSubreadditBar currentSubreddit={currentSubreddit} />
                     </section>
                 </aside>
             </section>
         </div>
-    )
+    ) : (
+        <div></div>
+    );
+
+    // return currentCommentLikes.length > 0 ? (
+    //     <div id="post-main-container">
+    //         <section id="post-close-button-container">
+    //             <button onClick={() => history.goBack()} id="post-close-button">
+    //                 <i className="fa-solid fa-xmark fa-lg" />
+    //                 Close
+    //             </button>
+    //         </section>
+    //         <section id="post-main-body-container">
+    //             <aside id="post-left-section">
+    //                 <section id="post-body-container">
+    //                     {PostBody({ currentPostLikes, currentPost, currentSubreddit, allUsers, currentUser, load })}
+    //                 </section>
+    //                 <section id="post-create-comment-container">
+    //                     {PostCreateComment({ currentPost, currentSubreddit, allUsers, currentUser, load })}
+    //                 </section>
+    //                 <section id="post-comments-container">
+    //                     {PostComments({ currentPost, currentSubreddit, allUsers, currentUser, post_id, load })}
+    //                 </section>
+    //             </aside>
+    //             <aside id="post-right-section">
+    //                 <section id="post-subreaddit-bar-container">
+    //                     {PostSubreadditBar({ currentSubreddit })}
+    //                 </section>
+    //             </aside>
+    //         </section>
+    //     </div>
+    // ) :(
+    //     <div></div>
+    // )
 }
 
 export default PostsIndividual;

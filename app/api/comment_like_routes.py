@@ -82,26 +82,12 @@ def likes_specific_comment(comment_id):
     return return_likes(comment_id, likes, dislikes)
 
 
-# Get all likes and dislikes made to comments for a specific post
-@comment_like_routes.route('/posts/<int:post_id>')
-def likes_specific_post(post_id):
-    comments = Comment.query.filter(Comment.post_id == post_id).all()
+# # Get all likes and dislikes made to comments for a specific post
+# @comment_like_routes.route('/posts/<int:post_id>')
+# def likes_specific_post(post_id):
+#     comments = Comment.query.filter(Comment.post_id == post_id).all()
 
-    return(comments[0].to_dict())
-
-    # obj = {}
-    # for x in comments:
-
-
-    # return {
-    #     id: {
-    #         "likes_total": likes_total,
-    #         "likes": {like.id: like.to_dict() for like in likes},
-    #         "dislikes": {dislike.id: dislike.to_dict() for dislike in dislikes}
-    #     }
-    # }
-
-    # likes = CommentLi
+#     return(comments[0].to_dict())
 
 
 # Create a new like on a comment

@@ -96,9 +96,6 @@ export const loadUserCommentLikesThunk = () => async (dispatch) => {
 
     if (res.ok) {
         const likes = await res.json()
-
-        // console.log('booba', likes)
-
         dispatch(loadUserCommentLikes(likes))
         return likes
     } else {
@@ -106,6 +103,25 @@ export const loadUserCommentLikesThunk = () => async (dispatch) => {
     }
 }
 
+
+export const createLikeCommentThunk = (likeInfo, commentId) => async (dispatch) => {
+    // TO DO
+    const res = await fetch(`/api/comment_likes/comments/${commentId}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(likeInfo),
+    })
+
+    if(res.ok) {
+        const like = await res.json()
+        dispatch(createLikeComment(like))
+        return like
+    }
+
+    return null
+}
 
 // export const createLikePostThunk = (likeInfo, postId) => async (dispatch) => {
 //     const res = await fetch(`/api/post_likes/posts/${postId}`, {
@@ -144,10 +160,6 @@ export const loadUserCommentLikesThunk = () => async (dispatch) => {
 // }
 
 
-export const createLikeCommentThunk = (likeInfo, commentId) => async (dispatch) => {
-    // TO DO
-}
-
 
 // export const deleteLikePostThunk = (postId) => async (dispatch) => {
 //     const res = await fetch(`/api/post_likes/posts/${postId}`, {
@@ -161,6 +173,8 @@ export const createLikeCommentThunk = (likeInfo, commentId) => async (dispatch) 
 
 //     return null;
 // }
+
+
 
 
 // ------------------------- SELECTOR FUNCTIONS ------------------------- //
@@ -177,7 +191,6 @@ const commentLikesReducer = (state = initialState, action) => {
 
     switch (action.type) {
         case LOAD_COMMENT_LIKES:
-            console.log('booba', action.likes)
             return Object.assign({}, newState, action.likes);
 
         case CREATE_COMMENT_LIKES:
