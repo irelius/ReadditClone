@@ -16,7 +16,7 @@ import redirectToPostPage from "../../../HelperFunctions/redirectToPostPage";
 import NoPostsToLoadComponent from "../../../NoPostsToLoadComponent";
 
 import calculatePostLikes from "../../../HelperFunctions/calculatePostLikes";
-import modifyLikeTotal from "../../../HelperFunctions/modifyLikeTotal";
+import modifyPostLikeTotal from "../../../HelperFunctions/modifyPostLikeTotal";
 
 
 const SubredditPagePosts = () => {
@@ -202,7 +202,7 @@ const SubredditPagePosts = () => {
                             }}>
                                 <i className="fa-solid fa-up-long fa-lg" id={`post-like-status-${postLikeStatus}`} />
                             </aside>
-                            <aside id="subreddit-post-vote-counter">{calculatePostLikes(el) + modifyLikeTotal(el, initialPostLikes, modifiedPostLikes)}</aside>
+                            <aside id="subreddit-post-vote-counter">{calculatePostLikes(el) + modifyPostLikeTotal(el, initialPostLikes, modifiedPostLikes)}</aside>
                             <aside id="subreddit-post-downvote-button" onClick={(e) => {
                                 e.stopPropagation()
                                 e.preventDefault()

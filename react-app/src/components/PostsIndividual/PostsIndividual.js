@@ -22,6 +22,7 @@ const PostsIndividual = () => {
     const history = useHistory()
 
     const [load, setLoad] = useState(false)
+    const [allCommentLikeStatus, setAllCommentLikeStatus] = useState({})
 
     const { subreddit_name, post_id } = useParams();
 
@@ -43,6 +44,7 @@ const PostsIndividual = () => {
         })
     }, [dispatch])
 
+
     const currentPost = Object.values(useSelector(postActions.loadAllPosts))
     const currentPostLikes = Object.values(useSelector(postLikeActions.loadPostLikes))
     const currentSubreddit = Object.values(useSelector(subredditActions.loadAllSubreddit))
@@ -51,9 +53,7 @@ const PostsIndividual = () => {
     const currentUser = allUsers[0] || -1
     const currentCommentLikes = Object.values(useSelector(commentLikeActions.loadCommentLikes))
 
-    console.log('booba', currentCommentLikes)
-
-    return currentCommentLikes.length > 0 ? (
+    return load && allUsers.length > 0 && currentPost.length > 0 && currentPostLikes.length > 0 && currentSubreddit.length > 0 && currentCommentLikes.length > 0 ? (
         <div id="post-main-container">
             <section id="post-close-button-container">
                 <button onClick={() => history.goBack()} id="post-close-button">
@@ -89,6 +89,8 @@ const PostsIndividual = () => {
                             allUsers={allUsers}
                             currentUser={currentUser}
                             post_id={post_id}
+                            currentLikes={currentCommentLikes}
+                            currentComments = {currentComments}
                             load={load}
                         />
                     </section>

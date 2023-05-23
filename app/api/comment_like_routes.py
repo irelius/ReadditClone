@@ -146,3 +146,22 @@ def likes_update_to_comment(comment_id):
 #     db.session.commit()
 
 #     return {"message": "Like/dislike successfully deleted"}
+
+@comment_like_routes.route("/comments/<int:comment_id>", methods=["DELETE"])
+@login_required
+def likes_delete_to_comment(comment_id):
+    current_user_id = int(current_user.get_id())
+    like_to_delete_comment = CommentLike.query.filter((CommentLike.comment_id == int(comment_id)), (CommentLike.user_id == current_user_id)).all()[0]
+
+    if current_user_id == None:
+        return {"errors": "You must be logged in before liking/disliking a comment"}, 401
+
+    if like_to_delete_comment == None:
+        return {"errors": "This post is not liked or disliked by user"}, 403
+
+    db.session.delete(like_to_delete_comment)
+    db.session.commit()
+
+    # return {"message": "booba"}
+
+    return {"message": "Like/dislike successfully deleted"}

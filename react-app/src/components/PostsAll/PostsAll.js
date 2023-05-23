@@ -16,7 +16,7 @@ import redirectToUserPage from "../HelperFunctions/redirectToUserPage";
 import LogInOrSignUpModal from "../Modals/LogInOrSignUpModal/LogInOrSignUpModal";
 
 import calculatePostLikes from "../HelperFunctions/calculatePostLikes";
-import modifyLikeTotal from "../HelperFunctions/modifyLikeTotal";
+import modifyPostLikeTotal from "../HelperFunctions/modifyPostLikeTotal";
 
 
 const PostsAll = () => {
@@ -87,7 +87,7 @@ const PostsAll = () => {
         }
     }
 
-    const likeHandler = (post, postLikeStatus, e) => {
+    const likeHandler = (post, postLikeStatus) => {
         let likeInfo = {
             like_status: "like"
         }
@@ -191,8 +191,8 @@ const PostsAll = () => {
                             }}>
                                 <i className="fa-solid fa-up-long fa-lg" id={`post-like-status-${postLikeStatus}`} />
                             </aside>
-                            <aside id="post-vote-counter">{calculatePostLikes(el) + modifyLikeTotal(el, initialPostLikes, modifiedPostLikes)}</aside>
-                            {/* <aside id="post-vote-counter">{modifyLikeTotal(el)}</aside> */}
+                            <aside id="post-vote-counter">{calculatePostLikes(el) + modifyPostLikeTotal(el, initialPostLikes, modifiedPostLikes)}</aside>
+                            {/* <aside id="post-vote-counter">{modifyPostLikeTotal(el)}</aside> */}
                             <aside id="post-downvote-button" onClick={(e) => {
                                 e.stopPropagation()
                                 e.preventDefault()

@@ -1,4 +1,4 @@
-const modifyLikeTotal = (post, initialPostLikes, modifiedPostLikes) => {
+const modifyCommentLikeTotal = (post, initialPostLikes, modifiedPostLikes) => {
     if (initialPostLikes[post["id"]] === "like" && modifiedPostLikes[post["id"]] === "neutral") {
         return -1
     }
@@ -23,4 +23,4 @@ const modifyLikeTotal = (post, initialPostLikes, modifiedPostLikes) => {
     return 0
 }
 
-export default modifyLikeTotal;
+export default modifyCommentLikeTotal;

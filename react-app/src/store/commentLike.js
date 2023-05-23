@@ -114,7 +114,7 @@ export const createLikeCommentThunk = (likeInfo, commentId) => async (dispatch) 
         body: JSON.stringify(likeInfo),
     })
 
-    if(res.ok) {
+    if (res.ok) {
         const like = await res.json()
         dispatch(createLikeComment(like))
         return like
@@ -140,6 +140,22 @@ export const createLikeCommentThunk = (likeInfo, commentId) => async (dispatch) 
 
 //     return null
 // }
+
+export const createDislikeCommentThunk = (dislikeInfo, commentId) => async (dispatch) => {
+    const res = await fetch(`/api/comment_likes/comments/${commentId}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(dislikeInfo),
+    })
+
+    if(res.ok) {
+        const dislike = await res.json()
+        dispatch(createLikeComment(dislike))
+        return dislike
+    }
+}
 
 // export const createDislikePostThunk = (dislikeInfo, postId) => async (dispatch) => {
 //     const res = await fetch(`/api/post_likes/posts/${postId}`, {
@@ -174,6 +190,18 @@ export const createLikeCommentThunk = (likeInfo, commentId) => async (dispatch) 
 //     return null;
 // }
 
+export const deleteLikeCommentThunk = (commentId) => async (dispatch) => {
+    const res = await fetch(`/api/comment_likes/comments/${commentId}`, {
+        method: "DELETE"
+    })
+
+    if (res.ok) {
+        dispatch(deleteLikeComment(commentId))
+        return true;
+    }
+
+    return null;
+}
 
 
 
@@ -197,7 +225,7 @@ const commentLikesReducer = (state = initialState, action) => {
             return Object.assign({}, newState, action.likes);
 
         case DELETE_COMMENT_LIKES:
-            return Object.assign({}, newState, action.postId);
+            return Object.assign({}, newState, action.commentId);
 
         case CLEAR_COMMENT_LIKES:
             return initialState

@@ -67,7 +67,13 @@ def comments_by_specific_username(username):
 @comment_routes.route("/posts/<int:post_id>")
 def comments_by_specific_post(post_id):
     comments = Comment.query.filter(Comment.post_id == post_id).all()
-    return return_comments(comments)
+    if len(comments) > 0:
+        commentDict = {"comments": {}}
+        for x in comments:
+            commentDict["comments"][x.id] = x.to_dict()
+            commentDict["comments"][x.id]["like_total"] = len(dict.values(x.to_dict()["comment_likes"])) - len(dict.values(x.to_dict()["comment_dislikes"]))
+        return commentDict
+    return {"comments": "No comments"}
 
 
 # Get comments made to a specific subreddit, this route doesn't seem all that useful
