@@ -1,22 +1,31 @@
-const modifyCommentLikeTotal = (post, initialPostLikes, modifiedPostLikes) => {
-    if (initialPostLikes[post["id"]] === "like" && modifiedPostLikes[post["id"]] === "neutral") {
+const modifyCommentLikeTotal = (comment, initialCommentLikes, modifiedCommentLikes) => {
+
+    // console.log('booba test', comment.id, initialCommentLikes, modifiedCommentLikes)
+
+    if (initialCommentLikes[comment["id"]] === "like" && modifiedCommentLikes[comment["id"]] === "neutral") {
         return -1
     }
-    if (initialPostLikes[post["id"]] === "like" && modifiedPostLikes[post["id"]] === "dislike") {
+    if (initialCommentLikes[comment["id"]] === "like" && modifiedCommentLikes[comment["id"]] === "dislike") {
         return -2
     }
+    if (initialCommentLikes[comment["id"]] === "like" && modifiedCommentLikes[comment["id"]] === "like") {
+        return 0
+    }
 
-    if (initialPostLikes[post["id"]] === "dislike" && modifiedPostLikes[post["id"]] === "neutral") {
+    if (initialCommentLikes[comment["id"]] === "dislike" && modifiedCommentLikes[comment["id"]] === "neutral") {
         return 1
     }
-    if (initialPostLikes[post["id"]] === "dislike" && modifiedPostLikes[post["id"]] === "like") {
+    if (initialCommentLikes[comment["id"]] === "dislike" && modifiedCommentLikes[comment["id"]] === "like") {
         return 2
     }
+    if (initialCommentLikes[comment["id"]] === "dislike" && modifiedCommentLikes[comment["id"]] === "dislike") {
+        return 0
+    }
 
-    if (modifiedPostLikes[post["id"]] === "like") {
+    if (modifiedCommentLikes[comment["id"]] === "like") {
         return 1
     }
-    if (modifiedPostLikes[post["id"]] === "dislike") {
+    if (modifiedCommentLikes[comment["id"]] === "dislike") {
         return -1
     }
 

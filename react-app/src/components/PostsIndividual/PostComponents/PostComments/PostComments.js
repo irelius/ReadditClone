@@ -5,44 +5,31 @@ import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom"
 
 import * as commentActions from "../../../../store/comment"
-import * as commentLikeActions from "../../../../store/commentLike"
+import commentLikesReducer, * as commentLikeActions from "../../../../store/commentLike"
 
 import redirectToUserPage from "../../../HelperFunctions/redirectToUserPage";
 import modifyCommentLikeTotal from "../../../HelperFunctions/modifyCommentLikeTotal";
+import calculateCommentLikes from "../../../HelperFunctions/calculateCommentLikes";
 
 // import IndividualComment from "./IndividualComment";
 
 const PostComments = ({ currentPost, currentSubreddit, allUsers, currentUser, post_id, currentLikes, currentComments, load }) => {
-    const dispatch = useDispatch()
     const history = useHistory()
+    const dispatch = useDispatch()
 
-    const [errors, setErrors] = useState([])
+    // usestates for comment EDIT functionality
     const [commentBody, setCommentBody] = useState("")
     const [newCommentBody, setNewCommentBody] = useState(null)
     const [loadEditCommentComponent, setLoadEditCommentComponent] = useState(false)
-    const [allCommentLikeStatus, setAllCommentLikeStatus] = useState({})
+
+    // usestates for comment LIKE functionality
+    const [initialCommentLikesStatus, setInitialCommentLikesStatus] = useState(false)
+    const [initialCommentLikes, setInitialCommentLikes] = useState({})
+    const [modifiedCommentLikes, setModifiedCommentLikes] = useState({})
     const [likeTotal, setLikeTotal] = useState({})
 
-    const [initialCommentLikeStatuses, setInitialCommentLikeStatuses] = useState(false)
 
-    // useEffect(() => {
-    //     if (currentLikes.length > 0) {
-    //         const likeDict = {};
-
-    // Object.values(currentLikes[0]).forEach(el => {
-    //             if (el.user_id === currentUser.id && el.like_status === "like") {
-    //                 likeDict[el.comment_id] = "like"
-    //             } else if (el.user_id === currentUser.id && el.like_status === "dislike") {
-    //                 likeDict[el.comment_id] = "dislike"
-    //             }
-
-    //         })
-
-    //         setAllCommentLikeStatus({ ...likeDict });
-    //     }
-
-    // }, [currentLikes]);
-
+    // useeffect to just find out what the like total is for each comment for a specific post
     useEffect(() => {
         if (currentComments.length > 0) {
             const likeTotalDict = {}
@@ -53,24 +40,12 @@ const PostComments = ({ currentPost, currentSubreddit, allUsers, currentUser, po
         }
     }, [currentComments])
 
-    // const CommentsComponent = () => {
-    //     const commentsToLoad = Object.values(currentComments[0])
-    //     return (
-    //         Array.isArray(commentsToLoad) && commentsToLoad.map((el, i) => {
-    //             return (
-    //                 <div>
-    //                     {IndividualComment()}
-    //                 </div>
-    //             )
-    //         })
-    //     )
-    // }
-
 
     // ----------------------------------------- Functions ---------------------------------------------- //
 
+    // initial like status for each comment
     const initialTempCommentsLiked = () => {
-        setInitialCommentLikeStatuses(true)
+        setInitialCommentLikesStatus(true)
 
         if (currentLikes.length > 0) {
             const likeDict = {};
@@ -84,8 +59,12 @@ const PostComments = ({ currentPost, currentSubreddit, allUsers, currentUser, po
 
             })
 
-            setAllCommentLikeStatus(allCommentLikeStatus => ({...allCommentLikeStatus, ...likeDict }));
+            setInitialCommentLikes(initialCommentLikes => ({
+                ...initialCommentLikes,
+                ...likeDict
+            }));
         }
+
     }
 
     // Comment Update
@@ -122,7 +101,7 @@ const PostComments = ({ currentPost, currentSubreddit, allUsers, currentUser, po
         }
     }
 
-    const likeHandler = async (comment, commentLikeStatus) => {
+    const likeHandler = (comment, commentLikeStatus) => {
         let likeInfo = {
             like_status: "like"
         }
@@ -130,49 +109,45 @@ const PostComments = ({ currentPost, currentSubreddit, allUsers, currentUser, po
         let updateValue = {}
 
         if (commentLikeStatus === "like") {
-            await dispatch(commentLikeActions.deleteLikeCommentThunk(comment.id)).then(() => (
-                dispatch(commentLikeActions.loadUserCommentLikesThunk())
-            ))
-
+            dispatch(commentLikeActions.deleteLikeCommentThunk(comment.id))
             updateValue[comment.id] = "neutral"
-            // setAllCommentLikeStatus({ ...allCommentLikeStatus, [comment.id]: "neutral" })
         } else {
-            await dispatch(commentLikeActions.deleteLikeCommentThunk(comment.id)).then(() =>
-                dispatch(commentLikeActions.createLikeCommentThunk(likeInfo, comment.id)).then(() => (
-                    dispatch(commentLikeActions.loadUserCommentLikesThunk())
-                ))
-            )
-
+            if (commentLikeStatus === "dislike") {
+                dispatch(commentLikeActions.deleteLikeCommentThunk(comment.id))
+            }
+            dispatch(commentLikeActions.createLikeCommentThunk(likeInfo, comment.id))
             updateValue[comment.id] = "like"
-
-            // setAllCommentLikeStatus({ ...allCommentLikeStatus, [commentToLoad.id]: "like" })
         }
 
-        setAllCommentLikeStatus(allCommentLikeStatus => ({
-            ...allCommentLikeStatus,
+        setModifiedCommentLikes(modifiedCommentLikes => ({
+            ...modifiedCommentLikes,
             ...updateValue
         }))
     }
 
-    const dislikeHandler = async (commentToLoad, commentLikeStatus) => {
+    const dislikeHandler = async (comment, commentLikeStatus) => {
         let likeInfo = {
             like_status: "dislike"
         }
 
+        let updateValue = {}
+
         if (commentLikeStatus === "dislike") {
-            dispatch(commentLikeActions.deleteLikeCommentThunk(commentToLoad.id)).then(() => (
-                dispatch(commentLikeActions.loadUserCommentLikesThunk())
-            ))
+            dispatch(commentLikeActions.deleteLikeCommentThunk(comment.id))
+            updateValue[comment.id] = "neutral"
 
-            setAllCommentLikeStatus({ ...allCommentLikeStatus, [commentToLoad.id]: "neutral" })
         } else {
-            dispatch(commentLikeActions.deleteLikeCommentThunk(commentToLoad.id))
-            dispatch(commentLikeActions.createDislikeCommentThunk(likeInfo, commentToLoad.id)).then(() => (
-                dispatch(commentLikeActions.loadUserCommentLikesThunk())
-            ))
-
-            setAllCommentLikeStatus({ ...allCommentLikeStatus, [commentToLoad.id]: "dislike" })
+            if (commentLikeStatus === "like") {
+                dispatch(commentLikeActions.deleteLikeCommentThunk(comment.id))
+            }
+            dispatch(commentLikeActions.createDislikeCommentThunk(likeInfo, comment.id))
+            updateValue[comment.id] = "dislike"
         }
+        setModifiedCommentLikes(modifiedCommentLikes => ({
+            ...modifiedCommentLikes,
+            ...updateValue
+        }))
+
     }
 
 
@@ -207,7 +182,7 @@ const PostComments = ({ currentPost, currentSubreddit, allUsers, currentUser, po
         )
     }
 
-    const loadCommentFooter = (el) => {
+    const loadCommentFooter = (el, commentLikeStatus) => {
         return (
             currentUser === -1 ? (
                 <div id="comments-remove-no-user"></div>
@@ -218,17 +193,17 @@ const PostComments = ({ currentPost, currentSubreddit, allUsers, currentUser, po
                         <aside onClick={(e) => {
                             e.preventDefault()
                             e.stopPropagation()
-                            likeHandler(el, allCommentLikeStatus[el.id])
+                            likeHandler(el, commentLikeStatus)
                         }}>
                             <i className="fa-solid fa-up-long fa-lg" />
                         </aside>
 
-                        {likeTotal[el.id] + modifyCommentLikeTotal(el, initialCommentLikeStatuses, allCommentLikeStatus)}
+                        {likeTotal[el.id] + modifyCommentLikeTotal(el, initialCommentLikes, modifiedCommentLikes)}
 
                         <aside onClick={(e) => {
                             e.preventDefault()
                             e.stopPropagation()
-                            dislikeHandler(el, allCommentLikeStatus[el.id])
+                            dislikeHandler(el, commentLikeStatus)
                         }}>
                             <i className="fa-solid fa-down-long fa-lg" />
                         </aside>
@@ -279,13 +254,16 @@ const PostComments = ({ currentPost, currentSubreddit, allUsers, currentUser, po
         if (currentComments.length > 0) {
             const commentsToLoad = Object.values(currentComments[0])
 
-            if (!initialCommentLikeStatuses) {
+            if (!initialCommentLikesStatus) {
                 initialTempCommentsLiked()
             }
 
 
+
             return (
                 Array.isArray(commentsToLoad) && commentsToLoad.map((el, i) => {
+                    calculateCommentLikes(el)
+
                     let commentPoster = -1;
                     if (allUsers[1]) {
                         commentPoster = allUsers[1][el["user_id"]]
@@ -293,6 +271,17 @@ const PostComments = ({ currentPost, currentSubreddit, allUsers, currentUser, po
 
                     let commentDate = el["created_at"].split(" ")
                     commentDate = commentDate[2] + " " + commentDate[1] + ", " + commentDate[3]
+
+                    let commentLikeStatus = "neutral"
+
+                    if(currentLikes[0][el.id] && currentLikes[0][el.id].user_id === currentUser.id) {
+                        commentLikeStatus = currentLikes[0][el.id].like_status
+                    }
+
+                    if(modifiedCommentLikes[el.id]) {
+                        commentLikeStatus = modifiedCommentLikes[el.id]
+                    }
+
 
                     return (
                         <div id='comments-section-main-container' key={i}>
@@ -325,7 +314,7 @@ const PostComments = ({ currentPost, currentSubreddit, allUsers, currentUser, po
                                 )}
                             </section>
                             <section id="comments-section-footer">
-                                {loadCommentFooter(el)}
+                                {loadCommentFooter(el, commentLikeStatus)}
                             </section>
                         </div>
                     )

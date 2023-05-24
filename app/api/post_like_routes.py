@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, request
 from flask_login import current_user, login_required
 from app.models import db, PostLike, Comment
 from app.forms import LikeForm
@@ -91,6 +91,8 @@ def likes_create_new_to_post(post_id):
         return {"errors": "You must be logged in before liking/disliking a post"}, 401
 
     form = LikeForm()
+    form['csrf_token'].data = request.cookies['csrf_token']
+
     new_like = PostLike(
         like_status = form.data["like_status"],
         post_id = post_id,
@@ -104,20 +106,20 @@ def likes_create_new_to_post(post_id):
 
 
 # Update specific post like status to neutral
-@post_like_routes.route("/posts/<int:post_id>", methods=["PUT"])
-@login_required
-def likes_update_to_post(post_id):
-    current_user_id = int(current_user.get_id())
-    like_to_edit_post = PostLike.query.filter((PostLike.post_id == int(post_id)), (PostLike.user_id == current_user_id)).all()[0]
+# @post_like_routes.route("/posts/<int:post_id>", methods=["PUT"])
+# @login_required
+# def likes_update_to_post(post_id):
+#     current_user_id = int(current_user.get_id())
+#     like_to_edit_post = PostLike.query.filter((PostLike.post_id == int(post_id)), (PostLike.user_id == current_user_id)).all()[0]
 
-    if current_user_id == None:
-        return {"errors": "You must be logged in before liking/disliking a post"}, 401
+#     if current_user_id == None:
+#         return {"errors": "You must be logged in before liking/disliking a post"}, 401
 
-    like_to_edit_post.like_status = "neutral"
+#     like_to_edit_post.like_status = "neutral"
 
-    db.session.commit()
+#     db.session.commit()
 
-    return like_to_edit_post.to_dict()
+#     return like_to_edit_post.to_dict()
 
 
 

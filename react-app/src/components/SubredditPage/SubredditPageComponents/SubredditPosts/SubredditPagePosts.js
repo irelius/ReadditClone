@@ -86,7 +86,7 @@ const SubredditPagePosts = () => {
 
     }
 
-    const likeHandler = (post, postLikeStatus, e) => {
+    const likeHandler = (post, postLikeStatus) => {
         let likeInfo = {
             like_status: "like"
         }
@@ -97,7 +97,9 @@ const SubredditPagePosts = () => {
             dispatch(postLikeActions.deleteLikePostThunk(post["id"]))
             updateValue[post["id"]] = "neutral"
         } else {
-            dispatch(postLikeActions.deleteLikePostThunk(post["id"]))
+            if(postLikeStatus === "dislike") {
+                dispatch(postLikeActions.deleteLikePostThunk(post["id"]))
+            }
             dispatch(postLikeActions.createLikePostThunk(likeInfo, post["id"]))
             updateValue[post["id"]] = "like"
         }
@@ -106,7 +108,6 @@ const SubredditPagePosts = () => {
             ...modifiedPostLikes,
             ...updateValue
         }))
-
     }
 
     const dislikeHandler = (post, postLikeStatus, e) => {
@@ -120,7 +121,9 @@ const SubredditPagePosts = () => {
             dispatch(postLikeActions.deleteLikePostThunk(post["id"]))
             updateValue[post["id"]] = "neutral"
         } else {
-            dispatch(postLikeActions.deleteLikePostThunk(post["id"]))
+            if (postLikeStatus === "like") {
+                dispatch(postLikeActions.deleteLikePostThunk(post["id"]))
+            }
             dispatch(postLikeActions.createLikePostThunk(likeInfo, post["id"]))
             updateValue[post["id"]] = "dislike"
         }

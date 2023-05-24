@@ -53,7 +53,7 @@ const PostsAll = () => {
 
 
     // Like/Dislike Handling
-    const initialTempPostsLiked = () => {
+    const initialTempPostsLiked = async () => {
         setInitialPostLikeStatus(true)
 
         let updateValue = {}
@@ -77,14 +77,12 @@ const PostsAll = () => {
                 }
             })
 
-            setInitialPostLikes(initialPostLikes => ({
-                ...initialPostLikes,
-                ...updateValue
-            }))
+            setInitialPostLikes((initialPostLikes) => ({ ...initialPostLikes, ...updateValue }))
         } else {
             allUserDislikes = null;
             allUserLikes = null;
         }
+
     }
 
     const likeHandler = (post, postLikeStatus) => {
@@ -97,6 +95,9 @@ const PostsAll = () => {
         if (postLikeStatus === "like") {
             dispatch(postLikeActions.deleteLikePostThunk(post["id"]))
             updateValue[post["id"]] = "neutral"
+        } else if (postLikeStatus === "neutral") {
+            dispatch(postLikeActions.createLikePostThunk(likeInfo, post["id"]))
+            updateValue[post["id"]] = "like"
         } else {
             dispatch(postLikeActions.deleteLikePostThunk(post["id"]))
             dispatch(postLikeActions.createLikePostThunk(likeInfo, post["id"]))
@@ -120,6 +121,9 @@ const PostsAll = () => {
         if (postLikeStatus === "dislike") {
             dispatch(postLikeActions.deleteLikePostThunk(post["id"]))
             updateValue[post["id"]] = "neutral"
+        } else if (postLikeStatus === "neutral") {
+            dispatch(postLikeActions.createLikePostThunk(likeInfo, post["id"]))
+            updateValue[post["id"]] = "dislike"
         } else {
             dispatch(postLikeActions.deleteLikePostThunk(post["id"]))
             dispatch(postLikeActions.createLikePostThunk(likeInfo, post["id"]))
@@ -146,6 +150,7 @@ const PostsAll = () => {
         if (!initialPostLikeStatus) {
             initialTempPostsLiked()
         }
+
 
         return (
             Array.isArray(postsToLoad) && postsToLoad.map((el, i) => {
