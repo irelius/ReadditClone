@@ -190,29 +190,30 @@ const PostComments = ({ currentPost, currentSubreddit, allUsers, currentUser, po
 
                 <div id="comment-footer-main-container">
                     <aside id="comment-footer-vote-container">
-                        <aside onClick={(e) => {
+                        <aside className="comment-vote-button" onClick={(e) => {
                             e.preventDefault()
                             e.stopPropagation()
                             likeHandler(el, commentLikeStatus)
                         }}>
-                            <i className="fa-solid fa-up-long fa-lg" />
+                            <i className="fa-solid fa-up-long fa-lg" id={`comment-like-status-${commentLikeStatus}`}/>
+                        </aside>
+                        <aside id="comment-vote-display">
+                            {likeTotal[el.id] + modifyCommentLikeTotal(el, initialCommentLikes, modifiedCommentLikes)}
                         </aside>
 
-                        {likeTotal[el.id] + modifyCommentLikeTotal(el, initialCommentLikes, modifiedCommentLikes)}
-
-                        <aside onClick={(e) => {
+                        <aside className="comment-vote-button" onClick={(e) => {
                             e.preventDefault()
                             e.stopPropagation()
                             dislikeHandler(el, commentLikeStatus)
                         }}>
-                            <i className="fa-solid fa-down-long fa-lg" />
+                            <i className="fa-solid fa-down-long fa-lg" id={`comment-dislike-status-${commentLikeStatus}`}/>
                         </aside>
                     </aside>
                     <aside>
                         {/* {IndividualComment({commentLikeStatus, setCommentLikeStatus})} */}
                     </aside>
                     {/* TO DO: Implement a comment edit function */}
-                    <aside onClick={() => setLoadEditCommentComponent(true)} id="comments-edit-container">
+                    {/* <aside onClick={() => setLoadEditCommentComponent(true)} id="comments-edit-container">
                         {
                             currentUser["id"] === el["user_id"] ? (
                                 <div id="comments-footer-create-comment">
@@ -225,7 +226,7 @@ const PostComments = ({ currentPost, currentSubreddit, allUsers, currentUser, po
                                 <div></div>
                             )
                         }
-                    </aside>
+                    </aside> */}
                     <aside id="comments-footer-delete-container">
                         {currentUser["id"] === el["user_id"] ? (
                             <div id="comments-footer-delete-comment" onClick={() => handleCommentDelete(el)}>
@@ -274,11 +275,11 @@ const PostComments = ({ currentPost, currentSubreddit, allUsers, currentUser, po
 
                     let commentLikeStatus = "neutral"
 
-                    if(currentLikes[0][el.id] && currentLikes[0][el.id].user_id === currentUser.id) {
+                    if (currentLikes[0][el.id] && currentLikes[0][el.id].user_id === currentUser.id) {
                         commentLikeStatus = currentLikes[0][el.id].like_status
                     }
 
-                    if(modifiedCommentLikes[el.id]) {
+                    if (modifiedCommentLikes[el.id]) {
                         commentLikeStatus = modifiedCommentLikes[el.id]
                     }
 

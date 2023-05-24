@@ -178,13 +178,29 @@
     margin-right: 10px;
 }
 
-#comment-footer-vote-container>* {
+#comment-vote-display {
+    display: flex;
+    justify-content: center;
+    width: 15px;
+}
+
+.comment-vote-button {
     padding: 5px;
 }
 
-#comment-footer-vote-container>*:hover {
+.comment-vote-button:hover {
     cursor: pointer;
     background-color: #2C2C2E;
+}
+
+
+#comment-like-status-like {
+    color: #CC3700;
+}
+
+
+#comment-dislike-status-dislike {
+    color: #5A75CC;
 }
 
 /* -----------------------------------------------------------------------*/
@@ -209,6 +225,7 @@
 .comments-footer-text {
     margin-left: 5px;
 }
+
 
 /* -----------------------------------------------------------------------*/
 /* Comments Section No Comments */
