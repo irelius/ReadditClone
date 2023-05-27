@@ -89,6 +89,17 @@ export const loadAllLikesCommentThunk = () => async (dispatch) => {
 //     }
 // }
 
+// Thunk action to load likes from everyone
+export const loadAllCommentLikesThunk = () => async (dispatch) => {
+    const res = await fetch(`/api/comment_likes`)
+
+    if(res.ok) {
+        const likes = await res.json()
+        dispatch(loadLikesComment(likes))
+        return likes
+    }
+    return null
+}
 
 // Thunk action to load likes from current user
 export const loadUserCommentLikesThunk = () => async (dispatch) => {

@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom"
 
 import * as commentActions from "../../../../store/comment"
-import commentLikesReducer, * as commentLikeActions from "../../../../store/commentLike"
+import * as commentLikeActions from "../../../../store/commentLike"
 
 import redirectToUserPage from "../../../HelperFunctions/redirectToUserPage";
 import modifyCommentLikeTotal from "../../../HelperFunctions/modifyCommentLikeTotal";
@@ -21,6 +21,8 @@ const PostComments = ({ currentPost, currentSubreddit, allUsers, currentUser, po
     const [commentBody, setCommentBody] = useState("")
     const [newCommentBody, setNewCommentBody] = useState(null)
     const [loadEditCommentComponent, setLoadEditCommentComponent] = useState(false)
+
+    console.log('booba', currentLikes)
 
     // usestates for comment LIKE functionality
     const [initialCommentLikesStatus, setInitialCommentLikesStatus] = useState(false)

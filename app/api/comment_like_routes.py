@@ -24,13 +24,21 @@ def return_likes(id, likes, dislikes):
 
 # Get all likes and dislikes ever made to comments
 @comment_like_routes.route("/")
-@login_required
+# @login_required
 def likes_total():
-    current_user_id = int(current_user.get_id())
+    # current_user_id = int(current_user.get_id())
     likes = CommentLike.query.filter(CommentLike.like_status == "like").all()
     dislikes = CommentLike.query.filter(CommentLike.like_status == "dislike").all()
 
-    return return_likes(current_user_id, likes, dislikes)
+    likes_total = len(likes) - len(dislikes)
+
+    return {
+        "likes_total": likes_total,
+        "likes": {like.id: like.to_dict() for like in likes},
+        "dislikes": {dislike.id: dislike.to_dict() for dislike in dislikes}
+    }
+
+    # return return_likes(current_user_id, likes, dislikes)
 
 
 # # Get all likes and dislikes made to comments for comments that belong to a specific post

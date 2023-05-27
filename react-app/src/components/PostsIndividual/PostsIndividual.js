@@ -32,7 +32,11 @@ const PostsIndividual = () => {
         dispatch(postActions.loadPostThunk(post_id))
         dispatch(commentActions.loadPostCommentsThunk(post_id))
         dispatch(postLikeActions.loadLikesPostThunk(post_id))
-        dispatch(commentLikeActions.loadUserCommentLikesThunk())
+        if (currentUser.id) {
+            dispatch(commentLikeActions.loadUserCommentLikesThunk())
+        } else {
+            dispatch(commentLikeActions.loadAllCommentLikesThunk())
+        }
         setLoad(true)
 
         return (() => {
@@ -51,7 +55,15 @@ const PostsIndividual = () => {
     const allUsers = Object.values(useSelector(state => state.session))
     const currentComments = Object.values(useSelector(commentActions.loadAllComments))
     const currentUser = allUsers[0] || -1
-    const currentCommentLikes = Object.values(useSelector(commentLikeActions.loadCommentLikes))
+    let currentCommentLikes = Object.values(useSelector(commentLikeActions.loadCommentLikes))
+
+    console.log('booba', currentCommentLikes)
+
+    // if (currentCommentLikes.length === 0) {
+    //     currentCommentLikes = [{
+    //         0: {}
+    //     }]
+    // }
 
     return load && allUsers.length > 0 && currentPost.length > 0 && currentPostLikes.length > 0 && currentSubreddit.length > 0 && currentCommentLikes.length > 0 ? (
         <div id="post-main-container">
@@ -90,7 +102,7 @@ const PostsIndividual = () => {
                             currentUser={currentUser}
                             post_id={post_id}
                             currentLikes={currentCommentLikes}
-                            currentComments = {currentComments}
+                            currentComments={currentComments}
                             load={load}
                         />
                     </section>
