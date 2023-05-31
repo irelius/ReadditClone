@@ -22,7 +22,6 @@ const PostComments = ({ currentPost, currentSubreddit, allUsers, currentUser, po
     const [newCommentBody, setNewCommentBody] = useState(null)
     const [loadEditCommentComponent, setLoadEditCommentComponent] = useState(false)
 
-    console.log('booba', currentLikes)
 
     // usestates for comment LIKE functionality
     const [initialCommentLikesStatus, setInitialCommentLikesStatus] = useState(false)

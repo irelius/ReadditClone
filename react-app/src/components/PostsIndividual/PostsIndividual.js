@@ -57,7 +57,6 @@ const PostsIndividual = () => {
     const currentUser = allUsers[0] || -1
     let currentCommentLikes = Object.values(useSelector(commentLikeActions.loadCommentLikes))
 
-    console.log('booba', currentCommentLikes)
 
     // if (currentCommentLikes.length === 0) {
     //     currentCommentLikes = [{
