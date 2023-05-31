@@ -6,7 +6,7 @@ import redirectToPostPage from "../../../HelperFunctions/redirectToPostPage"
 import redirectToSubredditPage from "../../../HelperFunctions/redirectToSubredditPage"
 import redirectToUserPage from "../../../HelperFunctions/redirectToUserPage"
 
-const UsersPageComments = ({ props }) => {
+const UsersPageComments = ({ props, setTabSelected }) => {
     const history = useHistory()
     const username = useParams().username;
 
@@ -15,7 +15,6 @@ const UsersPageComments = ({ props }) => {
     const posts = props["allPosts"][0]
     const subreddits = props["allSubreddits"][0]
     const allUsers = props["allUsers"][1]
-
 
     return (
         Array.isArray(commentsArray) && commentsArray.map((el, i) => {
@@ -39,6 +38,7 @@ const UsersPageComments = ({ props }) => {
                             <section id="user-comments-header-username" onClick={(e) => {
                                 e.stopPropagation()
                                 e.preventDefault()
+                                setTabSelected("posts")
                                 redirectToUserPage(username, history, e)
                             }}>
                                 {username}
@@ -63,6 +63,7 @@ const UsersPageComments = ({ props }) => {
                         <aside id="user-comments-header-poster" onClick={(e) => {
                             e.stopPropagation()
                             e.preventDefault()
+                            setTabSelected("posts")
                             redirectToUserPage(postPoster["username"], history, e)
                         }}>
                             u/{postPoster["username"]}
