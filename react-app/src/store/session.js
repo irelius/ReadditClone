@@ -2,6 +2,7 @@
 const SET_USER = 'session/SET_USER';
 const REMOVE_USER = 'session/REMOVE_USER';
 const LOAD_USERS = "session/LOAD_USERS"
+const CLEAR_USERS = "session/CLEAR_USERS"
 
 const setUser = (user) => ({
   type: SET_USER,
@@ -16,6 +17,12 @@ const loadUsers = (users) => ({
   type: LOAD_USERS,
   users
 })
+
+export const clearUsers = () => {
+  return {
+    type: CLEAR_USERS
+  }
+}
 
 const initialState = { user: null };
 
@@ -107,7 +114,7 @@ export const signUp = (username, email, password) => async (dispatch) => {
 export const loadAllUserThunk = () => async (dispatch) => {
   const res = await fetch('/api/users')
 
-  if(res.ok) {
+  if (res.ok) {
     const users = await res.json()
     dispatch(loadUsers(users))
     return users
@@ -124,7 +131,7 @@ export const loadAllUsers = (state) => state.session
 
 
 const sessionReducer = (state = initialState, action) => {
-  const newState = {...state}
+  const newState = { ...state }
 
   switch (action.type) {
     case SET_USER:
@@ -144,6 +151,8 @@ const sessionReducer = (state = initialState, action) => {
 
     case REMOVE_USER:
       return { user: null }
+    case CLEAR_USERS:
+      return initialState
     default:
       return state;
   }

@@ -70,7 +70,7 @@ def seed_comments():
     comment_eleven = Comment(
         user_id = 1,
         post_id = 5,
-        subreddit_id = 4,
+        subreddit_id = 1,
         body = "don't forget to change your oil",
     )
     comment_twelve = Comment(

@@ -2,10 +2,10 @@ import "./UsersPagePosts.css"
 
 import { useHistory, useParams } from "react-router-dom"
 
-import calculatePostLikes from "../../../../HelperFunctions/calculatePostLikes"
-import redirectToPostPage from "../../../../HelperFunctions/redirectToPostPage"
-import redirectToSubredditPage from "../../../../HelperFunctions/redirectToSubredditPage"
-import redirectToUserPage from "../../../../HelperFunctions/redirectToUserPage"
+import calculatePostLikes from "../../../HelperFunctions/calculatePostLikes"
+import redirectToPostPage from "../../../HelperFunctions/redirectToPostPage"
+import redirectToSubredditPage from "../../../HelperFunctions/redirectToSubredditPage"
+import redirectToUserPage from "../../../HelperFunctions/redirectToUserPage"
 
 const UsersPagePosts = ({ props }) => {
     const history = useHistory();
@@ -20,7 +20,11 @@ const UsersPagePosts = ({ props }) => {
             const subredditInfo = subredditsToLoad[el["subreddit_id"]]
 
             return (
-                <div key={i} id="user-posts-main-container" onClick={(e) => redirectToPostPage(subredditInfo["name"], el["id"], history, e)}>
+                <div key={i} id="user-posts-main-container" onClick={(e) => {
+                    e.stopPropagation()
+                    e.preventDefault()
+                    redirectToPostPage(subredditInfo["name"], el["id"], history, e)
+                }}>
                     <aside id="user-posts-left-container">
                         <aside id="post-upvote-button">
                             <i className="fa-solid fa-up-long fa-lg" />
@@ -33,7 +37,11 @@ const UsersPagePosts = ({ props }) => {
                     <aside id="user-posts-right-container">
                         <section id="user-posts-header-container">
                             {subredditInfo ? (
-                                <section id="user-posts-header-subreddit-information" onClick={(e) => redirectToSubredditPage(subredditInfo.name, history, e)}>
+                                <section id="user-posts-header-subreddit-information" onClick={(e) => {
+                                    e.stopPropagation()
+                                    e.preventDefault()
+                                    redirectToSubredditPage(subredditInfo.name, history, e)
+                                }}>
                                     r/{subredditInfo.name}
                                 </section>
                             ) : (
@@ -43,7 +51,11 @@ const UsersPagePosts = ({ props }) => {
                             )}
                             <aside id="user-posts-header-poster-container">
                                 Posted by
-                                <section id="user-post-header-poster" onClick={(e) => redirectToUserPage(username, history, e)}>
+                                <section id="user-post-header-poster" onClick={(e) => {
+                                    e.stopPropagation()
+                                    e.preventDefault()
+                                    redirectToUserPage(username, history, e)
+                                }}>
                                     u/{username}
                                 </section>
                             </aside>
