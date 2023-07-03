@@ -42,14 +42,9 @@ function App() {
           <LandingPage />
         </Route>
 
-        {/*<Route path="/r/:subreddit_name/:post_id" exact={true}>
-          <PostsIndividualBackup />
-        </Route> */}
-
-        <Route path='/test' exact={true}>
+        {/* <Route path='/test' exact={true}>
           <TestPage />
-        </Route>
-
+        </Route> */}
 
         <Route path='/login' exact={true}>
           <LoginForm />
