@@ -11,3 +11,49 @@
 #landing-page-posts-container {
     margin-right: 25px;
 }
+
+
+#landing-page-bottom-right {
+    display: flex;
+    flex-direction: row;
+
+    position: fixed;
+    bottom: 1em;
+    right: 1em;
+}
+
+#landing-page-bottom-right * {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-right: 1em;
+
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+
+    padding: 5px;
+    border: 1px solid #343536;
+    border-radius: 5px;
+    background-color: #1A1A1B;
+    color: white;
+    text-decoration: none;
+
+    width: 55px;
+
+}
+
+
+#landing-page-bottom-right *:hover {
+    text-decoration: underline;
+    border: 1px solid #C5C6C6;
+    cursor: pointer;
+}
+
+#to-the-top-button {
+    width: 90px;
+}
+
+#my-github {
+    margin-right: 0;
+}
