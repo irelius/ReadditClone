@@ -18,7 +18,7 @@ const PostComments = ({ currentPost, currentSubreddit, allUsers, currentUser, po
     const dispatch = useDispatch()
 
     // usestates for comment EDIT functionality
-    const [commentBody, setCommentBody] = useState("")
+    // const [commentBody, setCommentBody] = useState("")
     const [newCommentBody, setNewCommentBody] = useState(null)
     const [loadEditCommentComponent, setLoadEditCommentComponent] = useState(false)
 
@@ -32,6 +32,7 @@ const PostComments = ({ currentPost, currentSubreddit, allUsers, currentUser, po
 
     // useeffect to just find out what the like total is for each comment for a specific post
     useEffect(() => {
+        console.log('booba', currentComments[0])
         if (currentComments.length > 0) {
             const likeTotalDict = {}
             Object.values(currentComments[0]).forEach(el => {
