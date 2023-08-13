@@ -26,6 +26,8 @@ const PostsIndividual = () => {
 
     const { subreddit_name, post_id } = useParams();
 
+    console.log('booba test', subreddit_name, post_id)
+
     useEffect(() => {
         dispatch(userActions.loadAllUserThunk())
         dispatch(subredditActions.loadCurrentSubredditThunk(subreddit_name))
@@ -38,6 +40,13 @@ const PostsIndividual = () => {
             dispatch(commentLikeActions.loadAllCommentLikesThunk())
         }
         setLoad(true)
+
+        console.log('booba dispatch')
+        console.log('booba dispatch')
+        console.log('booba dispatch')
+        console.log('booba dispatch')
+        console.log('booba dispatch')
+        console.log('booba dispatch')
 
         return (() => {
             dispatch(subredditActions.clearSubreddit())
