@@ -215,7 +215,7 @@ const PostsAll = () => {
                             <aside id="individual-post-main-container">
                                 <section id="individual-post-header-container">
                                     <aside id="individual-post-header-subreddit-information">
-                                        {/* <NavLink exact to={`/r/${postSubreddit["name"]}`}>Test Test</NavLink> */}
+                                        <NavLink exact to={`/r/${postSubreddit["name"]}`}>Test Test</NavLink>
                                         <section id="post-header-subreddit-information" onClick={(e) => redirectToSubredditPage(postSubreddit["name"], history, e)}>
                                             r/{postSubreddit["name"]}
                                         </section>
