@@ -184,8 +184,8 @@ const PostsAll = () => {
                 }
 
                 return (
-                    // <div key={i} id="all-posts-main-container" onClick={(e) => redirectToPostPage(subredditInfo["name"], el["id"], history, e)}>
-                    <div key={i} id="all-posts-main-container">
+                    <div key={i} id="all-posts-main-container" onClick={(e) => redirectToPostPage(subredditInfo["name"], el["id"], history, e)}>
+                    {/* <div key={i} id="all-posts-main-container"> */}
                         <aside id="all-posts-left-section">
                             <aside id="post-upvote-button" onClick={(e) => {
                                 e.stopPropagation()
@@ -212,7 +212,7 @@ const PostsAll = () => {
                                 <i className="fa-solid fa-down-long fa-lg" id={`post-dislike-status-${postLikeStatus}`} />
                             </aside>
                         </aside >
-                        <Link exact to={`/r/${postSubreddit["name"]}`}>Test Test</Link>
+                        {/* <Link exact to={`/r/${postSubreddit["name"]}`}>Test Test</Link> */}
                         <aside id="all-posts-right-section">
                             <aside id="individual-post-main-container">
                                 <section id="individual-post-header-container">
