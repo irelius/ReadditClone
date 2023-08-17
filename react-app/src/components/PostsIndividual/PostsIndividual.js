@@ -25,6 +25,7 @@ const PostsIndividual = () => {
     // const [allCommentLikeStatus, setAllCommentLikeStatus] = useState({})
 
     const { subreddit_name, post_id } = useParams();
+    console.log('test individual posts', subreddit_name, post_id)
 
     console.log('booba test', subreddit_name, post_id)
 
