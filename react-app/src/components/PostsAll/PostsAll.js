@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom"
 import { Modal } from "../../context/Modal";
+import { NavLink } from "react-router-dom/cjs/react-router-dom.min";
 
 import * as postActions from "../../store/post"
 import * as subredditActions from "../../store/subreddit"
@@ -214,6 +215,7 @@ const PostsAll = () => {
                             <aside id="individual-post-main-container">
                                 <section id="individual-post-header-container">
                                     <aside id="individual-post-header-subreddit-information">
+                                        {/* <NavLink exact to={`/r/${postSubreddit["name"]}`}>Test Test</NavLink> */}
                                         <section id="post-header-subreddit-information" onClick={(e) => redirectToSubredditPage(postSubreddit["name"], history, e)}>
                                             r/{postSubreddit["name"]}
                                         </section>
