@@ -1,7 +1,7 @@
 import "./PostBody.css"
 
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom"
 import { Modal } from "../../../../context/Modal";
 
@@ -51,7 +51,7 @@ const PostBody = ({ currentPostLikes, currentPost, currentSubreddit, allUsers, c
             setLikeTotal(currentPostLikes[0]["likes_total"])
 
         }
-    }, [currentPostLikes])
+    }, [currentPostLikes, currentUser])
 
 
 

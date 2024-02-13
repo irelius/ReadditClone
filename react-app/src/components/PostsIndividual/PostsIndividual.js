@@ -22,9 +22,10 @@ const PostsIndividual = () => {
     const history = useHistory()
 
     const [load, setLoad] = useState(false)
-    const [allCommentLikeStatus, setAllCommentLikeStatus] = useState({})
+    // const [allCommentLikeStatus, setAllCommentLikeStatus] = useState({})
 
     const { subreddit_name, post_id } = useParams();
+    // console.log('test individual posts', subreddit_name, post_id)
 
     useEffect(() => {
         dispatch(userActions.loadAllUserThunk())
@@ -38,6 +39,13 @@ const PostsIndividual = () => {
             dispatch(commentLikeActions.loadAllCommentLikesThunk())
         }
         setLoad(true)
+
+        // console.log('booba dispatch')
+        // console.log('booba dispatch')
+        // console.log('booba dispatch')
+        // console.log('booba dispatch')
+        // console.log('booba dispatch')
+        // console.log('booba dispatch')
 
         return (() => {
             dispatch(subredditActions.clearSubreddit())

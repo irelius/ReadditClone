@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom"
 import { Modal } from "../../context/Modal";
+import { Link, NavLink } from "react-router-dom/cjs/react-router-dom.min";
 
 import * as postActions from "../../store/post"
 import * as subredditActions from "../../store/subreddit"
@@ -184,6 +185,7 @@ const PostsAll = () => {
 
                 return (
                     <div key={i} id="all-posts-main-container" onClick={(e) => redirectToPostPage(subredditInfo["name"], el["id"], history, e)}>
+                    {/* <div key={i} id="all-posts-main-container"> */}
                         <aside id="all-posts-left-section">
                             <aside id="post-upvote-button" onClick={(e) => {
                                 e.stopPropagation()
@@ -210,6 +212,7 @@ const PostsAll = () => {
                                 <i className="fa-solid fa-down-long fa-lg" id={`post-dislike-status-${postLikeStatus}`} />
                             </aside>
                         </aside >
+                        {/* <Link exact to={`/r/${postSubreddit["name"]}`}>Test Test</Link> */}
                         <aside id="all-posts-right-section">
                             <aside id="individual-post-main-container">
                                 <section id="individual-post-header-container">
