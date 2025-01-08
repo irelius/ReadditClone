@@ -24,11 +24,13 @@ def users_current():
     user = User.query.get(current_user.get_id())
     return {"users": {user.id: user.to_dict()}}
 
+
 # Get specific user by id
 @user_routes.route('/<int:user_id>', methods=["GET"])
 def users_specific(user_id):
     user = User.query.get(user_id)
     return {"users": {user_id: user.to_dict()}}
+
 
 # Get all subreddits specific user is part of
 @user_routes.route("/<int:user_id>/subreddits")
