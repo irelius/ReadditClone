@@ -7,9 +7,6 @@ from flask import current_app
 
 from alembic import context
 
-import os
-schema_name = os.environ.get('SCHEMA')
-
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
@@ -70,6 +67,12 @@ def run_migrations_offline():
         context.run_migrations()
 
 
+import os
+environment = os.environ.get("FLASK_ENV")
+schema_name = os.environ.get("SCHEMA")
+
+print('booba asdf', environment, schema_name)
+
 def run_migrations_online():
     """Run migrations in 'online' mode.
 
@@ -95,12 +98,13 @@ def run_migrations_online():
             connection=connection,
             target_metadata=get_metadata(),
             process_revision_directives=process_revision_directives,
-            **current_app.extensions['migrate'].configure_args,
-            version_table="alembic_version",
-            version_table_schema=schema_name
+            **current_app.extensions['migrate'].configure_args
         )
 
         with context.begin_transaction():
+            if environment == "production":
+                connection.execute(f"CREATE SCHEMA IF NOT EXISTS {schema_name}")
+                context.execute(f"SET search_path TO {schema_name}")
             context.run_migrations()
 
 
