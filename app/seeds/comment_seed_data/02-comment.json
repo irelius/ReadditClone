@@ -1,0 +1,32 @@
+[
+    {
+        "body": "I wanna go fishing",
+        "deleted": false,
+        "user_id": 4,
+        "post_id": 2
+    },
+    {
+        "body": "i tried it, was pretty fun",
+        "deleted": false,
+        "user_id": 5,
+        "post_id": 2
+    },
+    {
+        "body": "Not so much fun when a fish comes flying out and hits you in the face",
+        "deleted": false,
+        "user_id": 6,
+        "post_id": 2
+    },
+    {
+        "body": "I disagree, that was hilarious",
+        "deleted": false,
+        "user_id": 7,
+        "post_id": 2
+    },
+    {
+        "body": "I love how the sound of kids playing can bring back such pure, innocent memories. It really makes you reflect on how brief and special those moments are.",
+        "deleted": false,
+        "user_id": 8,
+        "post_id": 2
+    }
+]

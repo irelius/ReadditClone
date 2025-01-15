@@ -5,11 +5,11 @@ class PostLike(db.Model):
     __tablename__ = "post_likes"
 
     if environment == "production":
-        __table_args__ = {'schema': SCHEMA}
+        __table_args__ = {"schema": SCHEMA}
 
 
     id = db.Column(db.Integer, primary_key=True)
-    like_status = db.Column(db.String, nullable=True)
+    like_status = db.Column(db.String, nullable=True, default="neutral")
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
@@ -23,6 +23,6 @@ class PostLike(db.Model):
             "user_id": self.user_id,
             "post_id": self.post_id,
             "like_status": self.like_status,
-            'created_at': self.created_at,
-            'updated_at': self.updated_at
+            "created_at": self.created_at,
+            "updated_at": self.updated_at
         }

@@ -1,0 +1,26 @@
+[
+    {
+        "title": "How Do You Stay Focused When Your Code Keeps Breaking?",
+        "body": "I've been debugging this one problem for hours, and I feel like I'm getting nowhere. How do you push through when everything seems to go wrong with your code?",
+        "subreddit_id": 5,
+        "user_id": 9
+    },
+    {
+        "title": "Best Tools to Improve Your Workflow as a Developer",
+        "body": "I've recently started using some new tools for coding and they've drastically improved my workflow. From code editors to task managers, here are my go-to tools for staying productive. What about you?",
+        "subreddit_id": 5,
+        "user_id": 10
+    },
+    {
+        "title": "How Do You Manage Large Projects Without Losing Your Sanity?",
+        "body": "I'm starting a new software project, and it feels overwhelming. How do you keep track of tasks and deadlines without letting things slip through the cracks? Any tips for managing large, complex projects?",
+        "subreddit_id": 5,
+        "user_id": 9
+    },
+    {
+        "title": "Should Programmers Learn Multiple Programming Languages?",
+        "body": "There's always the debate about whether you should focus on mastering one language or learn multiple. What's your approach to this? Do you stick to one, or do you dive into a bunch?",
+        "subreddit_id": 5,
+        "user_id": 10
+    }
+]

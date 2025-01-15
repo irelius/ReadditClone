@@ -1,32 +1,16 @@
 from app.models import db, PostLike, environment, SCHEMA
 from sqlalchemy.sql import text
 
-def seed_post_likes():
-    post_like_one = PostLike(
-        like_status = "like",
-        user_id = 1,
-        post_id = 5,
-    )
-    post_like_two = PostLike(
-        like_status = "like",
-        user_id = 2,
-        post_id = 5,
-    )
-    post_like_three = PostLike(
-        like_status = "like",
-        user_id = 3,
-        post_id = 5,
-    )
-    post_like_four = PostLike(
-        like_status = "dislike",
-        user_id = 4,
-        post_id = 5,
-    )
+from .post_like_seed_data import post_like_seed_data
 
-    db.session.add(post_like_one)
-    db.session.add(post_like_two)
-    db.session.add(post_like_three)
-    db.session.add(post_like_four)
+def seed_post_likes():
+    for x in post_like_seed_data:
+        new_post_like = PostLike(
+            like_status=x["like_status"],
+            user_id=x["user_id"],
+            post_id=x["post_id"]
+        )
+        db.session.add(new_post_like)
 
     db.session.commit()
 

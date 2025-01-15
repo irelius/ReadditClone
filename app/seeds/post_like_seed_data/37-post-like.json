@@ -1,0 +1,27 @@
+[
+    {
+        "like_status": "like",
+        "post_id": 37,
+        "user_id": 10
+    },
+    {
+        "like_status": "like",
+        "post_id": 37,
+        "user_id": 3
+    },
+    {
+        "like_status": "like",
+        "post_id": 37,
+        "user_id": 9
+    },
+    {
+        "like_status": "like",
+        "post_id": 37,
+        "user_id": 6
+    },
+    {
+        "like_status": "like",
+        "post_id": 37,
+        "user_id": 5
+    }
+]

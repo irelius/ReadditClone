@@ -1,52 +1,15 @@
 from app.models import db, User, environment, SCHEMA
 from sqlalchemy.sql import text
+from .user_seed_data import user_seed_data
 
-
-# Adds a demo user, you can add other users here if you want
-def seed_users():
-    demo = User(
-        username='demo',
-        email='demo@user.io',
-        password='password'
-    )
-    marnie = User(
-        username='marnie',
-        email='marnie@user.io',
-        password='password'
-    )
-    bobbie = User(
-        username='bobbie',
-        email='bobbie@user.io',
-        password='password'
-    )
-    yusuke = User(
-        username="yusuke",
-        email="yusuke@user.io",
-        password="password"
-    )
-    kazu = User(
-        username="kazu",
-        email="kazu@user.io",
-        password="password"
-    )
-    oelgrin = User(
-        username="oelgrin",
-        email="oelgrin@user.io",
-        password="password"
-    )
-    aelvif = User(
-        username="aelvif",
-        email="aelvif@user.io",
-        password="password"
-    )
-
-    db.session.add(demo)
-    db.session.add(marnie)
-    db.session.add(bobbie)
-    db.session.add(yusuke)
-    db.session.add(kazu)
-    db.session.add(oelgrin)
-    db.session.add(aelvif)
+def seed_users():       
+    for x in user_seed_data:
+        new_user = User(
+            username=x["username"],
+            email=x["email"],
+            password=x["password"]
+        )
+        db.session.add(new_user)
     db.session.commit()
 
 
@@ -60,6 +23,6 @@ def undo_users():
     if environment == "production":
         db.session.execute(f"TRUNCATE table {SCHEMA}.users RESTART IDENTITY CASCADE;")
     else:
-        db.session.execute(text("DELETE FROM users;"))
+        db.session.execute(text("DELETE FROM users"))
         
     db.session.commit()

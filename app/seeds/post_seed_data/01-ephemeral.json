@@ -1,0 +1,38 @@
+[
+    {
+        "title": "Autumn's Embrace",
+        "user_id": 5,
+        "subreddit_id": 1,
+        "body": "Stood amidst the captivating beauty of a fall forest, its golden hues embracing me. The leaves whispered tales of fleeting moments."
+    },
+    {
+        "title": "remember being a kid at the playground?",
+        "user_id": 1,
+        "subreddit_id": 1,
+        "body": "Heard the distant laughter of children playing hide and seek. Reminded me of the ephemeral nature of innocence and the joy of fleeting childhood games. What childhood echoes do you catch in passing?"
+    },
+    {
+        "title": "The Fleeting Joy of Watching a Rainbow After a Storm",
+        "body": "I caught a glimpse of a rainbow after the storm today. It was so vibrant, but I knew it wouldn't last long. Just reminded me how fleeting moments of beauty can be.",
+        "subreddit_id": 1,
+        "user_id": 5
+    },
+    {
+        "title": "I Almost Missed the Last Minute of the Concert",
+        "body": "The last song of the concert was incredible, but I almost missed it because I got distracted talking to a friend. Just goes to show how fleeting moments of joy can be. Anyone else almost miss something amazing like that?",
+        "subreddit_id": 1,
+        "user_id": 5
+    },
+    {
+        "title": "That Moment When You Realize the Sun is Setting, and It's Almost Gone",
+        "body": "I was sitting by the window today when I saw the sun dip below the horizon. It's amazing how quickly it disappears, but how beautiful the light is while it's there. Has anyone else experienced a fleeting moment like this?",
+        "subreddit_id": 1,
+        "user_id": 5
+    },
+    {
+        "title": "Chasing the Last Rays of the Day: A Beautiful Ephemeral Moment",
+        "body": "I caught a glimpse of the sun setting just as it was about to disappear. It was one of those fleeting moments you can never quite recreate. Does anyone else live for moments like these?",
+        "subreddit_id": 1,
+        "user_id": 5
+    }
+]

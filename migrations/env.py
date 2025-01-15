@@ -71,8 +71,6 @@ import os
 environment = os.environ.get("FLASK_ENV")
 schema_name = os.environ.get("SCHEMA")
 
-print('booba asdf', environment, schema_name)
-
 def run_migrations_online():
     """Run migrations in 'online' mode.
 

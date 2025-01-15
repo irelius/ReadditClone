@@ -18,26 +18,23 @@ def subreddits_all():
 @subreddit_routes.route("/<int:subreddit_id>")
 def subreddits_specific_id(subreddit_id):
     subreddit = Subreddit.query.get(subreddit_id)
-    return {"subreddits": {subreddit_id: subreddit.to_dict()}}
-
-
-# Get specific subreddit by name
-@subreddit_routes.route("/<string:subreddit_name>")
-def subreddits_specific_name(subreddit_name):
-    subreddit = Subreddit.query.filter((Subreddit.name == subreddit_name)).first()
-    return {"subreddits": {subreddit.id: subreddit.to_dict()}}
+    if subreddit == None:
+        return {"error": "Subreddit does not exist"}
+    return subreddit.to_dict()
 
 
 # Get all users of subreddit
 @subreddit_routes.route("/<int:subreddit_id>/users")
 def subreddits_specific_users(subreddit_id):
-    subreddit = Subreddit.query.get(subreddit_id)
+    user_sub = UserSubreddit.query.filter(UserSubreddit.subreddit_id == subreddit_id)
+    print('booba', user_sub.to_dict())
     
-    data = subreddit.to_dict()
-    user_subreddit = User.query.join(UserSubreddit).filter(UserSubreddit.subreddit_id == subreddit_id).all()
-    data['user'] = {subreddit.id: subreddit.safe_to_dict() for subreddit in user_subreddit}
-        
-    return data
+    return 'booba'
+    
+    # subreddit = Subreddit.query.get(subreddit_id)
+    # if subreddit == None:
+    #     return {"error": "Subreddit does not exist"}
+    # return subreddit.all_data()
 
 
 # Create a new subreddit

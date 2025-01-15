@@ -1,7 +1,7 @@
 from flask.cli import AppGroup
 from .users import seed_users, undo_users
 from .subreddits import seed_subreddits, undo_subreddits
-from .users_subreddits import seed_users_subreddits, undo_users_subreddits
+from .user_subreddits import seed_user_subreddits, undo_user_subreddits
 from .posts import seed_posts, undo_posts
 from .images import seed_images, undo_images
 from .comments import seed_comments, undo_comments
@@ -28,12 +28,12 @@ def seed():
         undo_comments()
         undo_images()
         undo_posts()
-        undo_users_subreddits()
+        undo_user_subreddits()
         undo_subreddits()
         undo_users()
     seed_users()
     seed_subreddits()
-    seed_users_subreddits()
+    seed_user_subreddits()
     seed_posts()
     seed_images()
     seed_comments()
@@ -50,7 +50,7 @@ def undo():
     undo_comments()
     undo_images()
     undo_posts()
-    undo_users_subreddits()
+    undo_user_subreddits()
     undo_subreddits()
     undo_users()
     # Add other undo functions here

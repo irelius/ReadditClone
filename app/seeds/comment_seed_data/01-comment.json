@@ -1,0 +1,45 @@
+[
+    {
+        "body": "Hello my baby",
+        "deleted": false,
+        "user_id": 1,
+        "post_id": 1
+    },
+    {
+        "body": "Hello my darling",
+        "deleted": false,
+        "user_id": 2,
+        "post_id": 1
+    },
+    {
+        "body": "Hello my rag time gal",
+        "deleted": false,
+        "user_id": 1,
+        "post_id": 1
+    },
+    {
+        "body": "Such a poetic way to describe the fall forest! I think we all need a little reminder to slow down and appreciate the fleeting beauty of moments like this.",
+        "deleted": false,
+        "user_id": 7,
+        "post_id": 1
+    },
+    {
+        "body": "Autumn has this bittersweet beauty, like a final embrace before everything changes. The golden hues and the crisp air make it the perfect time for reflection on the transient nature of things.",
+        "deleted": false,
+        "user_id": 3,
+        "post_id": 1
+    },
+    {
+        "body": "Autumn always makes me feel a little nostalgic. I can totally relate to that sense of fleeting beauty. It's like every leaf falling is a reminder of the passage of time.",
+        "deleted": false,
+        "user_id": 7,
+        "post_id": 1
+    },
+    {
+        "body": "Autumn's beauty is so bittersweet. It's a reminder that everything has its time, and we should appreciate it while we can.",
+        "deleted": false,
+        "user_id": 6,
+        "post_id": 1,
+        "replies_id": 6
+    }
+]

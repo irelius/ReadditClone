@@ -1,0 +1,20 @@
+[
+    {
+        "subreddit_id": 3,
+        "user_id": 1,
+        "admin_status": false,
+        "mod_status": true
+    },
+    {
+        "subreddit_id": 3,
+        "user_id": 2,
+        "admin_status": false,
+        "mod_status": false
+    },
+    {
+        "subreddit_id": 3,
+        "user_id": 3,
+        "admin_status": true,
+        "mod_status": false
+    }
+]

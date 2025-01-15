@@ -1,0 +1,12 @@
+[
+    {
+        "like_status": "like",
+        "post_id": 48,
+        "user_id": 6
+    },
+    {
+        "like_status": "dislike",
+        "post_id": 48,
+        "user_id": 4
+    }
+]

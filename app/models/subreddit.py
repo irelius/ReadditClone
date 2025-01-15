@@ -5,39 +5,38 @@ class Subreddit(db.Model):
     __tablename__ = "subreddits"
 
     if environment == "production":
-        __table_args__ = {'schema': SCHEMA}
+        __table_args__ = {"schema": SCHEMA}
 
 
     id = db.Column(db.Integer, primary_key=True)
-    admin_id = db.Column(db.Integer, nullable=False)
     name = db.Column(db.String(21), unique=True, nullable=False)
-    # TO DO: add a function to make a subreddit private
-    # privacy_setting = db.Column(db.String, nullable=False)
+    # TODO: add a function to make a subreddit private
     description = db.Column(db.String(500))
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
     # One to Many Relationship, Unidirectional FROM Subreddit
     posts = db.relationship("Post", cascade="all, delete")
-    comments = db.relationship("Comment", cascade="all, delete")
 
     # Many to Many Relationship. Bidirectional through join table UserSubreddit
-    user_subreddit_relationship = db.relationship("UserSubreddit", back_populates="subreddit_join", cascade="all, delete")
+    user_relationship = db.relationship("UserSubreddit", back_populates="subreddit_join", cascade="all, delete")
     
-    def safe_to_dict(self):
-        return {
+    
+    def all_data(self):
+        return {           
             "id": self.id,
             "name": self.name,
-            "description": self.description
+            "users": {user_sub.user_id: user_sub.user_data_dict() for user_sub in self.user_relationship},
+            "description": self.description,
+            "created_at": self.created_at,
+            "updated_at": self.updated_at
         }
     
-    def to_dict(self):
+    def to_dict(self):               
         return {
             "id": self.id,
             "name": self.name,
-            "admin_id": self.admin_id,
-            # "users": {user.user_id: user.to_dict() for user in self.user_subreddit_relationship},
             "description": self.description,
-            'created_at': self.created_at,
-            'updated_at': self.updated_at
+            "created_at": self.created_at,
+            "updated_at": self.updated_at
         }

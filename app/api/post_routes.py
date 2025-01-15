@@ -15,14 +15,13 @@ def posts_all():
     posts = Post.query.all()
     return return_posts(posts)
 
-
 # Get specific post by id
 @post_routes.route("/<int:post_id>")
 def posts_specific(post_id):
-    post = (Post.query.get(post_id)).to_dict()
-    users = User.query.get(post["id"]).safe_to_dict()
-    
+    post = Post.query.get(post_id).to_dict()
+    users = User.query.get(post["user_id"]).safe_to_dict()
     post['user'] = users
+    
     return post
 
 # Get posts made by current user
@@ -31,20 +30,13 @@ def posts_specific(post_id):
 def posts_by_current_user():
     current_user_id = int(current_user.get_id())
     posts = Post.query.filter(Post.user_id == current_user_id).all()
+   
     return return_posts(posts)
 
 
 # Get posts made by specific user by id number
 @post_routes.route("/users/<int:user_id>")
 def posts_by_specific_user_id(user_id):
-    posts = Post.query.filter(Post.user_id == user_id).all()
-    return return_posts(posts)
-
-
-# Get posts made by specific user by username
-@post_routes.route("/users/<string:username>")
-def posts_by_specific_username(username):
-    user_id = User.query.filter(User.username == username).first().safe_to_dict()["id"]
     posts = Post.query.filter(Post.user_id == user_id).all()
     return return_posts(posts)
 
@@ -56,18 +48,10 @@ def posts_by_specific_subreddit_id(subreddit_id):
     return return_posts(posts)
 
 
-# Get posts for a specific subreddit by name
-@post_routes.route("/subreddits/<string:subreddit_name>")
-def posts_by_specific_subreddit_name(subreddit_name):
-    subreddit_id = (Subreddit.query.filter(Subreddit.name == subreddit_name).first()).to_dict()["id"]
-    posts = Post.query.filter(Post.subreddit_id == subreddit_id).all()
-    return return_posts(posts)
-
-
-# Create a post for a specific subreddit
-@post_routes.route("/subreddits/<int:subreddit_id>", methods=["POST"])
+# Create a post
+@post_routes.route("/", methods=["POST"])
 @login_required
-def posts_create_new(subreddit_id):
+def posts_create_new():
     current_user_id = int(current_user.get_id())
 
     if current_user_id == None:
@@ -79,7 +63,7 @@ def posts_create_new(subreddit_id):
     if form.validate_on_submit():
         new_post = Post(
             user_id = current_user_id,
-            subreddit_id = subreddit_id,
+            subreddit_id = form.data["subreddit_id"],
             title = form.data["title"],
             body = form.data["body"],
             # image = form.data["image"],

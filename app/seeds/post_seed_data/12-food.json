@@ -1,0 +1,20 @@
+[
+    {
+        "title": "Vegan Recipe: Creamy Mushroom Risotto",
+        "body": "I made a creamy mushroom risotto last night, and it turned out so well! Perfect for those cold nights. Here's the recipe if anyone wants to try it out!",
+        "subreddit_id": 12,
+        "user_id": 8
+    },
+    {
+        "title": "Spicy Ramen That Will Blow Your Mind (And Your Tastebuds)",
+        "body": "If you love spicy food, you've got to try this ramen recipe. It's got the perfect kick and will leave you sweating but satisfied. What's your go-to spicy dish?",
+        "subreddit_id": 12,
+        "user_id": 8
+    },
+    {
+        "title": "Freshly baked bread",
+        "user_id": 1,
+        "subreddit_id": 12,
+        "body": "My girlfriend just used my grandma's old bread recipe and oh man, that smell was just 100% nostalgia."
+    }
+]
