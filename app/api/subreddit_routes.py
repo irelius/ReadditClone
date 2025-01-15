@@ -27,9 +27,9 @@ def subreddits_specific_id(subreddit_id):
 @subreddit_routes.route("/<int:subreddit_id>/users")
 def subreddits_specific_users(subreddit_id):
     user_sub = UserSubreddit.query.filter(UserSubreddit.subreddit_id == subreddit_id)
-    print('booba', user_sub.to_dict())
+    print('test', user_sub.to_dict())
     
-    return 'booba'
+    return 'hello'
     
     # subreddit = Subreddit.query.get(subreddit_id)
     # if subreddit == None:

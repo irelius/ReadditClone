@@ -161,7 +161,7 @@ export const deleteLikePostThunk = (postId) => async (dispatch) => {
 
     return null;
 }
-// booba tre
+
 // Object { type: "/likes/DELETE_POST_LIKES", postId: 2 }
 // ​
 // postId: 2
