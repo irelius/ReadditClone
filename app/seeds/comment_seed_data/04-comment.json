@@ -3,12 +3,14 @@
         "body": "That foggy, eerie landscape sounds like something out of a dream. I can only imagine how surreal it must have been to witness.",
         "deleted": false,
         "user_id": 5,
+        "subreddit_id": 1,
         "post_id": 4
     },
     {
         "body": "I couldn't agree more. There's something mystical about Japan in winter. It feels like you're stepping into a different world.",
         "deleted": false,
         "user_id": 6,
+        "subreddit_id": 1,
         "post_id": 4,
         "replies_id": 17
     }

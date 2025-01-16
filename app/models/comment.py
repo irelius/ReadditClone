@@ -22,15 +22,27 @@ class Comment(db.Model):
     replies_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("comments.id")), nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("users.id")), nullable=False)
     post_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("posts.id")), nullable=False)
+    subreddit_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("subreddits.id")), nullable=False)
+    
+    def calc_likes(self):
+        likes = len([like for like in self.comment_likes if like.like_status == "like"])
+        dislikes = len([dislike for dislike in self.comment_likes if dislike.like_status == "dislike"])
+        total = likes - dislikes
+        return likes, dislikes, total
     
     def to_dict(self):
+        likes, dislikes, total = self.calc_likes()
+        
         return {
             "id": self.id,
             "user_id": self.user_id,
             "post_id": self.post_id,
+            "subreddit_id": self.subreddit_id,
             "body": self.body,
+            "likes": likes,
+            "dislikes": dislikes,
+            "total_likes": total,
             "replies": {reply.id: reply.to_dict() for reply in self.replies},
-            "comment_like": {comment_like.id: comment_like.to_dict() for comment_like in self.comment_likes},
             'created_at': self.created_at,
             'updated_at': self.updated_at
         }

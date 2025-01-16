@@ -58,8 +58,8 @@ def users_comments(user_id):
     return return_comments(comments)
     
 
-# Unauthorized user access
-@user_routes.route("/unauthorized", methods=["GET"])
-def users_unauthorized():
-    return {"errors": ["Unauthorized access"]}, 401
+# # Unauthorized user access
+# @user_routes.route("/unauthorized", methods=["GET"])
+# def users_unauthorized():
+#     return {"errors": ["Unauthorized access"]}, 403
 

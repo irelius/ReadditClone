@@ -28,7 +28,6 @@ class Post(db.Model):
         likes = len([like for like in self.post_likes if like.like_status == "like"])
         dislikes = len([dislike for dislike in self.post_likes if dislike.like_status == "dislike"])
         total = likes - dislikes
-        
         return likes, dislikes, total
 
 

@@ -3,24 +3,28 @@
         "body": "tax season is coming up",
         "deleted": false,
         "user_id": 2,
+        "subreddit_id": 1,
         "post_id": 5
     },
     {
         "body": "don't forget to change your oil",
         "deleted": false,
         "user_id": 1,
+        "subreddit_id": 1,
         "post_id": 5
     },
     {
         "body": "I love how you captured that! It really does feel like the silence has a personality of its own in that moment.",
         "deleted": false,
         "user_id": 7,
+        "subreddit_id": 1,
         "post_id": 5
     },
     {
         "body": "Thank you! That scene just seemed to radiate such calm, and I wanted to capture that essence. It's one of those rare moments where you feel time itself pause.",
         "deleted": false,
         "user_id": 8,
+        "subreddit_id": 1,
         "post_id": 5,
         "replies_id": 21
     }

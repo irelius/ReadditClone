@@ -3,12 +3,14 @@
         "body": "Walking through a deserted train station at night sounds so eerie, like something from a movie. I love the sense of mystery that comes with those kinds of places.",
         "deleted": false,
         "user_id": 8,
+        "subreddit_id": 2,
         "post_id": 10
     },
     {
         "body": "I think traveling to deserted or abandoned places gives you a sense of history, like you’re stepping into something frozen in time. It’s eerie, but also beautiful in a way.",
         "deleted": false,
         "user_id": 2,
+        "subreddit_id": 2,
         "post_id": 10
     }
 ]

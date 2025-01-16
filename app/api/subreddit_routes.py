@@ -63,7 +63,7 @@ def subreddits_create_new():
         db.session.add(new_subreddit_user)
         db.session.commit()
         return new_subreddit.to_dict()
-    return {"errors": validation_error_message(form.errors)}, 401
+    return {"errors": validation_error_message(form.errors)}, 400
 
 
 # TODO: implement function to add users to a private subreddit (another TO DO in the subreddit) or join a subreddit if public (this part is done for now)
@@ -104,7 +104,7 @@ def subreddits_update_specific(subreddit_id):
         return {"errors": "You must be logged in before editing this subreddit"}, 401
 
     if subreddit_to_edit.admin_id != current_user_id:
-        return {"errors": "You do not have permission to edit this subreddit"}, 401
+        return {"errors": "You do not have permission to edit this subreddit"}, 403
 
     form = SubredditForm()
     subreddit_to_edit.description = form.data["description"]
@@ -125,7 +125,7 @@ def subreddits_delete_specific(subreddit_id):
         return {"errors": "You must be logged in before deleting this subreddit"}, 401
 
     if(subreddit_to_delete.admin_id != current_user_id):
-        return {"errors": "You do not have permission to delete this subreddit"}, 401
+        return {"errors": "You do not have permission to delete this subreddit"}, 403
 
     db.session.delete(subreddit_to_delete)
     db.session.commit()

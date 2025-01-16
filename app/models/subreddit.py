@@ -17,6 +17,7 @@ class Subreddit(db.Model):
 
     # One to Many Relationship, Unidirectional FROM Subreddit
     posts = db.relationship("Post", cascade="all, delete")
+    subreddits = db.relationship("Comment")
 
     # Many to Many Relationship. Bidirectional through join table UserSubreddit
     user_relationship = db.relationship("UserSubreddit", back_populates="subreddit_join", cascade="all, delete")

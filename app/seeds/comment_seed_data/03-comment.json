@@ -3,18 +3,21 @@
         "body": "Is this true?",
         "deleted": false,
         "user_id": 2,
+        "subreddit_id": 1,
         "post_id": 3
     },
     {
         "body": "Rainbows after a storm are so fleeting, yet so beautiful. It's like the world is showing you a little reminder of beauty right when you think it’s all gone.",
         "deleted": false,
         "user_id": 4,
+        "subreddit_id": 1,
         "post_id": 3
     },
     {
         "body": "This is a fake article",
         "deleted": false,
         "user_id": 3,
+        "subreddit_id": 1,
         "post_id": 3,
         "replies_id": 13
     },
@@ -22,6 +25,7 @@
         "body": "Absolutely! Rainbows after the storm are like little gifts from the universe, reminding us that even after hardship, there can be beauty.",
         "deleted": false,
         "user_id": 2,
+        "subreddit_id": 1,
         "post_id": 3,
         "replies_id": 14
     }

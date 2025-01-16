@@ -3,12 +3,14 @@
         "body": "The idea of adaptive clothes is so cool! Imagine wearing something that changes based on the weather or even your mood. That would definitely make dressing for the day a lot more fun.",
         "deleted": false,
         "user_id": 11,
+        "subreddit_id": 3,
         "post_id": 15
     },
     {
         "body": "Haha, I know, right? It’s one of those concepts that makes you wonder how far fashion will go before it gets too wild!",
         "deleted": false,
         "user_id": 4,
+        "subreddit_id": 3,
         "post_id": 15,
         "replies_id": 44
     },
@@ -16,6 +18,7 @@
         "body": "Right? The future is here, and it's definitely going to be an interesting ride! I can't wait to see how it evolves.",
         "deleted": false,
         "user_id": 4,
+        "subreddit_id": 3,
         "post_id": 15,
         "replies_id": 44
     }

@@ -104,7 +104,7 @@ def create_like_on_post(post_id):
 @login_required
 def likes_delete_to_post(post_id):
     current_user_id = int(current_user.get_id())
-    like_to_delete_post = PostLike.query.filter((PostLike.post_id == int(post_id)), (PostLike.user_id == current_user_id)).all()[0]
+    like_to_delete_post = PostLike.query.filter((PostLike.post_id == int(post_id)), (PostLike.user_id == current_user_id)).first()
 
     if current_user_id == None:
         return {"errors": "You must be logged in before liking/disliking a comment"}, 401

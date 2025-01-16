@@ -9,7 +9,8 @@ def seed_comments():
             deleted=x["deleted"],
             user_id=x["user_id"],
             post_id=x["post_id"],
-            replies_id=x["replies_id"] if "replies_id" in x else None
+            replies_id=x["replies_id"] if "replies_id" in x else None,
+            subreddit_id=x["subreddit_id"]
         )
         db.session.add(new_comment)
 

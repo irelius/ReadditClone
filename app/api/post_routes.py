@@ -1,7 +1,7 @@
 from flask import Blueprint, request
 from flask_login import current_user, login_required
-from app.models import db, Post, Subreddit, User, PostLike
-from app.forms import PostForm, LikeForm
+from app.models import db, Post, Comment, Subreddit, User, PostLike
+from app.forms import PostForm, LikeForm, CommentForm
 from app.aws import (
     upload_file_to_s3, allowed_file, get_unique_filename)
 from app.helper import return_posts, validation_error_message
@@ -34,7 +34,7 @@ def posts_by_current_user():
     return return_posts(posts)
 
 
-# Get posts made by specific user by id number
+# Get posts made by specific user
 @post_routes.route("/users/<int:user_id>")
 def posts_by_specific_user_id(user_id):
     posts = Post.query.filter(Post.user_id == user_id).all()
@@ -84,8 +84,37 @@ def posts_create_new():
         db.session.commit()
 
         return new_post.to_dict()
-    return {"errors": validation_error_message(form.errors)}, 401
+    return {"errors": validation_error_message(form.errors)}, 400
 
+
+# Create a new comment on a post
+@post_routes.route("/<int:post_id>/comments", methods=["POST"])
+@login_required
+def create_comment_on_post(post_id):
+    current_user_id = int(current_user.get_id())
+
+    if current_user_id == None:
+        return {"errors": "You must be logged in before leaving a comment"}, 401
+
+    form = CommentForm()
+    form['csrf_token'].data = request.cookies['csrf_token']
+
+    if form.validate_on_submit():
+        new_comment = Comment(
+            body = form.data["body"],
+            deleted = False,
+            reply_to_id = None,
+            user_id = current_user_id,
+            post_id = post_id,
+            subreddit_id = form.data["subreddit_id"],
+        )
+
+        db.session.add(new_comment)
+        db.session.commit()
+
+        return new_comment.to_dict()
+
+    return {"errors": validation_error_message(form.errors)}, 401
 
 # Create a like/dislike to a post
 @post_routes.route("/<int:post_id>/likes", methods=["POST"])
@@ -121,7 +150,7 @@ def update_like_on_post(like_id):
     like_to_update = PostLike.query.get(like_id)
     
     if like_to_update == None:
-        return {"errors": "Like/dislike does not exist"}, 403
+        return {"errors": "Like/dislike does not exist"}, 404
         
     if like_to_update.user_id != current_user_id:
         return {"errors": "Current user is not authorized to update this like/dislike"}, 403
@@ -144,7 +173,7 @@ def delete_like_on_post(post_id):
     like_to_delete = PostLike.query.filter(PostLike.post_id == post_id, PostLike.user_id == current_user_id).first()
     
     if like_to_delete.user_id != current_user_id:
-        return {"errors": "This like/dislike does not belong to current user"}, 401
+        return {"errors": "This like/dislike does not belong to current user"}, 403
     
     if like_to_delete == None:
        return {"errors": "Current user is not authorized to delete this like/dislike"}, 403
@@ -165,7 +194,7 @@ def posts_update_specific(post_id):
         return {"errors": "You must be logged in before editing a post"}, 401
 
     if post_to_edit.user_id != current_user_id:
-        return {"errors": "You do not have permission to edit this post"}, 401
+        return {"errors": "You do not have permission to edit this post"}, 403
 
     form = PostForm()
 
