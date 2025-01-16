@@ -26,15 +26,10 @@ def subreddits_specific_id(subreddit_id):
 # Get all users of subreddit
 @subreddit_routes.route("/<int:subreddit_id>/users")
 def subreddits_specific_users(subreddit_id):
-    user_sub = UserSubreddit.query.filter(UserSubreddit.subreddit_id == subreddit_id)
-    print('test', user_sub.to_dict())
-    
-    return 'hello'
-    
-    # subreddit = Subreddit.query.get(subreddit_id)
-    # if subreddit == None:
-    #     return {"error": "Subreddit does not exist"}
-    # return subreddit.all_data()
+    user_subs = UserSubreddit.query.filter(UserSubreddit.subreddit_id == subreddit_id).join(Subreddit).all()
+    if len(user_subs) == 0:
+        return {"error": "Subreddit does not have any users"}
+    return {user_sub.id: user_sub.user_data_dict() for user_sub in user_subs}
 
 
 # Create a new subreddit
@@ -73,29 +68,29 @@ def subreddits_create_new():
 
 # TODO: implement function to add users to a private subreddit (another TO DO in the subreddit) or join a subreddit if public (this part is done for now)
 # Add a user to a subreddit
-@subreddit_routes.route("/<int:subreddit_id>", methods=["POST"])
-@login_required
-def subreddits_add_user(subreddit_id):
-    current_user_id = int(current_user.get_id())
+# @subreddit_routes.route("/<int:subreddit_id>", methods=["POST"])
+# @login_required
+# def subreddits_add_user(subreddit_id):
+#     current_user_id = int(current_user.get_id())
 
-    if current_user_id == None:
-        return {"errors": "You must be logged in before addings people to this subreddit"}, 401
+#     if current_user_id == None:
+#         return {"errors": "You must be logged in before addings people to this subreddit"}, 401
 
 
-    # This would require a user to be added if the subreddit is set to private
-    # subreddit_users = UserSubreddit.query.filter((UserSubreddit.subreddit_id == subreddit_id), (UserSubreddit.user_id == current_user_id)).all()
-    # if len(subreddit_users) == 0:
-    #     return {"errors": "You do not have permission to add a user to this subreddit"}, 403
+#     # This would require a user to be added if the subreddit is set to private
+#     # subreddit_users = UserSubreddit.query.filter((UserSubreddit.subreddit_id == subreddit_id), (UserSubreddit.user_id == current_user_id)).all()
+#     # if len(subreddit_users) == 0:
+#     #     return {"errors": "You do not have permission to add a user to this subreddit"}, 403
 
-    new_subreddit_user = UserSubreddit(
-        subreddit_id = subreddit_id,
-        user_id = current_user_id
-    )
+#     new_subreddit_user = UserSubreddit(
+#         subreddit_id = subreddit_id,
+#         user_id = current_user_id
+#     )
 
-    db.session.add(new_subreddit_user)
-    db.session.commit()
+#     db.session.add(new_subreddit_user)
+#     db.session.commit()
 
-    return {"message": f"Successfully added User {current_user_id} to Subreddit {subreddit_id}."}
+#     return {"message": f"Successfully added User {current_user_id} to Subreddit {subreddit_id}."}
 
 
 # Update a subreddit description by id, also possibly the privacy setting of subreddit if functionality implemented later

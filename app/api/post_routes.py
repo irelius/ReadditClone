@@ -1,7 +1,7 @@
 from flask import Blueprint, request
 from flask_login import current_user, login_required
 from app.models import db, Post, Subreddit, User, PostLike
-from app.forms import PostForm
+from app.forms import PostForm, LikeForm
 from app.aws import (
     upload_file_to_s3, allowed_file, get_unique_filename)
 from app.helper import return_posts, validation_error_message
@@ -85,6 +85,74 @@ def posts_create_new():
 
         return new_post.to_dict()
     return {"errors": validation_error_message(form.errors)}, 401
+
+
+# Create a like/dislike to a post
+@post_routes.route("/<int:post_id>/likes", methods=["POST"])
+@login_required
+def create_like_on_post(post_id):
+    current_user_id = int(current_user.get_id())
+
+    if current_user_id == None:
+        return {"errors": "You must be logged in before liking/disliking a post"}, 401
+
+    form = LikeForm()
+    form['csrf_token'].data = request.cookies['csrf_token']
+
+    new_like = PostLike(
+        like_status = form.data["like_status"],
+        post_id = post_id,
+        user_id = current_user_id
+    )
+
+    db.session.add(new_like)
+    db.session.commit()
+
+    return new_like.to_dict()
+
+
+# Update existing like to a post
+# TODO: Not sure how I'd get the id of the like, but if I figure it out, it would make the request faster
+@post_routes.route("/likes/<int:like_id>", methods=["PUT"])
+@login_required
+def update_like_on_post(like_id):
+    current_user_id = int(current_user.get_id())
+    
+    like_to_update = PostLike.query.get(like_id)
+    
+    if like_to_update == None:
+        return {"errors": "Like/dislike does not exist"}, 403
+        
+    if like_to_update.user_id != current_user_id:
+        return {"errors": "Current user is not authorized to update this like/dislike"}, 403
+    
+    form = LikeForm()
+    
+    like_to_update.like_status = form.data["like_status"]
+   
+    db.session.commit()
+    return like_to_update.to_dict()
+    
+    
+
+# Delete likes/dislikes to posts
+@post_routes.route("/<int:post_id>/likes", methods=["DELETE"])
+@login_required
+def delete_like_on_post(post_id):
+    current_user_id = int(current_user.get_id())
+    
+    like_to_delete = PostLike.query.filter(PostLike.post_id == post_id, PostLike.user_id == current_user_id).first()
+    
+    if like_to_delete.user_id != current_user_id:
+        return {"errors": "This like/dislike does not belong to current user"}, 401
+    
+    if like_to_delete == None:
+       return {"errors": "Current user is not authorized to delete this like/dislike"}, 403
+     
+    db.session.delete(like_to_delete)
+    db.session.commit()
+    
+    return {"message": "Like/dislike successfully deleted"}
 
 
 # Update a post by id

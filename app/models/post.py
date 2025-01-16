@@ -23,6 +23,7 @@ class Post(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("users.id")), nullable=False)
     subreddit_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("subreddits.id")), nullable=False)
 
+
     def calc_likes(self):
         likes = len([like for like in self.post_likes if like.like_status == "like"])
         dislikes = len([dislike for dislike in self.post_likes if dislike.like_status == "dislike"])
@@ -30,17 +31,6 @@ class Post(db.Model):
         
         return likes, dislikes, total
 
-    def test_to_dict(self):
-        likes, dislikes, total = self.calc_likes(self)
-       
-        return {
-            "id": self.id,
-            "title": self.title,
-            "body": self.body,
-            "likes": likes,
-            "dislikes": dislikes,
-            "total_likes": total
-        }
 
     def to_dict(self):
         likes, dislikes, total = self.calc_likes()

@@ -8,59 +8,59 @@ post_like_routes = Blueprint("post_likes", __name__)
 
 # --------------------------------------------------------------------------------
 
-# Get all likes and dislikes made to comments for comments that belong to a specific post
-# @post_like_routes.route('/all/post/<int:post_id>/comments')
-@post_like_routes.route("/")
-@login_required
-def likes_comments_per_post(post_id):
-    current_user_id = int(current_user.get_id())
+# # Get all likes and dislikes made to comments for comments that belong to a specific post
+# # @post_like_routes.route('/all/post/<int:post_id>/comments')
+# @post_like_routes.route("/")
+# @login_required
+# def likes_comments_per_post(post_id):
+#     current_user_id = int(current_user.get_id())
 
-    # likes = PostLike.query.filter(PostLike.like_status == "like").filter(PostLike.post_id == post_id).filter(PostLike.comment_id == 11).all()
-    # dislikes = PostLike.query.filter(PostLike.like_status == "dislike").filter(PostLike.post_id == post_id).filter(PostLike.comment_id == 11).all()
+#     # likes = PostLike.query.filter(PostLike.like_status == "like").filter(PostLike.post_id == post_id).filter(PostLike.comment_id == 11).all()
+#     # dislikes = PostLike.query.filter(PostLike.like_status == "dislike").filter(PostLike.post_id == post_id).filter(PostLike.comment_id == 11).all()
 
-    # test = db.query(Like, Comment).join(Comment)
+#     # test = db.query(Like, Comment).join(Comment)
 
-    likes = PostLike.query.filter(PostLike.like_status == "like").filter(PostLike.comment_id != None).filter(Comment.post_id == post_id).all()
-    dislikes = PostLike.query.filter(PostLike.like_status == "dislike").filter(PostLike.comment_id != None).filter(Comment.post_id == post_id).all()
+#     likes = PostLike.query.filter(PostLike.like_status == "like").filter(PostLike.comment_id != None).filter(Comment.post_id == post_id).all()
+#     dislikes = PostLike.query.filter(PostLike.like_status == "dislike").filter(PostLike.comment_id != None).filter(Comment.post_id == post_id).all()
 
-    comment = Comment.query.filter(Comment.post_id == post_id).all()
+#     comment = Comment.query.filter(Comment.post_id == post_id).all()
 
-    # return return_likes(current_user_id, likes, dislikes)
-
-
-# Get all likes and dislikes made by current user to posts
-@post_like_routes.route("/users/current")
-@login_required
-def likes_current_user():
-    current_user_id = int(current_user.get_id())
-    likes = PostLike.query.filter(PostLike.like_status == "like").filter(PostLike.user_id == current_user_id).all()
-    dislikes = PostLike.query.filter(PostLike.like_status == "dislike").filter(PostLike.user_id == current_user_id).all()
-
-    return return_likes(current_user_id, likes, dislikes)
+#     # return return_likes(current_user_id, likes, dislikes)
 
 
-# Get all likes and dislikes made by specific user to posts
-@post_like_routes.route("/users/<int:user_id>")
-def likes_specific_user(user_id):
-    likes = PostLike.query.filter(PostLike.like_status == "like").filter(PostLike.user_id == user_id).all()
-    dislikes = PostLike.query.filter(PostLike.like_status == "dislike").filter(PostLike.user_id == user_id).all()
+# # Get all likes and dislikes made by current user to posts
+# @post_like_routes.route("/users/current")
+# @login_required
+# def likes_current_user():
+#     current_user_id = int(current_user.get_id())
+#     likes = PostLike.query.filter(PostLike.like_status == "like").filter(PostLike.user_id == current_user_id).all()
+#     dislikes = PostLike.query.filter(PostLike.like_status == "dislike").filter(PostLike.user_id == current_user_id).all()
 
-    return return_likes(user_id, likes, dislikes)
-
-
-# Get all likes and dislikes made to a specific post
-@post_like_routes.route("/posts/<int:post_id>")
-def likes_specific_post(post_id):
-    likes = PostLike.query.filter(PostLike.like_status == "like").filter(PostLike.post_id == post_id).all()
-    dislikes = PostLike.query.filter(PostLike.like_status == "dislike").filter(PostLike.post_id == post_id).all()
-
-    return return_likes(post_id, likes, dislikes)
+#     return return_likes(current_user_id, likes, dislikes)
 
 
-# Create a new like on a post
+# # Get all likes and dislikes made by specific user to posts
+# @post_like_routes.route("/users/<int:user_id>")
+# def likes_specific_user(user_id):
+#     likes = PostLike.query.filter(PostLike.like_status == "like").filter(PostLike.user_id == user_id).all()
+#     dislikes = PostLike.query.filter(PostLike.like_status == "dislike").filter(PostLike.user_id == user_id).all()
+
+#     return return_likes(user_id, likes, dislikes)
+
+
+# # Get all likes and dislikes made to a specific post
+# @post_like_routes.route("/posts/<int:post_id>")
+# def likes_specific_post(post_id):
+#     likes = PostLike.query.filter(PostLike.like_status == "like").filter(PostLike.post_id == post_id).all()
+#     dislikes = PostLike.query.filter(PostLike.like_status == "dislike").filter(PostLike.post_id == post_id).all()
+
+#     return return_likes(post_id, likes, dislikes)
+
+
+# Create a like/dislike to a post
 @post_like_routes.route("/posts/<int:post_id>", methods=["POST"])
 @login_required
-def likes_create_new_to_post(post_id):
+def create_like_on_post(post_id):
     current_user_id = int(current_user.get_id())
 
     if current_user_id == None:
