@@ -32,6 +32,7 @@ class Comment(db.Model):
     
     def to_dict(self):
         likes, dislikes, total = self.calc_likes()
+        print('booba test', self.replies_id)
         
         return {
             "id": self.id,

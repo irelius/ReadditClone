@@ -21,18 +21,7 @@ class Subreddit(db.Model):
 
     # Many to Many Relationship. Bidirectional through join table UserSubreddit
     user_relationship = db.relationship("UserSubreddit", back_populates="subreddit_join", cascade="all, delete")
-    
-    
-    def all_data(self):
-        return {           
-            "id": self.id,
-            "name": self.name,
-            "users": {user_sub.user_id: user_sub.user_data_dict() for user_sub in self.user_relationship},
-            "description": self.description,
-            "created_at": self.created_at,
-            "updated_at": self.updated_at
-        }
-    
+        
     def to_dict(self):               
         return {
             "id": self.id,

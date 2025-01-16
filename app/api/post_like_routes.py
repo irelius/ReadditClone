@@ -13,7 +13,7 @@ post_like_routes = Blueprint("post_likes", __name__)
 # @post_like_routes.route("/")
 # @login_required
 # def likes_comments_per_post(post_id):
-#     current_user_id = int(current_user.get_id())
+#     user_id = int(current_user.get_id())
 
 #     # likes = PostLike.query.filter(PostLike.like_status == "like").filter(PostLike.post_id == post_id).filter(PostLike.comment_id == 11).all()
 #     # dislikes = PostLike.query.filter(PostLike.like_status == "dislike").filter(PostLike.post_id == post_id).filter(PostLike.comment_id == 11).all()
@@ -25,18 +25,18 @@ post_like_routes = Blueprint("post_likes", __name__)
 
 #     comment = Comment.query.filter(Comment.post_id == post_id).all()
 
-#     # return return_likes(current_user_id, likes, dislikes)
+#     # return return_likes(user_id, likes, dislikes)
 
 
 # # Get all likes and dislikes made by current user to posts
 # @post_like_routes.route("/users/current")
 # @login_required
 # def likes_current_user():
-#     current_user_id = int(current_user.get_id())
-#     likes = PostLike.query.filter(PostLike.like_status == "like").filter(PostLike.user_id == current_user_id).all()
-#     dislikes = PostLike.query.filter(PostLike.like_status == "dislike").filter(PostLike.user_id == current_user_id).all()
+#     user_id = int(current_user.get_id())
+#     likes = PostLike.query.filter(PostLike.like_status == "like").filter(PostLike.user_id == user_id).all()
+#     dislikes = PostLike.query.filter(PostLike.like_status == "dislike").filter(PostLike.user_id == user_id).all()
 
-#     return return_likes(current_user_id, likes, dislikes)
+#     return return_likes(user_id, likes, dislikes)
 
 
 # # Get all likes and dislikes made by specific user to posts
@@ -61,9 +61,9 @@ post_like_routes = Blueprint("post_likes", __name__)
 @post_like_routes.route("/posts/<int:post_id>", methods=["POST"])
 @login_required
 def create_like_on_post(post_id):
-    current_user_id = int(current_user.get_id())
+    user_id = int(current_user.get_id())
 
-    if current_user_id == None:
+    if user_id == None:
         return {"errors": "You must be logged in before liking/disliking a post"}, 401
 
     form = LikeForm()
@@ -72,7 +72,7 @@ def create_like_on_post(post_id):
     new_like = PostLike(
         like_status = form.data["like_status"],
         post_id = post_id,
-        user_id = current_user_id
+        user_id = user_id
     )
 
     db.session.add(new_like)
@@ -85,10 +85,10 @@ def create_like_on_post(post_id):
 # @post_like_routes.route("/posts/<int:post_id>", methods=["PUT"])
 # @login_required
 # def likes_update_to_post(post_id):
-#     current_user_id = int(current_user.get_id())
-#     like_to_edit_post = PostLike.query.filter((PostLike.post_id == int(post_id)), (PostLike.user_id == current_user_id)).all()[0]
+#     user_id = int(current_user.get_id())
+#     like_to_edit_post = PostLike.query.filter((PostLike.post_id == int(post_id)), (PostLike.user_id == user_id)).all()[0]
 
-#     if current_user_id == None:
+#     if user_id == None:
 #         return {"errors": "You must be logged in before liking/disliking a post"}, 401
 
 #     like_to_edit_post.like_status = "neutral"
@@ -103,10 +103,10 @@ def create_like_on_post(post_id):
 @post_like_routes.route("/posts/<int:post_id>", methods=["DELETE"])
 @login_required
 def likes_delete_to_post(post_id):
-    current_user_id = int(current_user.get_id())
-    like_to_delete_post = PostLike.query.filter((PostLike.post_id == int(post_id)), (PostLike.user_id == current_user_id)).first()
+    user_id = int(current_user.get_id())
+    like_to_delete_post = PostLike.query.filter((PostLike.post_id == int(post_id)), (PostLike.user_id == user_id)).first()
 
-    if current_user_id == None:
+    if user_id == None:
         return {"errors": "You must be logged in before liking/disliking a comment"}, 401
 
     if like_to_delete_post == None:

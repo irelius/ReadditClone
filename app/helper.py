@@ -1,4 +1,5 @@
 from flask_login import current_user
+from app.models import User, Subreddit, Post, Comment
 
 #  ---------------------------- General Helper Function ---------------------------
 # Validation error function
@@ -9,20 +10,18 @@ def validation_error_message(validation_errors):
             error_messages.append({field : error})
     return error_messages
 
-def current_user_id():
-    curr_user = current_user.get_id()
-    if current_user == None:
-        return {"errors": [{"user": "User is not logged in."}]}
-    return int(current_user.get_id())
-    
-
 
 #  --------------------------- Subreddit Helper Function --------------------------
 # Return subreddits based on length
 def return_subreddits(subreddits):
     if len(subreddits) > 0:
         return {subreddit.id: subreddit.to_dict() for subreddit in subreddits}
-    return {"error": "Subreddits do not exist"}
+    return {"errors": "Subreddits do not exist"}
+
+# def check_subreddit(id):
+#     subreddit = Subreddit.query.get(id)
+#     if subreddit == None:
+#         return {"errors": "Subreddit does not exist."}, 404
 
 
 #  ----------------------------- Post Helper Function -----------------------------
@@ -30,7 +29,12 @@ def return_subreddits(subreddits):
 def return_posts(posts):
     if len(posts) > 0:
         return {post.id: post.to_dict() for post in posts}
-    return {"error": "Posts do not exist"}
+    return {"errors": "Posts do not exist"}, 404
+
+# def check_post(id):
+#     post = Post.query.get(id)
+#     if post == None:
+#         return {"errors": "Post does not exist."}, 404
 
 
 #  --------------------------- PostLike Helper Function ---------------------------
@@ -51,4 +55,9 @@ def return_likes(id, likes, dislikes):
 def return_comments(comments):
     if len(comments) > 0:
         return {comment.id: comment.to_dict() for comment in comments}
-    return {"error": "Comments do not exist"}
+    return {"errors": "Comments do not exist"}
+
+# def check_comment(id):
+#     comment = Comment.query.get(id)
+#     if comment == None:
+#         return {"errors": "Comment does not exist."}, 404

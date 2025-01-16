@@ -12,4 +12,4 @@ class CommentForm(FlaskForm):
     body = StringField('body', validators=[DataRequired(), check_comment_length])
     subreddit_id = IntegerField("subreddit_id", validators=[DataRequired()])
     post_id = IntegerField("post_id", validators=[DataRequired()])
-    reply_to_id = IntegerField("reply_to_id")
+    replies_id = IntegerField("replies_id")

@@ -62,10 +62,10 @@ def unauthorized():
 @auth_routes.route("/current", methods = ["DELETE"])
 @login_required
 def users_delete():
-    current_user_id = User.query.get(current_user.get_id())
-    if(current_user_id == None):
-        return {'errors': [f"User {current_user_id} does not exist"]}, 404
+    user = User.query.get(current_user.get_id())
+    if(user == None):
+        return {'errors': [f"User {user} does not exist"]}, 404
 
-    db.session.delete(current_user_id)
+    db.session.delete(user)
     db.session.commit()
     return {"message": f"Successfully deleted User {current_user.id}'s account"}
