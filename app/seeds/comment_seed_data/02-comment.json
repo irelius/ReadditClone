@@ -4,34 +4,39 @@
         "deleted": false,
         "user_id": 4,
         "subreddit_id": 1,
-        "post_id": 2
+        "post_id": 2,
+        "is_reply": false
     },
     {
         "body": "i tried it, was pretty fun",
         "deleted": false,
         "user_id": 5,
         "subreddit_id": 1,
-        "post_id": 2
+        "post_id": 2,
+        "is_reply": false
     },
     {
         "body": "Not so much fun when a fish comes flying out and hits you in the face",
         "deleted": false,
         "user_id": 6,
         "subreddit_id": 1,
-        "post_id": 2
+        "post_id": 2,
+        "is_reply": false
     },
     {
         "body": "I disagree, that was hilarious",
         "deleted": false,
         "user_id": 7,
         "subreddit_id": 1,
-        "post_id": 2
+        "post_id": 2,
+        "is_reply": false
     },
     {
         "body": "I love how the sound of kids playing can bring back such pure, innocent memories. It really makes you reflect on how brief and special those moments are.",
         "deleted": false,
         "user_id": 8,
         "subreddit_id": 1,
-        "post_id": 2
+        "post_id": 2,
+        "is_reply": false
     }
 ]

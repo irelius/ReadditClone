@@ -4,13 +4,15 @@
         "deleted": false,
         "user_id": 8,
         "subreddit_id": 9,
-        "post_id": 37 
+        "post_id": 37,
+        "is_reply": false
     },
     {
         "body": "I know exactly what you mean! There’s a certain song that always helps me get through tough times. Music really does have an incredible power to reflect what we’re feeling.",
         "deleted": false,
         "user_id": 2,
         "subreddit_id": 9,
-        "post_id": 37
+        "post_id": 37,
+        "is_reply": false
     }
 ]

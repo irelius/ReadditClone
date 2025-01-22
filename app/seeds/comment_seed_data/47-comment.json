@@ -4,6 +4,7 @@
         "deleted": false,
         "user_id": 4,
         "subreddit_id": 13,
-        "post_id": 47
+        "post_id": 47,
+        "is_reply": false
     }
 ]

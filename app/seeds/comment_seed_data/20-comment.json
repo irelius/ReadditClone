@@ -4,7 +4,8 @@
         "deleted": false,
         "user_id": 3,
         "subreddit_id": 4,
-        "post_id": 20
+        "post_id": 20,
+        "is_reply": false
     },
     {
         "body": "Yeah, those moments are so surreal. It's almost like you're living two realities at once. I’ve had experiences like that too, where the line between dream and reality blurs.",
@@ -12,6 +13,7 @@
         "user_id": 8,
         "subreddit_id": 4,
         "post_id": 20,
-        "replies_id": 49
+        "replies_id": 49,
+        "is_reply": true
     }
 ]

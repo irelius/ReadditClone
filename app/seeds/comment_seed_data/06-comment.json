@@ -4,14 +4,16 @@
         "deleted": false,
         "user_id": 5,
         "subreddit_id": 1,
-        "post_id": 6
+        "post_id": 6,
+        "is_reply": false
     },
     {
         "body": "Rub gum with ice to freeze it and then scrape it off",
         "deleted": false,
         "user_id": 3,
         "subreddit_id": 1,
-        "post_id": 6
+        "post_id": 6,
+        "is_reply": false
     },
     {
         "body": "Yes, that’s exactly how I feel! It’s such a perfect moment, just taking in the beauty and remembering to slow down.",
@@ -19,6 +21,7 @@
         "user_id": 9,
         "subreddit_id": 1,
         "post_id": 6,
-        "replies_id": 23
+        "replies_id": 23,
+        "is_reply": true
     }
 ]

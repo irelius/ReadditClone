@@ -15,6 +15,7 @@ def posts_all():
     posts = Post.query.all()
     return return_posts(posts)
 
+
 # Get specific post by id
 @post_routes.route("/<int:post_id>")
 def posts_specific(post_id):
@@ -24,11 +25,13 @@ def posts_specific(post_id):
     
     return post
 
+
 # Get all comments made to a post
 @post_routes.route("/<int:post_id>/comments")
 def posts_comments(post_id):
     comments = Comment.query.filter(Comment.post_id == post_id).all()
     return return_comments(comments)
+
 
 # Create a post
 @post_routes.route("/", methods=["POST"])
@@ -84,6 +87,7 @@ def create_comment_on_post(post_id):
     if form.validate_on_submit():
         new_comment = Comment(
             body = form.data["body"],
+            is_reply=form.data["is_reply"],
             deleted = False,
             replies_id = None,
             user_id = user_id,
@@ -97,6 +101,7 @@ def create_comment_on_post(post_id):
         return new_comment.to_dict()
 
     return {"errors": validation_error_message(form.errors)}, 401
+
 
 # Create a like/dislike to a post
 @post_routes.route("/<int:post_id>/likes", methods=["POST"])
@@ -148,7 +153,6 @@ def update_like_on_post(like_id):
         return like_to_update.to_dict()
     
     return {"errors": validation_error_message(form.errors)}, 401
-    
     
 
 # Delete likes/dislikes to posts

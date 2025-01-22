@@ -6,6 +6,7 @@ def seed_comments():
     for x in comment_seed_data:
         new_comment = Comment(
             body=x["body"],
+            is_reply=x["is_reply"],
             deleted=x["deleted"],
             user_id=x["user_id"],
             post_id=x["post_id"],

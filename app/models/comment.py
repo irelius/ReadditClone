@@ -11,6 +11,7 @@ class Comment(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.String, nullable=False)
+    is_reply = db.Column(db.Boolean, nullable=False, default=False)
     deleted = db.Column(db.Boolean, nullable=False, default=False)
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
@@ -32,14 +33,14 @@ class Comment(db.Model):
     
     def to_dict(self):
         likes, dislikes, total = self.calc_likes()
-        print('booba test', self.replies_id)
-        
+
         return {
             "id": self.id,
             "user_id": self.user_id,
             "post_id": self.post_id,
             "subreddit_id": self.subreddit_id,
             "body": self.body,
+            "is_reply": self.is_reply,
             "likes": likes,
             "dislikes": dislikes,
             "total_likes": total,

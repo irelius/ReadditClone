@@ -4,13 +4,15 @@
         "deleted": false,
         "user_id": 7,
         "subreddit_id": 4,
-        "post_id": 19
+        "post_id": 19,
+        "is_reply": false
     },
     {
         "body": "I had a dream like that once too! It was like I was there, but in another time. Time travel in dreams feels so real, doesn’t it? I still think about it sometimes.",
         "deleted": false,
         "user_id": 6,
         "subreddit_id": 4,
-        "post_id": 19
+        "post_id": 19,
+        "is_reply": false
     }
 ]

@@ -4,20 +4,23 @@
         "deleted": false,
         "user_id": 10,
         "subreddit_id": 2,
-        "post_id": 8
+        "post_id": 8,
+        "is_reply": false
     },
     {
         "body": "That’s such a hauntingly beautiful experience. I can imagine how surreal it must have been to see a place like that, seemingly frozen in time, with only the fog to witness it.",
         "deleted": false,
         "user_id": 1,
         "subreddit_id": 2,
-        "post_id": 8
+        "post_id": 8,
+        "is_reply": false
     },
     {
         "body": "The way you describe Japan in winter makes me want to book a ticket right now. That mix of beauty and emptiness sounds so captivating. I love when the environment feels like it holds secrets.",
         "deleted": false,
         "user_id": 5,
         "subreddit_id": 2,
-        "post_id": 8
+        "post_id": 8,
+        "is_reply": false
     }
 ]

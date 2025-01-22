@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField
+from wtforms import StringField, IntegerField, BooleanField
 from wtforms.validators import DataRequired, ValidationError
 
 def check_comment_length(form, field):
@@ -10,6 +10,7 @@ def check_comment_length(form, field):
     
 class CommentForm(FlaskForm):
     body = StringField('body', validators=[DataRequired(), check_comment_length])
+    is_reply = BooleanField("is_reply", validators=[DataRequired()])
     subreddit_id = IntegerField("subreddit_id", validators=[DataRequired()])
     post_id = IntegerField("post_id", validators=[DataRequired()])
     replies_id = IntegerField("replies_id")

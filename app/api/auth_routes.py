@@ -27,7 +27,7 @@ def login():
     return {"errors": validation_error_message(form.errors)}, 401
 
 
-@auth_routes.route('/logout')
+@auth_routes.route('/logout', methods=["DELETE"])
 def logout():
     logout_user()
     return {'message': 'User logged out'}
@@ -63,7 +63,7 @@ def unauthorized():
 @login_required
 def users_delete():
     user = User.query.get(current_user.get_id())
-    if(user == None):
+    if user == None:
         return {'errors': [f"User {user} does not exist"]}, 404
 
     db.session.delete(user)

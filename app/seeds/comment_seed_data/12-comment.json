@@ -4,13 +4,15 @@
         "deleted": false,
         "user_id": 10,
         "subreddit_id": 3,
-        "post_id": 12
+        "post_id": 12,
+        "is_reply": false
     },
     {
         "body": "LED eyebrows? What will they think of next? I can’t decide whether this is hilarious or genius, but I’d love to see someone pull it off at a fashion show!",
         "deleted": false,
         "user_id": 3,
         "subreddit_id": 3,
-        "post_id": 12
+        "post_id": 12,
+        "is_reply": false
     }
 ]

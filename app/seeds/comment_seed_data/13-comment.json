@@ -4,14 +4,16 @@
         "deleted": false,
         "user_id": 11,
         "subreddit_id": 3,
-        "post_id": 13
+        "post_id": 13,
+        "is_reply": false
     },
     {
         "body": "I’d be scared of the jetpack jacket flying me into a tree or a lamp post! But hey, at least it would make for a great conversation starter, right?",
         "deleted": false,
         "user_id": 2,
         "subreddit_id": 3,
-        "post_id": 13
+        "post_id": 13,
+        "is_reply": false
     },
     {
         "body": "The possibilities are endless, right? I’m just hoping that one day we’ll have jetpacks for everyone!",
@@ -19,7 +21,8 @@
         "user_id": 10,
         "subreddit_id": 3,
         "post_id": 13,
-        "replies_id": 38
+        "replies_id": 38,
+        "is_reply": true
     },
     {
         "body": "I agree! Imagine trying to navigate a crowded street with that thing! It could be a little more practical, but definitely fun to think about.",
@@ -27,7 +30,8 @@
         "user_id": 3,
         "subreddit_id": 3,
         "post_id": 13,
-        "replies_id": 40
+        "replies_id": 40,
+        "is_reply": true
     },
     {
         "body": "That would definitely be a challenge! But maybe they could come up with a way to make it more practical without losing the cool factor.",
@@ -35,6 +39,7 @@
         "user_id": 7,
         "subreddit_id": 3,
         "post_id": 13,
-        "replies_id": 40
+        "replies_id": 40,
+        "is_reply": true
     }
 ]

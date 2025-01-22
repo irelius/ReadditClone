@@ -4,7 +4,8 @@
         "deleted": false,
         "user_id": 11,
         "subreddit_id": 3,
-        "post_id": 15
+        "post_id": 15,
+        "is_reply": false
     },
     {
         "body": "Haha, I know, right? It’s one of those concepts that makes you wonder how far fashion will go before it gets too wild!",
@@ -12,7 +13,8 @@
         "user_id": 4,
         "subreddit_id": 3,
         "post_id": 15,
-        "replies_id": 44
+        "replies_id": 44,
+        "is_reply": true
     },
     {
         "body": "Right? The future is here, and it's definitely going to be an interesting ride! I can't wait to see how it evolves.",
@@ -20,6 +22,7 @@
         "user_id": 4,
         "subreddit_id": 3,
         "post_id": 15,
-        "replies_id": 44
+        "replies_id": 44,
+        "is_reply": true
     }
 ]

@@ -4,14 +4,16 @@
         "deleted": false,
         "user_id": 6,
         "subreddit_id": 2,
-        "post_id": 11
+        "post_id": 11,
+        "is_reply": false
     },
     {
         "body": "That’s such an eerie thought! An extra person in the photo that wasn’t there before? Could be a glitch in the matrix or maybe something more supernatural. I’d definitely keep looking into it.",
         "deleted": false,
         "user_id": 5,
         "subreddit_id": 2,
-        "post_id": 11
+        "post_id": 11,
+        "is_reply": false
     },
     {
         "body": "Visiting abandoned places always gives me this strange feeling, like you’re not just seeing the past but feeling it too. The atmosphere is so thick with history.",
@@ -19,7 +21,8 @@
         "user_id": 10,
         "subreddit_id": 2,
         "post_id": 11,
-        "replies_id": 32
+        "replies_id": 32,
+        "is_reply": true
     },
     {
         "body": "That's such a creepy thought! It could be a glitch, or maybe even something more. It’s definitely worth looking into, I agree.",
@@ -27,6 +30,7 @@
         "user_id": 9,
         "subreddit_id": 2,
         "post_id": 11,
-        "replies_id": 33
+        "replies_id": 33,
+        "is_reply": true
     }
 ]

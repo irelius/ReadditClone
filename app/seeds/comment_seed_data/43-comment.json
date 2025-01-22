@@ -4,21 +4,24 @@
         "deleted": false,
         "user_id": 9,
         "subreddit_id": 11,
-        "post_id": 43
+        "post_id": 43,
+        "is_reply": false
     },
     {
         "body": "For books that bring that melancholic mood, I recommend 'The Catcher in the Rye'. It has that perfect mix of introspection and fleeting moments of clarity. I think it would fit right into the vibe you’re after.",
         "deleted": false,
         "user_id": 10,
         "subreddit_id": 11,
-        "post_id": 43
+        "post_id": 43,
+        "is_reply": false
     },
     {
         "body": "For melancholic books, try 'The Fault in Our Stars'. It’s got that perfect blend of sadness and beauty, and it’ll definitely make you think about life and loss.",
         "deleted": false,
         "user_id": 1,
         "subreddit_id": 11,
-        "post_id": 43
+        "post_id": 43,
+        "is_reply": false
     },
     {
         "body": "I love that recommendation! Murakami has such a way of making melancholy feel beautiful and inviting. It's definitely on my list now!",
@@ -26,7 +29,8 @@
         "user_id": 2,
         "subreddit_id": 11,
         "post_id": 43,
-        "replies_id": 63
+        "replies_id": 63,
+        "is_reply": true
     },
     {
         "body": "Catcher in the Rye is a great suggestion! That book always leaves you with so much to think about, like an ache that sticks with you.",
@@ -34,6 +38,7 @@
         "user_id": 1,
         "subreddit_id": 11,
         "post_id": 43,
-        "replies_id": 64
+        "replies_id": 64,
+        "is_reply": true
     }
 ]

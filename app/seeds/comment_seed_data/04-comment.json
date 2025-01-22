@@ -4,7 +4,8 @@
         "deleted": false,
         "user_id": 5,
         "subreddit_id": 1,
-        "post_id": 4
+        "post_id": 4,
+        "is_reply": false
     },
     {
         "body": "I couldn't agree more. There's something mystical about Japan in winter. It feels like you're stepping into a different world.",
@@ -12,6 +13,7 @@
         "user_id": 6,
         "subreddit_id": 1,
         "post_id": 4,
-        "replies_id": 17
+        "replies_id": 17,
+        "is_reply": true
     }
 ]

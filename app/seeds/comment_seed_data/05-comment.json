@@ -4,21 +4,24 @@
         "deleted": false,
         "user_id": 2,
         "subreddit_id": 1,
-        "post_id": 5
+        "post_id": 5,
+        "is_reply": false
     },
     {
         "body": "don't forget to change your oil",
         "deleted": false,
         "user_id": 1,
         "subreddit_id": 1,
-        "post_id": 5
+        "post_id": 5,
+        "is_reply": false
     },
     {
         "body": "I love how you captured that! It really does feel like the silence has a personality of its own in that moment.",
         "deleted": false,
         "user_id": 7,
         "subreddit_id": 1,
-        "post_id": 5
+        "post_id": 5,
+        "is_reply": false
     },
     {
         "body": "Thank you! That scene just seemed to radiate such calm, and I wanted to capture that essence. It's one of those rare moments where you feel time itself pause.",
@@ -26,6 +29,7 @@
         "user_id": 8,
         "subreddit_id": 1,
         "post_id": 5,
-        "replies_id": 21
+        "replies_id": 21,
+        "is_reply": true
     }
 ]
