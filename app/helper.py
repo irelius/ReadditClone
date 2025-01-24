@@ -7,16 +7,24 @@ def validation_error_message(validation_errors):
     error_messages = []
     for field in validation_errors:
         for error in validation_errors[field]:
-            error_messages.append({field : error})
+            error_messages.append(error)
     return error_messages
 
 
 #  --------------------------- Subreddit Helper Function --------------------------
 # Return subreddits based on length
 def return_subreddits(subreddits):
-    if len(subreddits) > 0:
-        return {subreddit.id: subreddit.to_dict() for subreddit in subreddits}
-    return {"errors": "Subreddits do not exist"}
+    subreddit_by_id = []
+    all_subreddits = {}
+
+    for subreddit in subreddits:
+        subreddit_by_id.append(subreddit.id)
+        all_subreddits[subreddit.id] = subreddit.to_dict()
+    
+    return {
+        "subreddit_by_id": subreddit_by_id,
+        "all_subreddits": all_subreddits
+    }
 
 
 #  ----------------------------- Post Helper Function -----------------------------

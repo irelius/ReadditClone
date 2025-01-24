@@ -24,7 +24,7 @@ def check_description_length(form, field):
 
 
 class SubredditForm(FlaskForm):
-    name = StringField("name", validators=[DataRequired(), check_subreddit_name_length, subreddit_exists])
+    name = StringField("name", validators=[DataRequired(message="A subreddit name is required."), check_subreddit_name_length, subreddit_exists])
     # admin_id = IntegerField("admin_id", validators=[DataRequired()])
     # mod_id = IntegerField("mod_id")
     # privacy_setting = SelectField("privacy_setting", choices=["Public", "Restricted", "Private"], validators=[DataRequired()])

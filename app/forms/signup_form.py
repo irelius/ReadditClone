@@ -47,6 +47,6 @@ def check_password (form, field):
 
 
 class SignUpForm(FlaskForm):
-    username = StringField('username', validators=[DataRequired(), username_exists, check_username])
-    email = StringField('email', validators=[DataRequired(), user_exists, check_valid_email])
-    password = StringField('password', validators=[DataRequired(), check_password])
+    username = StringField('username', validators=[DataRequired(message="Username is required."), username_exists, check_username])
+    email = StringField('email', validators=[DataRequired(message="Email is required."), user_exists, check_valid_email])
+    password = StringField('password', validators=[DataRequired("Password is required."), check_password])

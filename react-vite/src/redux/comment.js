@@ -172,14 +172,13 @@ const initialState = {};
 
 const commentReducer = (state = initialState, action) => {
     const newState = { ...state };
+    const allComments = { "comments": {} }
+    const deletedComment = { ...newState }
 
     switch (action.type) {
         case LOAD_COMMENTS:
-            const allComments = { "comments": {} }
 
-            if (action.comments.comments === "No comments") {
-
-            } else {
+            if (action.comments.comments !== "No comments") {
                 const commentsArray = Object.values(action.comments.comments)
                 commentsArray.forEach(el => {
                     allComments["comments"][el.id] = el
@@ -192,7 +191,6 @@ const commentReducer = (state = initialState, action) => {
             return newState
 
         case DELETE_COMMENT:
-            const deletedComment = { ...newState }
             delete deletedComment.comments[action.comment]
             return deletedComment
 
@@ -202,7 +200,6 @@ const commentReducer = (state = initialState, action) => {
         default:
             return newState
     }
-
 }
 
 export default commentReducer

@@ -176,38 +176,32 @@ const initialState = {};
 
 const postReducer = (state = initialState, action) => {
     const newState = { ...state };
+    const allPosts = { "posts": {} };
+    const deletedPost = { ...newState }
 
     switch (action.type) {
         case LOAD_POST:
             return Object.assign({}, newState, action.post);
         case LOAD_POSTS:
-            const allPosts = { "posts": {} };
 
-            if (action.posts.posts === "No posts") {
-
-            } else {
+            if (action.posts.posts !== "No posts") {
                 const postsArray = Object.values(action.posts.posts)
                 postsArray.forEach(el => {
                     allPosts["posts"][el.id] = el
                 })
                 return allPosts
             }
-        /* falls through */
 
+            return 'no'
         case CREATE_POST:
             return newState
-
         case PUT_POST:
             return Object.assign({}, newState, action.post)
-
         case DELETE_POST:
-            const deletedPost = { ...newState }
             delete deletedPost[action.postId]
             return deletedPost
-
         case CLEAR_POST:
             return initialState;
-
         default:
             return newState
     }

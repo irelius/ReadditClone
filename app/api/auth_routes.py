@@ -12,7 +12,7 @@ auth_routes = Blueprint('auth', __name__)
 def authenticate():
     if current_user.is_authenticated:
         return current_user.to_dict()
-    return {'errors': {'message': 'Unauthorized'}}, 401
+    return {'errors': ["Authentication error"]}, 401
 
 
 @auth_routes.route('/login', methods=['POST'])
@@ -24,6 +24,7 @@ def login():
         user = User.query.filter(User.email == form.data['email']).first()
         login_user(user)
         return user.to_dict()
+    
     return {"errors": validation_error_message(form.errors)}, 401
 
 

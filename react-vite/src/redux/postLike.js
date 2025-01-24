@@ -163,9 +163,7 @@ export const deleteLikePostThunk = (postId) => async (dispatch) => {
 }
 
 // Object { type: "/likes/DELETE_POST_LIKES", postId: 2 }
-// ​
 // postId: 2
-// ​
 // type: "/likes/DELETE_POST_LIKES"
 
 // ------------------------- SELECTOR FUNCTIONS ------------------------- //
@@ -181,17 +179,17 @@ const postLikesReducer = (state = initialState, action) => {
     const newState = { ...state }
 
     switch (action.type) {
-        case LOAD_POST_LIKES:
-            return Object.assign({}, newState, action.likes);
+        // case LOAD_POST_LIKES:
+        //     return Object.assign({}, newState, action.likes);
 
-        case CREATE_POST_LIKES:
-            return Object.assign({}, newState, action.postLikes);
+        // case CREATE_POST_LIKES:
+        //     return Object.assign({}, newState, action.postLikes);
 
-        case DELETE_POST_LIKES:
-            return Object.assign({}, newState, action.postId);
+        // case DELETE_POST_LIKES:
+        //     return Object.assign({}, newState, action.postId);
 
-        case CLEAR_POST_LIKES:
-            return initialState
+        // case CLEAR_POST_LIKES:
+        //     return initialState
 
         default:
             return newState

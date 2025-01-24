@@ -9,7 +9,7 @@ def check_comment_length(form, field):
         raise ValidationError("A comment body is required")
     
 class CommentForm(FlaskForm):
-    body = StringField('body', validators=[DataRequired(), check_comment_length])
+    body = StringField('body', validators=[DataRequired(message="Comment body is required."), check_comment_length])
     is_reply = BooleanField("is_reply", validators=[DataRequired()])
     subreddit_id = IntegerField("subreddit_id", validators=[DataRequired()])
     post_id = IntegerField("post_id", validators=[DataRequired()])

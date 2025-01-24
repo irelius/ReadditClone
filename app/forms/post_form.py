@@ -13,7 +13,7 @@ def check_title_length(form, field):
 
 
 class PostForm(FlaskForm):
-    title = StringField("title", validators=[DataRequired(), check_title_length])
+    title = StringField("title", validators=[DataRequired(message="Post title is required."), check_title_length])
     body = StringField("body")
     subreddit_id = IntegerField("subreddit_id", validators=[DataRequired()])
     # image = StringField("image")

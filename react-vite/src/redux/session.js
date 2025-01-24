@@ -1,5 +1,7 @@
-const SET_USER = 'session/setUser';
-const REMOVE_USER = 'session/removeUser';
+// constants
+const SET_USER = 'session/SET_USER';
+const REMOVE_USER = 'session/REMOVE_USER';
+const LOAD_USERS = "session/LOAD_USERS"
 
 const setUser = (user) => ({
     type: SET_USER,
@@ -7,73 +9,134 @@ const setUser = (user) => ({
 });
 
 const removeUser = () => ({
-    type: REMOVE_USER
-});
+    type: REMOVE_USER,
+})
 
-export const thunkAuthenticate = () => async (dispatch) => {
-    const response = await fetch("/api/auth/");
-    if (response.ok) {
-        const data = await response.json();
-        if (data.errors) {
-            return;
+const loadUsers = (users) => ({
+    type: LOAD_USERS,
+    payload: users
+})
+
+export const authenticate = () => async (dispatch) => {
+    const response = await fetch('/api/auth/', {
+        headers: {
+            'Content-Type': 'application/json'
         }
-
-        dispatch(setUser(data));
-    }
-};
-
-export const thunkLogin = (credentials) => async dispatch => {
-    const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(credentials)
     });
 
     if (response.ok) {
         const data = await response.json();
         dispatch(setUser(data));
-    } else if (response.status < 500) {
-        const errorMessages = await response.json();
-        return errorMessages
-    } else {
-        return { server: "Something went wrong. Please try again" }
     }
-};
+}
 
-export const thunkSignup = (user) => async (dispatch) => {
-    const response = await fetch("/api/auth/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(user)
+export const login = ({ email, password }) => async (dispatch) => {
+    const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            email,
+            password
+        })
+    });
+    const data = await response.json();
+    return dispatch(setUser(data))
+}
+
+export const logout = () => async (dispatch) => {
+    const response = await fetch('/api/auth/logout', {
+        method: "DELETE",
+        headers: {
+            'Content-Type': 'application/json',
+        }
     });
 
     if (response.ok) {
-        const data = await response.json();
-        dispatch(setUser(data));
-    } else if (response.status < 500) {
-        const errorMessages = await response.json();
-        return errorMessages
-    } else {
-        return { server: "Something went wrong. Please try again" }
+        dispatch(removeUser());
     }
 };
 
-export const thunkLogout = () => async (dispatch) => {
-    await fetch("/api/auth/logout");
-    dispatch(removeUser());
-};
 
-const initialState = { user: null };
+export const signUp = ({ username, email, password }) => async (dispatch) => {
+    const response = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            username,
+            email,
+            password
+        }),
+    });
 
-function sessionReducer(state = initialState, action) {
+    const data = await response.json();
+    dispatch(setUser(data))
+
+}
+
+export const loadAllUserThunk = () => async (dispatch) => {
+    const res = await fetch('/api/users/')
+
+    if (res.ok) {
+        const users = await res.json()
+        dispatch(loadUsers(users))
+        return users
+    }
+}
+
+// ------------------------- SELECTOR FUNCTIONS ------------------------- //
+
+export const loadAllUsers = (state) => state.session
+
+const initialState = {
+    loggedIn: false,
+    user: null,
+    errors: []
+}
+
+// ------------------------------ REDUCERS ------------------------------ //
+
+
+const sessionReducer = (state = initialState, action) => {
+    const newState = { ...state }
+
+    if (action.payload && "errors" in action.payload) {
+        newState.errors = action.payload.errors
+        return newState
+    } else if (action.payload && !("errors" in action.payload)) {
+        newState.errors = []
+    }
+
+    // reduxError(newState, action.payload)
+
     switch (action.type) {
         case SET_USER:
-            return { ...state, user: action.payload };
+            newState.loggedIn = true
+            newState.user = { ...action.payload }
+            return newState
+        case LOAD_USERS:
+            const userById = []
+            const users = {}
+
+            for (let i = 0; i < action.payload.users.length; i++) {
+                let currUser = action.payload.users[i]
+                users[currUser.id] = currUser
+                userById.push(currUser.id)
+            }
+
+            return {
+                userById,
+                users
+            }
+
         case REMOVE_USER:
-            return { ...state, user: null };
+            return initialState
         default:
             return state;
     }
 }
 
-export default sessionReducer;
+export default sessionReducer

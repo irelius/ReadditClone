@@ -18,7 +18,7 @@ def subreddits_all():
 def subreddit_by_id(subreddit_id):
     subreddit = Subreddit.query.get(subreddit_id)
     if subreddit == None:
-        return {"errors": "Subreddit does not exist."}, 404
+        return {"errors": ["Subreddit does not exist."]}, 404
     return subreddit.to_dict()
 
 
@@ -27,7 +27,7 @@ def subreddit_by_id(subreddit_id):
 def subreddit_users(subreddit_id):
     user_subs = UserSubreddit.query.filter(UserSubreddit.subreddit_id == subreddit_id).join(Subreddit).all()
     if len(user_subs) == 0:
-        return {"errors": "Subreddit does not have any users"}, 404
+        return {"errors": ["Subreddit does not have any users"]}, 404
     return {user_sub.id: user_sub.user_data_dict() for user_sub in user_subs}
 
 
@@ -37,17 +37,17 @@ def subreddit_posts(subreddit_id):
     posts = Post.query.filter(Post.subreddit_id == subreddit_id).all()
     if len(posts) > 0:
         return {post.id: post.to_dict() for post in posts}
-    return {"errors": "Subreddit does not have any posts."}, 404
+    return {"errors": ["Subreddit does not have any posts."]}, 404
 
 
 # Create a new subreddit
-@subreddit_routes.route("/new", methods=["POST"])
+@subreddit_routes.route("/", methods=["POST"])
 @login_required
 def subreddits_create_new():
     user_id = int(current_user.get_id())
 
     if user_id == None:
-        return {"errors": "You must be logged in before creating a new subreddit"}, 401
+        return {"errors": ["You must be logged in before creating a new subreddit"]}, 401
 
     form = SubredditForm()
     form['csrf_token'].data = request.cookies['csrf_token']
@@ -57,7 +57,6 @@ def subreddits_create_new():
         new_subreddit = Subreddit(
             name = name,
             description = form.data["description"],
-            admin_id = user_id
         )
 
         db.session.add(new_subreddit)
@@ -83,11 +82,11 @@ def subreddits_join(subreddit_id):
     
     user_check = User.query.get(user_id)
     if user_check == None:
-        return {"errors": "User does not exist."}, 404
+        return {"errors": ["User does not exist."]}, 404
     
     subreddit = Subreddit.query.get(id)
     if subreddit == None:
-        return {"errors": "Subreddit does not exist."}, 404
+        return {"errors": ["Subreddit does not exist."]}, 404
 
     form = UserSubredditForm()
     form['csrf_token'].data = request.cookies['csrf_token']
@@ -112,12 +111,12 @@ def subreddits_leave(subreddit_id):
     
     subreddit = Subreddit.query.get(id)
     if subreddit == None:
-        return {"errors": "Subreddit does not exist."}, 404
+        return {"errors": ["Subreddit does not exist."]}, 404
 
     subreddit_to_leave = UserSubreddit.query.filter(UserSubreddit.user_id == user_id, UserSubreddit.subreddit_id == subreddit_id).first()
     
     if subreddit_to_leave == None:
-        return {"errors": "User isn't part of this subreddit"}, 404
+        return {"errors": ["User isn't part of this subreddit"]}, 404
     
     db.session.delete(subreddit_to_leave)
     db.session.commit()
@@ -133,13 +132,13 @@ def subreddits_leave(subreddit_id):
 #     user_id = int(current_user.get_id())
 
 #     if user_id == None:
-#         return {"errors": "You must be logged in before addings people to this subreddit"}, 401
+#         return {"errors"[: "You must be logged in before addings people to this subreddit"]}, 401
 
 
 #     # This would require a user to be added if the subreddit is set to private
 #     # subreddit_users = UserSubreddit.query.filter((UserSubreddit.subreddit_id == subreddit_id), (UserSubreddit.user_id == user_id)).all()
 #     # if len(subreddit_users) == 0:
-#     #     return {"errors": "You do not have permission to add a user to this subreddit"}, 403
+#     #     return {"e[rrors": "You do not have permission to add a user to this subreddit"]}, 403
 
 #     new_subreddit_user = UserSubreddit(
 #         subreddit_id = subreddit_id,
@@ -157,14 +156,14 @@ def subreddits_leave(subreddit_id):
 @login_required
 def subreddits_update_specific(subreddit_id):
     user_id = int(current_user.get_id())
-    subreddit_to_edit = Subreddit.query.get(subreddit_id)
-
     if user_id == None:
-        return {"errors": "You must be logged in before editing this subreddit"}, 401
+        return {"errors": ["You must be logged in before editing this subreddit"]}, 401
 
-    if subreddit_to_edit.admin_id != user_id:
-        return {"errors": "You do not have permission to edit this subreddit"}, 403
+    admin_check = UserSubreddit.query.filter(UserSubreddit.user_id == user_id, UserSubreddit.subreddit_id == subreddit_id, UserSubreddit.admin_status == True).first()
+    if admin_check == None:
+        return {"errors": ["You do not have permission to edit this subreddit"]}, 403
 
+    subreddit_to_edit = Subreddit.query.get(subreddit_id)
     form = SubredditForm()
     subreddit_to_edit.description = form.data["description"]
 
@@ -175,20 +174,25 @@ def subreddits_update_specific(subreddit_id):
 # Delete a subreddit. Techically, this is not a function that is readily available to users of Readdit, but it is implemented in this project to demonstrate full CRUD functionality
 @subreddit_routes.route("/<int:subreddit_id>", methods=["DELETE"])
 @login_required
-def subreddits_delete_specific(subreddit_id):
+def subreddits_delete_specific(subreddit_id):   
     user_id = int(current_user.get_id())
-    subreddit_to_delete = Subreddit.query.get(subreddit_id)
-
     if user_id == None:
-        return {"errors": "You must be logged in before deleting this subreddit"}, 401
+        return {"errors": ["You must be logged in before deleting this subreddit"]}, 401
 
+    subreddit_to_delete = Subreddit.query.get(subreddit_id)
     if subreddit_to_delete == None:
-        return {"errors": "Subreddit does not exist."}, 404
-
-    if(subreddit_to_delete.admin_id != user_id):
-        return {"errors": "You do not have permission to delete this subreddit"}, 403
+        return {"errors": ["Subreddit does not exist."]}, 404
+    
+    admin_check = UserSubreddit.query.filter(UserSubreddit.user_id == user_id, UserSubreddit.subreddit_id == subreddit_id, UserSubreddit.admin_status == True).first()
+    if admin_check == None:
+        return {"errors": ["You do not have permission to delete this subreddit"]}, 403
 
     db.session.delete(subreddit_to_delete)
     db.session.commit()
 
-    return {"message": f"Successfully deleted Subreddit {subreddit_id}."}
+    return {
+        "id": subreddit_id,
+        "message": "Successfully deleted subreddit"
+    }
+    
+    
