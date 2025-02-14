@@ -1,12 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { Provider } from "react-redux";
-import { RouterProvider } from "react-router-dom";
-import configureStore from "./redux/store";
-import { router } from "./router";
-import * as sessionActions from "./redux/session";
+
 import "./reset.css";
 import "./index.css";
+
+import configureStore from "./redux";
+import { Provider } from "react-redux";
+import { BrowserRouter } from "react-router-dom";
+import * as sessionActions from "./redux/session";
+import App from "./App";
 
 const store = configureStore();
 
@@ -18,7 +20,9 @@ if (import.meta.env.MODE !== "production") {
 ReactDOM.createRoot(document.getElementById("root")).render(
 	<React.StrictMode>
 		<Provider store={store}>
-			<RouterProvider router={router} />
-		</Provider> 
+			<BrowserRouter>
+				<App />
+			</BrowserRouter>
+		</Provider>
 	</React.StrictMode>
 );

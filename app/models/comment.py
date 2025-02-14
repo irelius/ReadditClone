@@ -30,7 +30,7 @@ class Comment(db.Model):
         dislikes = len([dislike for dislike in self.comment_likes if dislike.like_status == "dislike"])
         total = likes - dislikes
         return likes, dislikes, total
-    
+        
     def to_dict(self):
         likes, dislikes, total = self.calc_likes()
 

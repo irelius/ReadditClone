@@ -1,16 +1,18 @@
+import { reduxError } from "./helper"
+
 // ------------------------------- ACTIONS ------------------------------- //
-const LOAD_COMMENT = "/comments/LOAD_COMMENT"
-const LOAD_COMMENTS = "/comments/LOAD_COMMENTS"
-const CREATE_COMMENT = "/comments/CREATE_COMMENT"
-const PUT_COMMENT = "/comments/PUT_COMMENT"
-const DELETE_COMMENT = "/comments/DELETE_COMMENT"
-const CLEAR_COMMENT = "/comments/CLEAR_COMMENT"
+const LOAD_COMMENT = "LOAD_COMMENT"
+const LOAD_CURR_COMMENTS = "LOAD_CURR_COMMENTS"
+const LOAD_COMMENTS = "LOAD_COMMENTS"
+const CREATE_COMMENT = "CREATE_COMMENT"
+const PUT_COMMENT = "PUT_COMMENT"
+const DELETE_COMMENT = "DELETE_COMMENT"
 
 // Get one comment
 export const loadComment = (comment) => {
     return {
         type: LOAD_COMMENT,
-        comment
+        payload: comment
     }
 }
 
@@ -18,7 +20,14 @@ export const loadComment = (comment) => {
 export const loadComments = (comments) => {
     return {
         type: LOAD_COMMENTS,
-        comments
+        payload: comments
+    }
+}
+
+export const loadCurrComments = (comments) => {
+    return {
+        type: LOAD_CURR_COMMENTS,
+        payload: comments
     }
 }
 
@@ -26,7 +35,7 @@ export const loadComments = (comments) => {
 export const createComment = (comment) => {
     return {
         type: CREATE_COMMENT,
-        comment
+        payload: comment
     }
 }
 
@@ -34,7 +43,7 @@ export const createComment = (comment) => {
 export const updateComment = (comment) => {
     return {
         type: PUT_COMMENT,
-        comment
+        payload: comment
     }
 }
 
@@ -42,20 +51,14 @@ export const updateComment = (comment) => {
 export const deleteComment = (comment) => {
     return {
         type: DELETE_COMMENT,
-        comment
-    }
-}
-
-export const clearComment = () => {
-    return {
-        type: CLEAR_COMMENT
+        payload: comment
     }
 }
 
 
 // ------------------------------- THUNKS ------------------------------- //
 
-// Thunk action to load all comments
+// load all comments
 export const loadCommentsThunk = () => async (dispatch) => {
     const res = await fetch(`/api/comments`)
 
@@ -66,7 +69,7 @@ export const loadCommentsThunk = () => async (dispatch) => {
     }
 }
 
-// Thunk action to load one comment
+// load one comment
 export const loadCommentThunk = (commentId) => async (dispatch) => {
     const res = await fetch(`/api/comments/${commentId}`)
 
@@ -77,52 +80,61 @@ export const loadCommentThunk = (commentId) => async (dispatch) => {
     }
 }
 
-// Thunk action to load all comments by user
-export const loadUserCommentsThunk = (username) => async (dispatch) => {
-    const res = await fetch(`/api/comments/users/${username}`)
+// load all comments by a specific user
+export const loadUserCommentsThunk = (userId) => async (dispatch) => {
+    const res = await fetch(`/api/users/${userId}/comments`)
 
-    if (res.ok) {
-        const comments = await res.json()
-        dispatch(loadComments(comments))
-        return comments
-    }
+    const comments = await res.json()
+    return dispatch(loadComments(comments))
 }
 
-// Thunk action to load all comments for a specific post
+// load all comments made by current user
+export const loadCurrentUserCommentsThunk = () => async (dispatch) => {
+    const res = await fetch(`/api/users/current/comments`)
+
+    const data = await res.json()
+    return dispatch(loadComments(data))
+}
+
+// load all comments for a specific post
 export const loadPostCommentsThunk = (postId) => async (dispatch) => {
-    const res = await fetch(`/api/comments/posts/${postId}`)
+    const res = await fetch(`/api/posts/${postId}/comments`)
 
-    if (res.ok) {
-        const comments = await res.json()
-        dispatch(loadComments(comments))
-        return comments
-    }
+    const comments = await res.json()
+    return dispatch(loadComments(comments))
+
 }
 
-// Thunk action to create a new comment
+// create a new comment for a post
 export const createCommentThunk = (commentInfo, postId) => async (dispatch) => {
-    const res = await fetch(`/api/comments/posts/${postId}`, {
+    const res = await fetch(`/api/posts/${postId}/comments`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
         body: JSON.stringify(commentInfo)
     })
-    if (res.ok) {
-        const data = await res.json();
-        dispatch(createComment(data))
-    } else if (res.status < 500) {
-        const data = await res.json()
-        if (data.errors) {
-            return data.errors
-        }
-    }
 
-    return null
+    const data = await res.json();
+    return dispatch(createComment(data))
+}
+
+// create a new comment as a reply to another comment
+export const createReplyThunk = (commentInfo, commentId) => async (dispatch) => {
+    const res = await fetch(`/api/comments/${commentId}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(commentInfo)
+    })
+
+    const data = await res.json();
+    return dispatch(createComment(data))
 }
 
 
-// Thunk action to update a comment
+// update a comment
 export const putCommentThunk = (commentInfo, comment) => async (dispatch) => {
     const res = await fetch(`/api/comments/${comment.id}`, {
         method: "PUT",
@@ -146,7 +158,7 @@ export const putCommentThunk = (commentInfo, comment) => async (dispatch) => {
 }
 
 
-// Thunk action to delete a comment
+// delete a comment
 export const deleteCommentThunk = (comment) => async (dispatch) => {
     const res = await fetch(`/api/comments/${comment.id}`, {
         method: "DELETE"
@@ -168,35 +180,52 @@ export const loadAllComments = (state) => state.comments;
 
 // ------------------------------ REDUCERS ------------------------------ //
 
-const initialState = {};
+const initialState = {
+    commentsById: [],
+    comments: {},
+    errors: []
+};
 
 const commentReducer = (state = initialState, action) => {
     const newState = { ...state };
-    const allComments = { "comments": {} }
-    const deletedComment = { ...newState }
+    const errorCheck = reduxError(newState, action.payload)
 
     switch (action.type) {
-        case LOAD_COMMENTS:
+        case LOAD_COMMENT:
+            if (errorCheck) return errorCheck
+            newState.errors = []
+            newState.commentsById = [action.payload.id]
+            newState.comments = action.payload
 
-            if (action.comments.comments !== "No comments") {
-                const commentsArray = Object.values(action.comments.comments)
-                commentsArray.forEach(el => {
-                    allComments["comments"][el.id] = el
-                })
-                return allComments
-            }
-        /* falls through */
-
-        case CREATE_COMMENT:
             return newState
+        case LOAD_COMMENTS:
+            if (errorCheck) return errorCheck
+            newState.errors = []
+            newState.commentsById = action.payload.comments_by_id
+            newState.comments = action.payload.all_comments
 
+            return newState
+        case LOAD_CURR_COMMENTS:
+            return 
+        case CREATE_COMMENT:
+            if (errorCheck) return errorCheck
+            newState.errors = []
+
+            return newState
+        case PUT_COMMENT:
+            if (errorCheck) return errorCheck
+            newState.errors = []
+            newState.comments[action.payload.id] = action.payload
+
+            return newState
         case DELETE_COMMENT:
-            delete deletedComment.comments[action.comment]
-            return deletedComment
+            if (errorCheck) return errorCheck
+            newState.errors = []
 
-        case CLEAR_COMMENT:
-            return initialState;
-
+            const deletedCommentId = newState.commentsById.filter(el => el !== action.payload.id)
+            newState.commentsById = deletedCommentId
+            delete newState[action.payload.id]
+            return newState
         default:
             return newState
     }

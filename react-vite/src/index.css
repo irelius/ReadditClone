@@ -11,6 +11,8 @@ html, body {
     /* background-color: #030303; */
 
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+
+    background-color: darkslategray;
 }
 
 body #login-modal-main-container{

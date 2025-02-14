@@ -16,28 +16,10 @@ def subreddits_all():
 # Get specific subreddit by id
 @subreddit_routes.route("/<int:subreddit_id>")
 def subreddit_by_id(subreddit_id):
-    subreddit = Subreddit.query.get(subreddit_id)
+    subreddit = Subreddit.query.get(subreddit_id)    
     if subreddit == None:
         return {"errors": ["Subreddit does not exist."]}, 404
     return subreddit.to_dict()
-
-
-# Get all users of subreddit
-@subreddit_routes.route("/<int:subreddit_id>/users")
-def subreddit_users(subreddit_id):
-    user_subs = UserSubreddit.query.filter(UserSubreddit.subreddit_id == subreddit_id).join(Subreddit).all()
-    if len(user_subs) == 0:
-        return {"errors": ["Subreddit does not have any users"]}, 404
-    return {user_sub.id: user_sub.user_data_dict() for user_sub in user_subs}
-
-
-# Get all posts of subreddit
-@subreddit_routes.route("/<int:subreddit_id>/posts")
-def subreddit_posts(subreddit_id):
-    posts = Post.query.filter(Post.subreddit_id == subreddit_id).all()
-    if len(posts) > 0:
-        return {post.id: post.to_dict() for post in posts}
-    return {"errors": ["Subreddit does not have any posts."]}, 404
 
 
 # Create a new subreddit
@@ -65,13 +47,71 @@ def subreddits_create_new():
         new_subreddit_user = UserSubreddit(
             subreddit_id = new_subreddit.id,
             user_id = user_id,
-            admin_status = True
+            admin_status = True,
+            mod_status = False
         )
 
         db.session.add(new_subreddit_user)
         db.session.commit()
         return new_subreddit.to_dict()
     return {"errors": validation_error_message(form.errors)}, 400
+
+# Update a subreddit description by id, also possibly the privacy setting of subreddit if functionality implemented later
+@subreddit_routes.route("/<int:subreddit_id>", methods=["PUT"])
+@login_required
+def subreddits_update_specific(subreddit_id):
+    user_id = int(current_user.get_id())
+    if user_id == None:
+        return {"errors": ["You must be logged in before editing this subreddit"]}, 401
+
+    admin_check = UserSubreddit.query.filter(UserSubreddit.user_id == user_id, UserSubreddit.subreddit_id == subreddit_id, UserSubreddit.admin_status == True).first()
+    if admin_check == None:
+        return {"errors": ["You do not have permission to edit this subreddit"]}, 403
+
+    subreddit_to_edit = Subreddit.query.get(subreddit_id)
+    form = SubredditForm()
+
+    if form.validate_on_submit():
+        subreddit_to_edit.description = form.data["description"]
+        
+        db.session.commit()
+        return subreddit_to_edit.to_dict()
+    return {"errors": validation_error_message(form.errors)}, 401 
+
+
+# Delete a subreddit. Techically, this is not a function that is readily available to users of Readdit, but it is implemented in this project to demonstrate full CRUD functionality
+@subreddit_routes.route("/<int:subreddit_id>", methods=["DELETE"])
+@login_required
+def subreddits_delete_specific(subreddit_id):   
+    user_id = int(current_user.get_id())
+    if user_id == None:
+        return {"errors": ["You must be logged in before deleting this subreddit"]}, 401
+
+    subreddit_to_delete = Subreddit.query.get(subreddit_id)
+    if subreddit_to_delete == None:
+        return {"errors": ["Subreddit does not exist."]}, 404
+    
+    admin_check = UserSubreddit.query.filter(UserSubreddit.user_id == user_id, UserSubreddit.subreddit_id == subreddit_id, UserSubreddit.admin_status == True).first()
+    if admin_check == None:
+        return {"errors": ["You do not have permission to delete this subreddit"]}, 403
+
+    db.session.delete(subreddit_to_delete)
+    db.session.commit()
+
+    return {
+        "id": subreddit_id,
+        "message": "Successfully deleted subreddit"
+    }
+
+
+# -------------------------------------------------- User stuff --------------------------------------------------
+# Get all users of subreddit
+@subreddit_routes.route("/<int:subreddit_id>/users")
+def subreddit_users(subreddit_id):
+    user_subs = UserSubreddit.query.filter(UserSubreddit.subreddit_id == subreddit_id).join(Subreddit).all()
+    if len(user_subs) == 0:
+        return {"errors": ["Subreddit does not have any users"]}, 404
+    return {user_sub.id: user_sub.user_data_dict() for user_sub in user_subs}
 
 
 # Join subreddit as a new member
@@ -103,7 +143,7 @@ def subreddits_join(subreddit_id):
         db.session.commit()
     return {"errors": validation_error_message(form.errors)}, 400
 
-# Leave subreddit as a member
+# Leave subreddit as current user
 @subreddit_routes.route('<int:subreddit_id>/leave', methods=["DELETE"])
 @login_required
 def subreddits_leave(subreddit_id):
@@ -151,48 +191,11 @@ def subreddits_leave(subreddit_id):
 #     return {"message": f"Successfully added User {user_id} to Subreddit {subreddit_id}."}
 
 
-# Update a subreddit description by id, also possibly the privacy setting of subreddit if functionality implemented later
-@subreddit_routes.route("/<int:subreddit_id>", methods=["PUT"])
-@login_required
-def subreddits_update_specific(subreddit_id):
-    user_id = int(current_user.get_id())
-    if user_id == None:
-        return {"errors": ["You must be logged in before editing this subreddit"]}, 401
-
-    admin_check = UserSubreddit.query.filter(UserSubreddit.user_id == user_id, UserSubreddit.subreddit_id == subreddit_id, UserSubreddit.admin_status == True).first()
-    if admin_check == None:
-        return {"errors": ["You do not have permission to edit this subreddit"]}, 403
-
-    subreddit_to_edit = Subreddit.query.get(subreddit_id)
-    form = SubredditForm()
-    subreddit_to_edit.description = form.data["description"]
-
-    db.session.commit()
-    return subreddit_to_edit.to_dict()
-
-
-# Delete a subreddit. Techically, this is not a function that is readily available to users of Readdit, but it is implemented in this project to demonstrate full CRUD functionality
-@subreddit_routes.route("/<int:subreddit_id>", methods=["DELETE"])
-@login_required
-def subreddits_delete_specific(subreddit_id):   
-    user_id = int(current_user.get_id())
-    if user_id == None:
-        return {"errors": ["You must be logged in before deleting this subreddit"]}, 401
-
-    subreddit_to_delete = Subreddit.query.get(subreddit_id)
-    if subreddit_to_delete == None:
-        return {"errors": ["Subreddit does not exist."]}, 404
-    
-    admin_check = UserSubreddit.query.filter(UserSubreddit.user_id == user_id, UserSubreddit.subreddit_id == subreddit_id, UserSubreddit.admin_status == True).first()
-    if admin_check == None:
-        return {"errors": ["You do not have permission to delete this subreddit"]}, 403
-
-    db.session.delete(subreddit_to_delete)
-    db.session.commit()
-
-    return {
-        "id": subreddit_id,
-        "message": "Successfully deleted subreddit"
-    }
-    
-    
+# -------------------------------------------------- Post stuff --------------------------------------------------
+# Get all posts of subreddit
+@subreddit_routes.route("/<int:subreddit_id>/posts")
+def subreddit_posts(subreddit_id):
+    posts = Post.query.filter(Post.subreddit_id == subreddit_id).all()
+    if len(posts) > 0:
+        return {post.id: post.to_dict() for post in posts}
+    return {"errors": ["Subreddit does not have any posts."]}, 404

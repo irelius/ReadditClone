@@ -3,33 +3,40 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
 import ErrorHelper from "../../components/ErrorHelper/ErrorHelper";
-import { deleteSubredditThunk, updateSubredditThunk } from "../../redux/subreddit";
+
 import { login } from "../../redux/session";
+import { loadAllUserThunk } from "../../redux/user";
+import { createPostThunk, deletePostThunk, loadPostsThunk, putPostThunk } from "../../redux/post";
 
 export default function MainPage() {
 	const dispatch = useDispatch();
 	const [load, setLoad] = useState(false);
-    
+
 	useEffect(() => {
-        setLoad(true);
-        dispatch(login({
-            "email": "demo@user.io",
-            "password": "password"
-        }))
-		// dispatch(loadSubredditThunk(999));
+		setLoad(true);
+		dispatch(loadPostsThunk());
 	}, []);
-    const subreddit_errors = useSelector((state) => state.subreddit.errors);
+	const subreddit_errors = useSelector((state) => state.subreddit.errors);
 
-	const test = useSelector((state) => state.subreddit);
-    console.log('booba', test)
+	const test = useSelector((state) => state.post);
+	// console.log('booba', test)
 
-    const handleCreate = () => {
-        const body = {
-            subredditId: 1
-        }
+	const handleCreate = () => {
+		dispatch(
+			login({
+				email: "demo@user.io",
+				password: "password",
+			})
+		);
 
-        dispatch(deleteSubredditThunk(2))
-    }
+		const body = {
+			subreddit_id: 1,
+			title: "test post title",
+			body: "test post body 3",
+		};
+
+		dispatch(loadAllUserThunk());
+	};
 
 	return load ? (
 		<div>

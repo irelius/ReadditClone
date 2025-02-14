@@ -1,16 +1,17 @@
+import { reduxError } from "./helper"
+
 // ------------------------------- ACTIONS ------------------------------- //
-const LOAD_POST = '/posts/LOAD_POST'
-const LOAD_POSTS = '/posts/LOAD_POSTS'
-const CREATE_POST = '/posts/CREATE_POST'
-const PUT_POST = '/posts/PUT_POST'
-const DELETE_POST = '/posts/DELETE_POST'
-const CLEAR_POST = "/posts/CLEAR_POST"
+const LOAD_POST = 'LOAD_POST'
+const LOAD_POSTS = 'LOAD_POSTS'
+const CREATE_POST = 'CREATE_POST'
+const PUT_POST = 'PUT_POST'
+const DELETE_POST = 'DELETE_POST'
 
 // Get one post
 export const loadPost = (post) => {
     return {
         type: LOAD_POST,
-        post
+        payload: post
     }
 }
 
@@ -18,7 +19,7 @@ export const loadPost = (post) => {
 export const loadPosts = (posts) => {
     return {
         type: LOAD_POSTS,
-        posts
+        payload: posts
     }
 }
 
@@ -26,7 +27,7 @@ export const loadPosts = (posts) => {
 export const createPost = (post) => {
     return {
         type: CREATE_POST,
-        post
+        payload: post
     }
 }
 
@@ -34,7 +35,7 @@ export const createPost = (post) => {
 export const updatePost = (post) => {
     return {
         type: PUT_POST,
-        post
+        payload: post
     }
 }
 
@@ -42,33 +43,24 @@ export const updatePost = (post) => {
 export const deletePost = (postId) => {
     return {
         type: DELETE_POST,
-        postId
-    }
-}
-
-export const clearPost = () => {
-    return {
-        type: CLEAR_POST,
+        payload: postId
     }
 }
 
 
 // ------------------------------- THUNKS ------------------------------- //
 
-// Thunk action to load a specific post
+// load a specific post
 export const loadPostThunk = (postId) => async (dispatch) => {
     const res = await fetch(`/api/posts/${postId}`)
 
-    if (res.ok) {
-        const posts = await res.json();
-        dispatch(loadPost(posts))
-        return posts
-    }
+    const data = await res.json();
+    return dispatch(loadPost(data))
 }
 
-// Thunk action to load all posts
+// load all posts
 export const loadPostsThunk = () => async (dispatch) => {
-    const res = await fetch(`/api/posts`)
+    const res = await fetch(`/api/posts/`)
 
     if (res.ok) {
         const posts = await res.json();
@@ -77,32 +69,33 @@ export const loadPostsThunk = () => async (dispatch) => {
     }
 }
 
-// Thunk action to load all posts by name
-export const loadCurrentSubredditPostsThunk = (subredditName) => async (dispatch) => {
-    const res = await fetch(`/api/posts/subreddits/${subredditName}`)
+// load a user's posts
+export const loadUserPostsThunk = (userId) => async (dispatch) => {
+    const res = await fetch(`/api/users/${userId}/posts`)
 
-    if (res.ok) {
-        const posts = await res.json();
-        dispatch(loadPosts(posts))
-        return posts
-    }
+    const data = await res.json()
+    return dispatch(loadPosts(data))
 }
 
+// load current user's posts
+export const loadCurrentUserPostsThunk = () =>  async (dispatch) => {
+    const res = await fetch(`/api/users/current/posts`)
 
-// Thunk action to load all posts by specific username
-export const loadUserPostsThunk = (username) => async (dispatch) => {
-    const res = await fetch(`/api/posts/users/${username}`)
-
-    if (res.ok) {
-        const posts = await res.json()
-        dispatch(loadPosts(posts))
-        return posts
-    }
+    const data = await res.json()
+    return dispatch(loadPosts(data))
 }
 
-// Thunk action to create a new post
+// load a subreddit's posts
+export const loadSubredditPostsThunk = (subredditId) => async (dispatch) => {
+    const res = await fetch(`/api/subreddits/${subredditId}/posts`)
+
+    const data = await res.json()
+    return dispatch(loadPosts(data))
+}
+
+// create a new post
 export const createPostThunk = (postInfo) => async (dispatch) => {
-    const res = await fetch(`/api/posts/subreddits/${postInfo.subreddit_id}`, {
+    const res = await fetch(`/api/posts/`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -110,23 +103,13 @@ export const createPostThunk = (postInfo) => async (dispatch) => {
         body: JSON.stringify(postInfo),
     })
 
-    if (res.ok) {
-        const data = await res.json();
-        dispatch(createPost(data))
-        return data
-    } else if (res.status < 500) {
-        const data = await res.json()
-        if (data.errors) {
-            return data.errors
-        }
-    }
-
-    return null
+    const data = await res.json();
+    return dispatch(createPost(data))
 }
 
-// Thunk action to update an existing post
-export const putPostThunk = (postInfo, post) => async (dispatch) => {
-    const res = await fetch(`/api/posts/${post.id}`, {
+// update an existing post
+export const putPostThunk = (postInfo, postId) => async (dispatch) => {
+    const res = await fetch(`/api/posts/${postId}`, {
         method: "PUT",
         headers: {
             'Content-Type': 'application/json',
@@ -134,78 +117,70 @@ export const putPostThunk = (postInfo, post) => async (dispatch) => {
         body: JSON.stringify(postInfo)
     })
 
-    if (res.ok) {
-        const data = await res.json();
-        dispatch(updatePost(data))
-        return data
-    } else if (res.status < 500) {
-        const data = await res.json()
-        if (data.errors) {
-            return data.errors
-        }
-    }
-
-    return null
+    const data = await res.json();
+    return dispatch(updatePost(data))
 }
 
-// Thunk action to delete a post
-export const deletePostThunk = (post) => async (dispatch) => {
-    const postId = Object.values(post)[0]["id"]
-
+// delete a post
+export const deletePostThunk = (postId) => async (dispatch) => {
     const res = await fetch(`/api/posts/${postId}`, {
         method: "DELETE"
     })
 
-    if (res.ok) {
-        dispatch(deletePost(postId))
-    }
-
-    return null;
+    const data = await res.json();
+    return dispatch(deletePost(data))
 }
-
-
-// ------------------------- SELECTOR FUNCTIONS ------------------------- //
-
-export const loadAllPosts = (state) => state.post
-
-
 
 // ------------------------------ REDUCERS ------------------------------ //
 
-const initialState = {};
+const initialState = {
+    postsById: [],
+    posts: {},
+    errors: []
+};
 
 const postReducer = (state = initialState, action) => {
     const newState = { ...state };
-    const allPosts = { "posts": {} };
-    const deletedPost = { ...newState }
+    const errorCheck = reduxError(newState, action.payload)
 
     switch (action.type) {
         case LOAD_POST:
-            return Object.assign({}, newState, action.post);
+            if (errorCheck) return errorCheck
+            newState.errors = []
+            newState.postsById = [action.payload.id]
+            newState.posts = action.payload
+
+            return newState
         case LOAD_POSTS:
+            if (errorCheck) return errorCheck
+            newState.errors = []
 
-            if (action.posts.posts !== "No posts") {
-                const postsArray = Object.values(action.posts.posts)
-                postsArray.forEach(el => {
-                    allPosts["posts"][el.id] = el
-                })
-                return allPosts
-            }
+            newState.postsById = action.payload.post_by_id
+            newState.posts = action.payload.all_posts
 
-            return 'no'
+            return newState
         case CREATE_POST:
+            if (errorCheck) return errorCheck
+            newState.errors = []
+
             return newState
         case PUT_POST:
-            return Object.assign({}, newState, action.post)
+            if (errorCheck) return errorCheck
+            newState.errors = []
+            newState.posts[action.payload.id] = action.payload
+
+            return newState
         case DELETE_POST:
-            delete deletedPost[action.postId]
-            return deletedPost
-        case CLEAR_POST:
-            return initialState;
+            if (errorCheck) return errorCheck
+            newState.errors = []
+
+            const deletePostId = newState.postsById.filter(el => el !== action.payload.id)
+            newState.postsById = deletePostId
+            delete newState[action.payload.id]
+            return newState
         default:
             return newState
     }
-
 }
 
 export default postReducer

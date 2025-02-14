@@ -1,20 +1,23 @@
 import {
-    legacy_createStore as createStore,
-    applyMiddleware,
+    legacy_createStore as createStore, applyMiddleware,
     compose,
     combineReducers,
 } from "redux";
 import thunk from "redux-thunk";
 import sessionReducer from "./session";
+import userReducer from "./user"
 import subredditReducer from "./subreddit";
-
+import postReducer from "./post";
 
 const rootReducer = combineReducers({
+    user: userReducer,
     session: sessionReducer,
     subreddit: subredditReducer,
+    post: postReducer
 });
 
 let enhancer;
+
 if (import.meta.env.MODE === "production") {
     enhancer = applyMiddleware(thunk);
 } else {
@@ -23,6 +26,7 @@ if (import.meta.env.MODE === "production") {
         window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
     enhancer = composeEnhancers(applyMiddleware(thunk, logger));
 }
+
 
 const configureStore = (preloadedState) => {
     return createStore(rootReducer, preloadedState, enhancer);

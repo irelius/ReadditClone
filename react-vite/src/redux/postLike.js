@@ -1,23 +1,24 @@
 // ------------------------------- ACTIONS ------------------------------- //
-const LOAD_POST_LIKES = '/likes/LOAD_POST_LIKES'
-const CREATE_POST_LIKES = '/likes/CREATE_POST_LIKES'
-// const PUT_POST_LIKES = '/likes/PUT_POST_LIKES'
-const DELETE_POST_LIKES = '/likes/DELETE_POST_LIKES'
-const CLEAR_POST_LIKES = "/likes/CLEAR_POST_LIKES"
+const LOAD_POST_LIKES = 'LOAD_POST_LIKES'
+const LOAD_CURR_POST_LIKES = 'LOAD_CURR_POST_LIKES'
+const CREATE_POST_LIKES = 'CREATE_POST_LIKES'
+// const PUT_POST_LIKES = 'PUT_POST_LIKES'
+const DELETE_POST_LIKES = 'DELETE_POST_LIKES'
+const CLEAR_POST_LIKES = "CLEAR_POST_LIKES"
 
 // Get likes for a post
 export const loadLikesPost = (likes) => {
     return {
         type: LOAD_POST_LIKES,
-        likes
+        payload: likes
     }
 }
 
 // Get likes from user
 export const loadUserPostLikes = (likes) => {
     return {
-        type: LOAD_POST_LIKES,
-        likes
+        type: LOAD_CURR_POST_LIKES,
+        payload: likes
     }
 }
 
@@ -25,7 +26,7 @@ export const loadUserPostLikes = (likes) => {
 export const createLikePost = (likes) => {
     return {
         type: CREATE_POST_LIKES,
-        likes
+        payload: likes
     }
 }
 
@@ -50,7 +51,7 @@ export const createLikePost = (likes) => {
 export const deleteLikePost = (postId) => {
     return {
         type: DELETE_POST_LIKES,
-        postId
+        payload: postId
     }
 }
 
@@ -63,57 +64,34 @@ export const clearPostLikes = () => {
 
 // ------------------------------- THUNKS ------------------------------- //
 
-// Thunk action to load likes for a post
+// load likes for a post
 export const loadLikesPostThunk = (postId) => async (dispatch) => {
-    const res = await fetch(`/api/post_likes/posts/${postId}`)
+    const res = await fetch(`/api/posts/${postId}/likes`)
 
-
-    if (res.ok) {
-        const likes = await res.json()
-        dispatch(loadLikesPost(likes))
-        return likes
-    }
+    const likes = await res.json()
+    return dispatch(loadLikesPost(likes))
 }
 
 
-// Thunk action to load all likes made to posts
-export const loadAllLikesPostThunk = () => async (dispatch) => {
-    const res = await fetch(`/api/post_likes/`)
+// load post likes from current user
+export const loadCurrentUserPostLikesThunk = (postId) => async (dispatch) => {
+    const res = await fetch(`/api/users/current/posts/${postId}/likes`)
 
-    if (res.ok) {
-        const likes = await res.json()
-        dispatch(loadLikesPost(likes))
-        return likes
-    }
+    const likes = await res.json()
+    return dispatch(loadUserPostLikes(likes))
 }
 
+// load all post likes from a specific user
+export const loadUserPostLikesThunk = (userId) => async (dispatch) => {
+    const res = await fetch(`/api/users/${userId}/post_likes`)
 
-// // Thunk action to load all likes made to comments that belong to a specific post
-// export const loadAllCommentLikesPerPostThunk = (post_id) => async (dispatch) => {
-//     const res = await fetch(`/api/likes/all/comments/${post_id}`)
-
-//     if(res.ok) {
-//         const likes = await res.json()
-//         dispatch(loadLikesComment(likes))
-//         return likes
-//     }
-// }
-
-
-// Thunk action to load post likes from current user
-export const loadUserPostLikesThunk = () => async (dispatch) => {
-    const res = await fetch(`/api/post_likes/users/current`)
-
-    if (res.ok) {
-        const likes = await res.json()
-        dispatch(loadUserPostLikes(likes))
-        return likes
-    }
+    const data = await res.json()
+    return dispatch(loadLikesPost(data))
 }
 
-
+// create a like/dislike on a post
 export const createLikePostThunk = (likeInfo, postId) => async (dispatch) => {
-    const res = await fetch(`/api/post_likes/posts/${postId}`, {
+    const res = await fetch(`/api/posts/${postId}/likes`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -130,45 +108,34 @@ export const createLikePostThunk = (likeInfo, postId) => async (dispatch) => {
     return null
 }
 
-export const createDislikePostThunk = (dislikeInfo, postId) => async (dispatch) => {
-    const res = await fetch(`/api/post_likes/posts/${postId}`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(dislikeInfo),
-    })
+// redundant
+// export const createDislikePostThunk = (dislikeInfo, postId) => async (dispatch) => {
+//     const res = await fetch(`/api/post_likes/posts/${postId}`, {
+//         method: "POST",
+//         headers: {
+//             "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify(dislikeInfo),
+//     })
 
-    if (res.ok) {
-        const dislike = await res.json()
-        dispatch(createLikePost(dislike))
-        return dislike
-    }
+//     if (res.ok) {
+//         const dislike = await res.json()
+//         dispatch(createLikePost(dislike))
+//         return dislike
+//     }
 
-    return null
-}
+//     return null
+// }
 
 
 export const deleteLikePostThunk = (postId) => async (dispatch) => {
-    const res = await fetch(`/api/post_likes/posts/${postId}`, {
+    const res = await fetch(`/api/posts/${postId}/likes`, {
         method: "DELETE"
     })
 
-    if (res.ok) {
-        dispatch(deleteLikePost(postId))
-        return true;
-    }
-
-    return null;
+    const data = await res.json()
+    return dispatch(deleteLikePost(data))
 }
-
-// Object { type: "/likes/DELETE_POST_LIKES", postId: 2 }
-// postId: 2
-// type: "/likes/DELETE_POST_LIKES"
-
-// ------------------------- SELECTOR FUNCTIONS ------------------------- //
-
-export const loadPostLikes = (state) => state.postLikes
 
 
 // ------------------------------ REDUCERS ------------------------------ //
@@ -182,6 +149,8 @@ const postLikesReducer = (state = initialState, action) => {
         // case LOAD_POST_LIKES:
         //     return Object.assign({}, newState, action.likes);
 
+        // case LOAD_CURR_POST_LIKES:
+        //      return
         // case CREATE_POST_LIKES:
         //     return Object.assign({}, newState, action.postLikes);
 

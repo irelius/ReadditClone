@@ -29,6 +29,7 @@ def login():
 
 
 @auth_routes.route('/logout', methods=["DELETE"])
+@login_required
 def logout():
     logout_user()
     return {'message': 'User logged out'}
@@ -56,17 +57,4 @@ def sign_up():
 
 @auth_routes.route('/unauthorized')
 def unauthorized():
-    return {"errors": ["Unauthorized access"]}, 401
-
-
-# Delete user
-@auth_routes.route("/current", methods = ["DELETE"])
-@login_required
-def users_delete():
-    user = User.query.get(current_user.get_id())
-    if user == None:
-        return {'errors': [f"User {user} does not exist"]}, 404
-
-    db.session.delete(user)
-    db.session.commit()
-    return {"message": f"Successfully deleted User {current_user.id}'s account"}
+    return {"errors": ["Unauthorized access. User must be logged in."]}, 401
