@@ -18,6 +18,9 @@ class Post(db.Model):
     post_likes = db.relationship("PostLike", cascade="all, delete")
     comments = db.relationship("Comment", cascade="all, delete")
     images = db.relationship("Image", cascade="all, delete")
+    
+    # One to Many relationship, Bidirectional to Users
+    users = db.relationship("User", back_populates="posts")
 
     # Many to One Relationships, Unidirectional TO Post
     user_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("users.id")), nullable=False)
@@ -37,6 +40,7 @@ class Post(db.Model):
         return {
             "id": self.id,
             "user_id": self.user_id,
+            "users": self.users.safe_to_dict(),
             "subreddit_id": self.subreddit_id,
             "title": self.title,
             "body": self.body,

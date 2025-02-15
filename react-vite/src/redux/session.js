@@ -91,13 +91,17 @@ const sessionReducer = (state = sessionState, action) => {
         case SET_USER:
             if (errorCheck) return errorCheck
             newState.errors = []
+
             newState.loggedIn = true
             newState.user = { ...action.payload }
-
             return newState
         case LOGOUT_USER:
             if (errorCheck) return errorCheck
-            return state
+            newState.errors = []
+
+            newState.loggedIn = false,
+            newState.user = null
+            return newState
         default:
             return state;
     }

@@ -1,13 +1,7 @@
 import { reduxError } from "./helper";
 
-const LOAD_USER = "LOAD_USER"
 const LOAD_USERS = "LOAD_USERS"
 const DELETE_USER = "DELETE_USER"
-
-const loadUser = (user) => ({
-    type: LOAD_USER,
-    payload: user
-})
 
 const loadUsers = (users) => ({
     type: LOAD_USERS,
@@ -19,37 +13,35 @@ const deleteUser = (user) => ({
     payload: user
 })
 
+// -------------------------- Dispatch helper -------------------------- //
+const dispatchHelper = (res) => async (dispatch) => {
+    const data = await res.json()
+    return dispatch(loadUsers(data))
+}
 
 // ------------------------------- THUNKS ------------------------------- //
-// load a specific user
-export const loadUserThunk = (userId) => async (dispatch) => {
-    const res = await fetch(`/api/users/${userId}`)
-
-    const data = await res.json()
-    return dispatch(loadUser(data))
+// load all users
+export const loadAllUserThunk = () => async () => {
+    const res = await fetch('/api/users/')
+    return dispatchHelper(res)
 }
 
 // load current user
-export const loadCurrentUserThunk = () => async (dispatch) => {
+export const loadCurrentUserThunk = () => async () => {
     const res = await fetch("/api/users/current")
-    const data = await res.json()
-    return dispatch(loadUser(data))
+    return dispatchHelper(res)
 }
 
-// load all users
-export const loadAllUserThunk = () => async (dispatch) => {
-    const res = await fetch('/api/users/')
-
-    const users = await res.json()
-    return dispatch(loadUsers(users))
+// load a specific user
+export const loadUserThunk = (userId) => async () => {
+    const res = await fetch(`/api/users/${userId}`)
+    return dispatchHelper(res)
 }
 
 // load a subreddit's users
-export const loadSubredditUsersThunk = (subredditId) => async (dispatch) => {
+export const loadSubredditUsersThunk = (subredditId) => async () => {
     const res = await fetch(`/api/subreddits/${subredditId}/users`)
-
-    const users = await res.json()
-    return dispatch(loadUsers(users))
+    return dispatchHelper(res)
 }
 
 // delete user account
@@ -76,27 +68,25 @@ const userReducer = (state = userState, action) => {
     const newState = { ...state }
     const errorCheck = reduxError(newState, action.payload)
 
-    switch (action.type) {
-        case LOAD_USER:
-            if (errorCheck) return errorCheck
-            newState.errors = []
+    // gets the id that would be returned from a single user query
+    const userId = action.payload && "users_by_id" in action.payload ? action.payload.users_by_id[0] : null
 
-            return newState
+    switch (action.type) {
         case LOAD_USERS:
             if (errorCheck) return errorCheck
             newState.errors = []
 
-            newState.users = action.payload.all_user
-            newState.usersById = action.payload.user_by_id
-            return newState
+            newState.users = action.payload.all_users
+            newState.usersById = action.payload.users_by_id
 
+            console.log('booba', newState)
+            return newState
         case DELETE_USER:
             if (errorCheck) return errorCheck
             newState.errors = []
 
-            const deletedUserId = newState.usersById.filter(el => el !== action.payload.id)
-            newState.usersById = deletedUserId
-            delete newState[action.payload.id]
+            newState.usersById = newState.usersById.filter(el => el !== userId)
+            delete newState[userId]
             return newState
         default:
             return newState

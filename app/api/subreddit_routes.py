@@ -2,7 +2,7 @@ from flask import Blueprint, request
 from flask_login import current_user, login_required
 from app.models import db, Subreddit, UserSubreddit, User, Post
 from app.forms import SubredditForm, UserSubredditForm
-from app.helper import validation_error_message, return_subreddits
+from app.helper import validation_error_message, return_subreddit, return_subreddits, return_user_sub,return_user_subs, return_posts
 
 subreddit_routes = Blueprint('subreddits', __name__)
 
@@ -17,9 +17,7 @@ def subreddits_all():
 @subreddit_routes.route("/<int:subreddit_id>")
 def subreddit_by_id(subreddit_id):
     subreddit = Subreddit.query.get(subreddit_id)    
-    if subreddit == None:
-        return {"errors": ["Subreddit does not exist."]}, 404
-    return subreddit.to_dict()
+    return return_subreddit(subreddit)
 
 
 # Create a new subreddit
@@ -28,17 +26,13 @@ def subreddit_by_id(subreddit_id):
 def subreddits_create_new():
     user_id = int(current_user.get_id())
 
-    if user_id == None:
-        return {"errors": ["You must be logged in before creating a new subreddit"]}, 401
-
     form = SubredditForm()
     form['csrf_token'].data = request.cookies['csrf_token']
-    name = form.data["name"].strip(" ").replace(" ", "_")
 
     if form.validate_on_submit():
         new_subreddit = Subreddit(
-            name = name,
-            description = form.data["description"],
+            name = form.data["name"].strip(" ").replace(" ", "_"),
+            description = form.data["description"].strip(" "),
         )
 
         db.session.add(new_subreddit)
@@ -53,7 +47,8 @@ def subreddits_create_new():
 
         db.session.add(new_subreddit_user)
         db.session.commit()
-        return new_subreddit.to_dict()
+        return return_subreddit(new_subreddit)
+    
     return {"errors": validation_error_message(form.errors)}, 400
 
 # Update a subreddit description by id, also possibly the privacy setting of subreddit if functionality implemented later
@@ -61,8 +56,6 @@ def subreddits_create_new():
 @login_required
 def subreddits_update_specific(subreddit_id):
     user_id = int(current_user.get_id())
-    if user_id == None:
-        return {"errors": ["You must be logged in before editing this subreddit"]}, 401
 
     admin_check = UserSubreddit.query.filter(UserSubreddit.user_id == user_id, UserSubreddit.subreddit_id == subreddit_id, UserSubreddit.admin_status == True).first()
     if admin_check == None:
@@ -72,10 +65,11 @@ def subreddits_update_specific(subreddit_id):
     form = SubredditForm()
 
     if form.validate_on_submit():
-        subreddit_to_edit.description = form.data["description"]
+        subreddit_to_edit.description = form.data["description"].strip(" ")
         
         db.session.commit()
-        return subreddit_to_edit.to_dict()
+        return return_subreddit(subreddit_to_edit)
+    
     return {"errors": validation_error_message(form.errors)}, 401 
 
 
@@ -84,8 +78,6 @@ def subreddits_update_specific(subreddit_id):
 @login_required
 def subreddits_delete_specific(subreddit_id):   
     user_id = int(current_user.get_id())
-    if user_id == None:
-        return {"errors": ["You must be logged in before deleting this subreddit"]}, 401
 
     subreddit_to_delete = Subreddit.query.get(subreddit_id)
     if subreddit_to_delete == None:
@@ -99,7 +91,7 @@ def subreddits_delete_specific(subreddit_id):
     db.session.commit()
 
     return {
-        "id": subreddit_id,
+        "id": subreddit_to_delete.id,
         "message": "Successfully deleted subreddit"
     }
 
@@ -108,25 +100,24 @@ def subreddits_delete_specific(subreddit_id):
 # Get all users of subreddit
 @subreddit_routes.route("/<int:subreddit_id>/users")
 def subreddit_users(subreddit_id):
+    subreddit_check = Subreddit.query.get(subreddit_id)
+    if subreddit_check == None:
+        return {"errors": "Subreddit does not exist"}, 404
+    
     user_subs = UserSubreddit.query.filter(UserSubreddit.subreddit_id == subreddit_id).join(Subreddit).all()
-    if len(user_subs) == 0:
-        return {"errors": ["Subreddit does not have any users"]}, 404
-    return {user_sub.id: user_sub.user_data_dict() for user_sub in user_subs}
 
+    return return_user_subs(user_subs, "user")
 
 # Join subreddit as a new member
+# TODO: implement function to add users to a private subreddit. Will require refactoring subreddit model
 @subreddit_routes.route("<int:subreddit_id>/join", methods=["POST"])
 @login_required
 def subreddits_join(subreddit_id):
     user_id = int(current_user.get_id())
     
-    user_check = User.query.get(user_id)
-    if user_check == None:
-        return {"errors": ["User does not exist."]}, 404
-    
     subreddit = Subreddit.query.get(id)
     if subreddit == None:
-        return {"errors": ["Subreddit does not exist."]}, 404
+        return {"errors": ["Subreddit does not exist to join."]}, 404
 
     form = UserSubredditForm()
     form['csrf_token'].data = request.cookies['csrf_token']
@@ -141,61 +132,41 @@ def subreddits_join(subreddit_id):
         
         db.session.add(new_user_subreddit)
         db.session.commit()
-    return {"errors": validation_error_message(form.errors)}, 400
+        
+        return return_user_sub(new_user_subreddit)
+    
+    return {"errors": validation_error_message(form.errors)}, 401
 
 # Leave subreddit as current user
 @subreddit_routes.route('<int:subreddit_id>/leave', methods=["DELETE"])
 @login_required
 def subreddits_leave(subreddit_id):
     user_id = int(current_user.get_id())
-    
-    subreddit = Subreddit.query.get(id)
-    if subreddit == None:
-        return {"errors": ["Subreddit does not exist."]}, 404
+        
+    subreddit_check = Subreddit.query.get(subreddit_id)
+    if subreddit_check == None:
+        return {"errors": ["Subreddit does not exist. User is not part of subreddit"]}, 404
 
     subreddit_to_leave = UserSubreddit.query.filter(UserSubreddit.user_id == user_id, UserSubreddit.subreddit_id == subreddit_id).first()
     
     if subreddit_to_leave == None:
-        return {"errors": ["User isn't part of this subreddit"]}, 404
+        return {"errors": ["User is not part of this subreddit"]}, 404
     
     db.session.delete(subreddit_to_leave)
     db.session.commit()
     
-    return {"message": f"Successfully left Subreddit {subreddit_id}."}
-
-
-# TODO: implement function to add users to a private subreddit (another TO DO in the subreddit) or join a subreddit if public (this part is done for now)
-# Add a user to a subreddit
-# @subreddit_routes.route("/<int:subreddit_id>", methods=["POST"])
-# @login_required
-# def subreddits_add_user(subreddit_id):
-#     user_id = int(current_user.get_id())
-
-#     if user_id == None:
-#         return {"errors"[: "You must be logged in before addings people to this subreddit"]}, 401
-
-
-#     # This would require a user to be added if the subreddit is set to private
-#     # subreddit_users = UserSubreddit.query.filter((UserSubreddit.subreddit_id == subreddit_id), (UserSubreddit.user_id == user_id)).all()
-#     # if len(subreddit_users) == 0:
-#     #     return {"e[rrors": "You do not have permission to add a user to this subreddit"]}, 403
-
-#     new_subreddit_user = UserSubreddit(
-#         subreddit_id = subreddit_id,
-#         user_id = user_id
-#     )
-
-#     db.session.add(new_subreddit_user)
-#     db.session.commit()
-
-#     return {"message": f"Successfully added User {user_id} to Subreddit {subreddit_id}."}
-
+    return {
+        "id": subreddit_to_leave.id,
+        "message": "User has left subreddit successfully"
+    }
 
 # -------------------------------------------------- Post stuff --------------------------------------------------
 # Get all posts of subreddit
 @subreddit_routes.route("/<int:subreddit_id>/posts")
 def subreddit_posts(subreddit_id):
+    subreddit_check = Subreddit.query.get(subreddit_id)
+    if subreddit_check == None:
+        return {"errors": ["Subreddit does not exist"]}, 404
+    
     posts = Post.query.filter(Post.subreddit_id == subreddit_id).all()
-    if len(posts) > 0:
-        return {post.id: post.to_dict() for post in posts}
-    return {"errors": ["Subreddit does not have any posts."]}, 404
+    return return_posts(posts)

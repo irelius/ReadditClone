@@ -1,32 +1,15 @@
 import { reduxError } from "./helper"
 
 // ------------------------------- ACTIONS ------------------------------- //
-const LOAD_COMMENT = "LOAD_COMMENT"
-const LOAD_CURR_COMMENTS = "LOAD_CURR_COMMENTS"
 const LOAD_COMMENTS = "LOAD_COMMENTS"
 const CREATE_COMMENT = "CREATE_COMMENT"
 const PUT_COMMENT = "PUT_COMMENT"
 const DELETE_COMMENT = "DELETE_COMMENT"
 
-// Get one comment
-export const loadComment = (comment) => {
-    return {
-        type: LOAD_COMMENT,
-        payload: comment
-    }
-}
-
-// Get all comments
+// Get comments
 export const loadComments = (comments) => {
     return {
         type: LOAD_COMMENTS,
-        payload: comments
-    }
-}
-
-export const loadCurrComments = (comments) => {
-    return {
-        type: LOAD_CURR_COMMENTS,
         payload: comments
     }
 }
@@ -55,58 +38,46 @@ export const deleteComment = (comment) => {
     }
 }
 
-
-// ------------------------------- THUNKS ------------------------------- //
-
-// load all comments
-export const loadCommentsThunk = () => async (dispatch) => {
-    const res = await fetch(`/api/comments`)
-
-    if (res.ok) {
-        const comments = await res.json();
-        dispatch(loadComments(comments))
-        return comments
-    }
-}
-
-// load one comment
-export const loadCommentThunk = (commentId) => async (dispatch) => {
-    const res = await fetch(`/api/comments/${commentId}`)
-
-    if (res.ok) {
-        const comment = await res.json();
-        dispatch(loadComments(comment))
-        return comment
-    }
-}
-
-// load all comments by a specific user
-export const loadUserCommentsThunk = (userId) => async (dispatch) => {
-    const res = await fetch(`/api/users/${userId}/comments`)
-
-    const comments = await res.json()
-    return dispatch(loadComments(comments))
-}
-
-// load all comments made by current user
-export const loadCurrentUserCommentsThunk = () => async (dispatch) => {
-    const res = await fetch(`/api/users/current/comments`)
-
+// -------------------------- Dispatch helper -------------------------- //
+const dispatchHelper = (res) => async (dispatch) => {
     const data = await res.json()
     return dispatch(loadComments(data))
 }
 
-// load all comments for a specific post
-export const loadPostCommentsThunk = (postId) => async (dispatch) => {
-    const res = await fetch(`/api/posts/${postId}/comments`)
+// ------------------------------- THUNKS ------------------------------- //
 
-    const comments = await res.json()
-    return dispatch(loadComments(comments))
-
+// load all comments
+export const loadCommentsThunk = () => async () => {
+    const res = await fetch(`/api/comments/`)
+    return dispatchHelper(res)
 }
 
-// create a new comment for a post
-export const createCommentThunk = (commentInfo, postId) => async (dispatch) => {
+// load one comment
+export const loadCommentThunk = (commentId) => async () => {
+    const res = await fetch(`/api/comments/${commentId}`)
+    return dispatchHelper(res)
+}
+
+// load all comments by a specific user
+export const loadUserCommentsThunk = (userId) => async () => {
+    const res = await fetch(`/api/users/${userId}/comments`)
+    return dispatchHelper(res)
+}
+
+// load all comments made by current user
+export const loadCurrentUserCommentsThunk = () => async () => {
+    const res = await fetch(`/api/users/current/comments`)
+    return dispatchHelper(res)
+}
+
+// load all comments for a specific post
+export const loadPostCommentsThunk = (postId) => async () => {
+    const res = await fetch(`/api/posts/${postId}/comments`)
+    return dispatchHelper(res)
+}
+
+// create a new comment on a post
+export const createCommentOnPostThunk = (commentInfo, postId) => async (dispatch) => {
     const res = await fetch(`/api/posts/${postId}/comments`, {
         method: "POST",
         headers: {
@@ -120,7 +91,7 @@ export const createCommentThunk = (commentInfo, postId) => async (dispatch) => {
 }
 
 // create a new comment as a reply to another comment
-export const createReplyThunk = (commentInfo, commentId) => async (dispatch) => {
+export const createCommentOnCommentThunk = (commentInfo, commentId) => async (dispatch) => {
     const res = await fetch(`/api/comments/${commentId}`, {
         method: "POST",
         headers: {
@@ -144,17 +115,8 @@ export const putCommentThunk = (commentInfo, comment) => async (dispatch) => {
         body: JSON.stringify(commentInfo)
     })
 
-    if (res.ok) {
-        const data = await res.json();
-        dispatch(updateComment(data))
-    } else if (res.status < 500) {
-        const data = await res.json()
-        if (data.errors) {
-            return data.errors
-        }
-    }
-
-    return null
+    const data = await res.json();
+    return dispatch(updateComment(data))
 }
 
 
@@ -164,22 +126,12 @@ export const deleteCommentThunk = (comment) => async (dispatch) => {
         method: "DELETE"
     })
 
-    if (res.ok) {
-        dispatch(deleteComment(comment.id))
-    }
-
-    return null
+    const data = await res.json()
+    return dispatch(deleteComment(data))
 }
 
 
-// ------------------------- SELECTOR FUNCTIONS ------------------------- //
-
-export const loadAllComments = (state) => state.comments;
-
-
-
 // ------------------------------ REDUCERS ------------------------------ //
-
 const initialState = {
     commentsById: [],
     comments: {},
@@ -190,41 +142,36 @@ const commentReducer = (state = initialState, action) => {
     const newState = { ...state };
     const errorCheck = reduxError(newState, action.payload)
 
-    switch (action.type) {
-        case LOAD_COMMENT:
-            if (errorCheck) return errorCheck
-            newState.errors = []
-            newState.commentsById = [action.payload.id]
-            newState.comments = action.payload
+    // gets the id that would be returned from a single comment query
+    const commentId = action.payload && "comment_by_id" in action.payload ? action.payload.comment_by_id[0] : null
 
-            return newState
+    switch (action.type) {
         case LOAD_COMMENTS:
             if (errorCheck) return errorCheck
             newState.errors = []
+
             newState.commentsById = action.payload.comments_by_id
             newState.comments = action.payload.all_comments
-
             return newState
-        case LOAD_CURR_COMMENTS:
-            return 
         case CREATE_COMMENT:
             if (errorCheck) return errorCheck
             newState.errors = []
 
+            newState.commentsById.push(commentId)
+            newState.comments[commentId] = action.payload.all_comments
             return newState
         case PUT_COMMENT:
             if (errorCheck) return errorCheck
             newState.errors = []
-            newState.comments[action.payload.id] = action.payload
 
+            newState.comments[commentId] = action.payload.all_comments
             return newState
         case DELETE_COMMENT:
             if (errorCheck) return errorCheck
             newState.errors = []
 
-            const deletedCommentId = newState.commentsById.filter(el => el !== action.payload.id)
-            newState.commentsById = deletedCommentId
-            delete newState[action.payload.id]
+            newState.commentsById = newState.commentsById.filter(el => el !== commentId)
+            delete newState[commentId]
             return newState
         default:
             return newState

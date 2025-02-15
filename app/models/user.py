@@ -22,14 +22,15 @@ class User(db.Model, UserMixin):
 
 
     # One to Many Relationships, Unidirectional FROM User
-    posts = db.relationship("Post", cascade="all, delete")
     post_likes = db.relationship("PostLike", cascade="all, delete")
     comments = db.relationship("Comment", cascade="all, delete")
     comment_likes = db.relationship("CommentLike", cascade="all, delete")
 
+    # One to Many relationship, Bidirectional to Users
+    posts = db.relationship("Post", back_populates="users", cascade="all, delete")
+
     # Many to Many Relationship. Bidirectional through join table UserSubreddit   
     subreddit_relationship = db.relationship("UserSubreddit", back_populates="user_join", cascade="all, delete")
-
 
     @property
     def password(self):

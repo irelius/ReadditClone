@@ -1,18 +1,10 @@
 import { reduxError } from "./helper"
 
 // ------------------------------- ACTIONS ------------------------------- //
-const LOAD_SUBREDDIT = 'LOAD_SUBREDDIT'
 const LOAD_SUBREDDITS = 'LOAD_SUBREDDITS'
 const PUT_SUBREDDIT = 'PUT_SUBREDDIT'
 const CREATE_SUBREDDIT = 'CREATE_SUBREDDIT'
 const DELETE_SUBREDDIT = 'DELETE_SUBREDDIT'
-
-export const loadSubreddit = (subreddit) => {
-    return {
-        type: LOAD_SUBREDDIT,
-        payload: subreddit
-    }
-}
 
 export const loadSubreddits = (subreddits) => {
     return {
@@ -42,30 +34,35 @@ export const deleteSubreddit = (subreddit) => {
     }
 }
 
-// ------------------------------- THUNKS ------------------------------- //
-
-// load a specific subreddit
-export const loadSubredditThunk = (subredditId) => async (dispatch) => {
-    const res = await fetch(`/api/subreddits/${subredditId}`)
-
-    const subreddit = await res.json()
-    return dispatch(loadSubreddit(subreddit))
-}
-
-// load all subreddits
-export const loadSubredditsThunk = () => async (dispatch) => {
-    const res = await fetch("/api/subreddits/")
-
-    const data = await res.json();
-    return dispatch(loadSubreddits(data))
-}
-
-// load a user's subreddits
-export const loadUserSubredditThunk = (userId) => async (dispatch) => {
-    const res = await fetch(`/api/users/${userId}/subreddits`)
-
+// -------------------------- Dispatch helper -------------------------- //
+const dispatchHelper = (res) => async (dispatch) => {
     const data = await res.json()
     return dispatch(loadSubreddits(data))
+}
+
+// ------------------------------- THUNKS ------------------------------- //
+// load all subreddits
+export const loadSubredditsThunk = () => async () => {
+    const res = await fetch("/api/subreddits/")
+    return dispatchHelper(res)
+}
+
+// load a specific subreddit
+export const loadSubredditThunk = (subredditId) => async () => {
+    const res = await fetch(`/api/subreddits/${subredditId}`)
+    return dispatchHelper(res)
+}
+
+// load a specific user's subreddits
+export const loadUserSubredditThunk = (userId) => async () => {
+    const res = await fetch(`/api/users/${userId}/subreddits`)
+    return dispatchHelper(res)
+}
+
+// load current user's subreddits
+export const loadCurrentUserSubredditThunk = () => async () => {
+    const res = await fetch(`/api/users/current/subreddits`)
+    return dispatchHelper(res)
 }
 
 // create subreddit
@@ -85,24 +82,9 @@ export const createSubredditThunk = ({ name, description }) => async (dispatch) 
     dispatch(createSubreddit(data))
 }
 
-// user joins subreddit as a member
-export const userJoinSubredditThunk = (subredditId) => async (dispatch) => {
-    const res = await fetch(`/api/subreddits/${subredditId}/join`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        }
-    })
-
-    const data = await res.json()
-    // TODO see how to update the state in the reducer for this thunk
-    console.log('booba', data)
-
-}
-
 // edit subreddit (currently only updates description)
 // TO DO: think of more properties of subreddits that could be changed (e.g. privacy, banner, etc.)
-export const updateSubredditThunk = ({ subredditId, description }) => async (dispatch) => {
+export const updateSubredditThunk = (subredditId, { description }) => async (dispatch) => {
     const res = await fetch(`/api/subreddits/${subredditId}`, {
         method: "PUT",
         headers: {
@@ -117,6 +99,20 @@ export const updateSubredditThunk = ({ subredditId, description }) => async (dis
     dispatch(updateSubreddit(data))
 }
 
+// user joins subreddit as a member
+export const userJoinSubredditThunk = (subredditId) => async (dispatch) => {
+    const res = await fetch(`/api/subreddits/${subredditId}/join`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        }
+    })
+
+    const data = await res.json()
+    // TODO see how to update the state in the reducer for this thunk
+    console.log('booba', data)
+
+}
 
 // user leaves subreddit
 export const userLeaveSubredditThunk = (subredditId) => async (dispatch) => {
@@ -153,49 +149,38 @@ const subredditState = {
 
 const subredditReducer = (state = subredditState, action) => {
     const newState = { ...state }
-
     const errorCheck = reduxError(newState, action.payload)
 
+    // gets the id that would be returned from a single subreddit query
+    const subredditId = action.payload && "subreddits_by_id" in action.payload ? action.payload.subreddits_by_id[0] : null
+
     switch (action.type) {
-        case LOAD_SUBREDDIT:
-            if (errorCheck) return errorCheck
-
-            newState.errors = []
-            newState.subredditsById = [action.payload.id]
-            newState.subreddits[action.payload.id] = action.payload
-
-            return newState
         case LOAD_SUBREDDITS:
             if (errorCheck) return errorCheck
-
             newState.errors = []
-            newState.subredditsById = action.payload.subreddit_by_id
-            newState.subreddits = action.payload.all_subreddits
 
+            newState.subredditsById = action.payload.subreddits_by_id
+            newState.subreddits = action.payload.all_subreddits
             return newState
         case CREATE_SUBREDDIT:
             if (errorCheck) return errorCheck
-
             newState.errors = []
-            newState.subredditsById.push(action.payload.id)
-            newState.subreddits[action.payload.id] = action.payload
 
+            newState.subredditsById.push(subredditId)
+            newState.subreddits[subredditId] = action.payload.all_subreddits
             return newState
         case PUT_SUBREDDIT:
             if (errorCheck) return errorCheck
-
             newState.errors = []
-            newState.subreddits[action.payload.id] = action.payload
 
+            newState.subreddits[subredditId] = action.payload.all_subreddits
             return newState
         case DELETE_SUBREDDIT:
             if (errorCheck) return errorCheck
-
             newState.errors = []
-            const deleteSubredditId = newState.subredditsById.filter(el => el !== action.payload.id)
-            newState.subredditsById = deleteSubredditId
-            delete newState[action.payload.id]
 
+            newState.subredditsById = newState.subredditsById.filter(el => el !== subredditId)
+            delete newState[subredditId]
             return newState
         default:
             return newState;

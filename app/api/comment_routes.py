@@ -2,7 +2,7 @@ from flask import Blueprint, request
 from flask_login import current_user, login_required
 from app.models import db, Comment, User, Subreddit, CommentLike
 from app.forms import CommentForm, LikeForm
-from app.helper import return_comments, return_comment_likes, validation_error_message
+from app.helper import return_comment, return_comments, return_comment_like, return_comment_likes, validation_error_message
 
 comment_routes = Blueprint("comments", __name__)
 
@@ -13,15 +13,11 @@ def comments_all():
     comments = Comment.query.all()
     return return_comments(comments)
 
-
 # Get specific comment by id
 @comment_routes.route("/<int:comment_id>")
 def comments_specific(comment_id):
     comment = Comment.query.get(comment_id)
-    if comment == None:
-        return {"errors": ["Comment does not exist"]}, 404
-    return {"comments": {comment_id: comment.to_dict()}}
-
+    return return_comment(comment)
 
 # Create a new comment on a comment
 @comment_routes.route("/<int:comment_id>", methods=["POST"])
@@ -49,7 +45,7 @@ def create_comment_on_comment(comment_id):
         db.session.add(new_comment)
         db.session.commit()
 
-        return new_comment.to_dict()
+        return return_comment(new_comment)
 
     return {"errors": validation_error_message(form.errors)}, 401
 
@@ -71,10 +67,10 @@ def comments_update_specific(comment_id):
     form['csrf_token'].data = request.cookies['csrf_token']
     
     if form.validate_on_submit():
-        comment_to_edit.body = form.data["body"]
+        comment_to_edit.body = form.data["body"].strip(" ")
         db.session.commit()
         
-        return comment_to_edit.to_dict()
+        return return_comment(comment_to_edit)
     
     return {"errors": validation_error_message(form.errors)}, 401
 
@@ -89,22 +85,23 @@ def comments_delete_specific(comment_id):
     subreddit = Subreddit.query.get(comment_to_delete.subreddit_id)
 
     if comment_to_delete == None:
-        return {"errors": [f"Comment {comment_id} does not exist"]}, 404
+        return {"errors": ["Comment does not exist to delete"]}, 404
        
-    if comment_to_delete.user_id != user_id and subreddit.admin_id != user_id:
-        return {"errors": ["You are not authorized to delete this comment."]}, 403
-
-    # While not a true delete, doing this is necessary to keep the binary tree of comment structure 
-    comment_to_delete.deleted = True
-    
     if comment_to_delete.user_id == user_id:    
         comment_to_delete.body = "Comment deleted by user."
     elif subreddit.admin_id == user_id:
         comment_to_delete.body = "Comment removed by admin."
+    else:
+        return {"errors": ["You are not authorized to delete this comment."]}, 403
     
+    # While not a true delete, doing this is necessary to keep the binary tree of comment structure and keep to reddit's functionality
+    comment_to_delete.deleted = True
     db.session.commit()
 
-    return {"message": "Comment successfully deleted."}
+    return {
+        "id": comment_to_delete.id,
+        "message": "Comment successfully deleted."
+    }
 
 
 # ----------------------------------------------- Comment Likes -----------------------------------------------
@@ -120,10 +117,12 @@ def get_comment_likes(comment_id):
 
 
 # Create a like/dislike to a comment
+# TODO: add in a check to see if a like/dislike already exists
 @comment_routes.route("/<int:comment_id>/likes", methods=["POST"])
 @login_required
 def create_like_on_comment(comment_id):
     user_id = int(current_user.get_id())
+        
     form = LikeForm()
     form['csrf_token'].data = request.cookies['csrf_token']
     
@@ -135,8 +134,9 @@ def create_like_on_comment(comment_id):
         )
         db.session.add(new_like)
         db.session.commit()
-
-        return new_like.to_dict()
+        
+        return return_comment_like(new_like)
+        
     return {"errors": validation_error_message(form.errors)}, 401
 
 
@@ -162,7 +162,7 @@ def update_like_on_comment(like_id):
     if form.validate_on_submit():
         like_to_update.like_status = form.data["like_status"]
         db.session.commit()
-        return like_to_update.to_dict()
+        return return_comment_like(like_to_update)
     
     return {"errors": validation_error_message(form.errors)}, 401
     
@@ -184,4 +184,7 @@ def delete_like_on_post(comment_id):
     db.session.delete(like_to_delete)
     db.session.commit()
     
-    return {"message": "Like/dislike successfully deleted"}
+    return {
+        "id": like_to_delete.id,
+        "message": "Like/dislike successfully deleted"
+    }
