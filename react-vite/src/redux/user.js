@@ -13,35 +13,33 @@ const deleteUser = (user) => ({
     payload: user
 })
 
-// -------------------------- Dispatch helper -------------------------- //
-const dispatchHelper = (res) => async (dispatch) => {
-    const data = await res.json()
-    return dispatch(loadUsers(data))
-}
-
 // ------------------------------- THUNKS ------------------------------- //
 // load all users
 export const loadAllUserThunk = () => async () => {
     const res = await fetch('/api/users/')
-    return dispatchHelper(res)
+    const data = await res.json()
+    return dispatch(loadUsers(data))
 }
 
 // load current user
 export const loadCurrentUserThunk = () => async () => {
     const res = await fetch("/api/users/current")
-    return dispatchHelper(res)
+    const data = await res.json()
+    return dispatch(loadUsers(data))
 }
 
 // load a specific user
 export const loadUserThunk = (userId) => async () => {
     const res = await fetch(`/api/users/${userId}`)
-    return dispatchHelper(res)
+    const data = await res.json()
+    return dispatch(loadUsers(data))
 }
 
 // load a subreddit's users
 export const loadSubredditUsersThunk = (subredditId) => async () => {
     const res = await fetch(`/api/subreddits/${subredditId}/users`)
-    return dispatchHelper(res)
+    const data = await res.json()
+    return dispatch(loadUsers(data))
 }
 
 // delete user account

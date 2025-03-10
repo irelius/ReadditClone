@@ -2,6 +2,7 @@ from flask import Blueprint
 from flask_login import current_user, login_required
 from app.models import db, User, UserSubreddit, Post, Comment, CommentLike, PostLike
 from app.helper import return_comments, return_posts, return_user, return_users, return_post_likes, return_comment_likes, return_user_sub, return_user_subs
+from sqlalchemy.orm import joinedload
 
 user_routes = Blueprint('users', __name__)
 
@@ -20,7 +21,7 @@ def users_current():
     user_id = int(current_user.get_id())
     user = User.query.get(user_id)
     
-    # "to_dict()" used since the current user should be able to see their information
+    # "to_dict()" used since the current user should be able to see their own information
     return {
         "users_by_id": [user.id],
         "all_users": {user.id: user.to_dict()}
@@ -64,7 +65,7 @@ def user_subreddits(user_id):
     if user_check == None:
         return {"errors": ["User does not exist"]}, 404
     
-    user_subs = UserSubreddit.query.filter(UserSubreddit.user_id == user_id).all()
+    user_subs = UserSubreddit.query.options(joinedload(UserSubreddit.subreddit_join)).filter(UserSubreddit.user_id == user_id).all()
     return return_user_subs(user_subs, "subreddit")
 
 
@@ -74,27 +75,29 @@ def user_subreddits(user_id):
 def current_user_subreddits():
     user_id = int(current_user.get_id())
 
-    user_subs = UserSubreddit.query.filter(UserSubreddit.user_id == user_id).join(User).all()
+    user_subs = UserSubreddit.query.options(joinedload(UserSubreddit.subreddit_join)).filter(UserSubreddit.user_id == user_id).join(User).all()
     return return_user_subs(user_subs, "subreddit")
     
 
 # -------------------------------------------- Post stuff --------------------------------------------
 # Get posts of a specific user
 @user_routes.route("/<int:user_id>/posts")
-def user_posts(user_id):
+def user_posts(user_id):    
     user_check = User.query.get(user_id)
     if user_check == None:
         return {"errors": ["User does not exist"]}, 404
     
-    posts = Post.query.filter(Post.user_id == user_id).all()
+    posts = Post.query.options(joinedload(Post.post_likes), joinedload(Post.comments), joinedload(Post.images), joinedload(Post.users), joinedload(Post.subreddits)).filter(Post.user_id == user_id).all()
+
     return return_posts(posts)
+
 
 # Get posts of current user
 @user_routes.route("/current/posts")
 @login_required
 def current_user_posts():
     user_id = int(current_user.get_id())
-    posts = Post.query.filter(Post.user_id == user_id).all()
+    posts = Post.query.options(joinedload(Post.post_likes), joinedload(Post.comments), joinedload(Post.images), joinedload(Post.users), joinedload(Post.subreddits)).filter(Post.user_id == user_id).all()
     return return_posts(posts)
 
 
@@ -115,7 +118,7 @@ def user_post_likes(user_id):
 def current_user_post_likes(post_id):
     user_id = int(current_user.get_id())
     
-    post_check = Post.query.get(post_id)
+    post_check = Post.query.options(joinedload(Post.post_likes), joinedload(Post.comments), joinedload(Post.images), joinedload(Post.users), joinedload(Post.subreddits)).get(post_id)
     if post_check == None:
         return {"errors": ["Post does not exist."]}, 404
         
@@ -130,7 +133,7 @@ def users_comments(user_id):
     if user_check == None:
         return {"errors": ["User does not exist"]}, 404
     
-    comments = Comment.query.filter(Comment.user_id == user_id).all()
+    comments = Comment.query.options(joinedload(Comment.comment_likes), joinedload(Comment.replies)).filter(Comment.user_id == user_id).all()
     return return_comments(comments)
 
 # Get comments of current user
@@ -138,7 +141,7 @@ def users_comments(user_id):
 @login_required
 def current_user_comments():
     user_id = int(current_user.get_id())
-    comments = Comment.query.filter(Comment.user_id == user_id).all()
+    comments = Comment.query.options(joinedload(Comment.comment_likes), joinedload(Comment.replies)).filter(Comment.user_id == user_id).all()
     return return_comments(comments)
 
 
@@ -155,7 +158,7 @@ def user_comment_likes(user_id):
 def current_user_comment_likes(comment_id):
     user_id = int(current_user.get_id())
     
-    comment_check = Comment.query.get(comment_id)
+    comment_check = Comment.query.options(joinedload(Comment.comment_likes), joinedload(Comment.replies)).get(comment_id)
     if comment_check == None:
         return {"errors": ["Comment does not exist."]}, 404
 

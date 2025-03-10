@@ -34,4 +34,4 @@ botocore = "==1.29.13"
 [dev-packages]
 
 [requires]
-python_version = "3.9"
+python_version = "3.11"

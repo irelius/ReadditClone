@@ -19,8 +19,9 @@ class Post(db.Model):
     comments = db.relationship("Comment", cascade="all, delete")
     images = db.relationship("Image", cascade="all, delete")
     
-    # One to Many relationship, Bidirectional to Users
+    # One to Many relationship, Bidirectional
     users = db.relationship("User", back_populates="posts")
+    subreddits = db.relationship("Subreddit", back_populates="posts")
 
     # Many to One Relationships, Unidirectional TO Post
     user_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("users.id")), nullable=False)
@@ -33,6 +34,11 @@ class Post(db.Model):
         total = likes - dislikes
         return likes, dislikes, total
 
+    def test_comments(self):
+        return {
+            "id": self.id,
+            "comments": {comment.id: comment.to_dict() for comment in self.comments }
+        }
 
     def to_dict(self):
         likes, dislikes, total = self.calc_likes()
@@ -42,6 +48,7 @@ class Post(db.Model):
             "user_id": self.user_id,
             "users": self.users.safe_to_dict(),
             "subreddit_id": self.subreddit_id,
+            "subreddits": self.subreddits.to_dict(),
             "title": self.title,
             "body": self.body,
             "images":  {image.id: image.to_dict() for image in self.images},

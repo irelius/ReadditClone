@@ -38,42 +38,42 @@ export const deleteComment = (comment) => {
     }
 }
 
-// -------------------------- Dispatch helper -------------------------- //
-const dispatchHelper = (res) => async (dispatch) => {
-    const data = await res.json()
-    return dispatch(loadComments(data))
-}
 
 // ------------------------------- THUNKS ------------------------------- //
 
 // load all comments
 export const loadCommentsThunk = () => async () => {
     const res = await fetch(`/api/comments/`)
-    return dispatchHelper(res)
+     const data = await res.json()
+    return dispatch(loadComments(data))
 }
 
 // load one comment
 export const loadCommentThunk = (commentId) => async () => {
     const res = await fetch(`/api/comments/${commentId}`)
-    return dispatchHelper(res)
+     const data = await res.json()
+    return dispatch(loadComments(data))
 }
 
 // load all comments by a specific user
 export const loadUserCommentsThunk = (userId) => async () => {
     const res = await fetch(`/api/users/${userId}/comments`)
-    return dispatchHelper(res)
+     const data = await res.json()
+    return dispatch(loadComments(data))
 }
 
 // load all comments made by current user
 export const loadCurrentUserCommentsThunk = () => async () => {
     const res = await fetch(`/api/users/current/comments`)
-    return dispatchHelper(res)
+     const data = await res.json()
+    return dispatch(loadComments(data))
 }
 
 // load all comments for a specific post
 export const loadPostCommentsThunk = (postId) => async () => {
     const res = await fetch(`/api/posts/${postId}/comments`)
-    return dispatchHelper(res)
+     const data = await res.json()
+    return dispatch(loadComments(data))
 }
 
 // create a new comment on a post

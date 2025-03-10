@@ -67,10 +67,6 @@ def run_migrations_offline():
         context.run_migrations()
 
 
-import os
-environment = os.environ.get("FLASK_ENV")
-schema_name = os.environ.get("SCHEMA")
-
 def run_migrations_online():
     """Run migrations in 'online' mode.
 
@@ -100,9 +96,6 @@ def run_migrations_online():
         )
 
         with context.begin_transaction():
-            if environment == "production":
-                connection.execute(f"CREATE SCHEMA IF NOT EXISTS {schema_name}")
-                context.execute(f"SET search_path TO {schema_name}")
             context.run_migrations()
 
 

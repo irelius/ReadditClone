@@ -16,8 +16,11 @@ class Subreddit(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
     # One to Many Relationship, Unidirectional FROM Subreddit
-    posts = db.relationship("Post", cascade="all, delete")
     subreddits = db.relationship("Comment")
+    
+    # One to Many relationship, Bidirection
+    posts = db.relationship("Post", cascade="all, delete", back_populates="subreddits")
+    
 
     # Many to Many Relationship. Bidirectional through join table UserSubreddit
     user_relationship = db.relationship("UserSubreddit", back_populates="subreddit_join", cascade="all, delete")

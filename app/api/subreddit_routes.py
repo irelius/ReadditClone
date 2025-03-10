@@ -3,6 +3,7 @@ from flask_login import current_user, login_required
 from app.models import db, Subreddit, UserSubreddit, User, Post
 from app.forms import SubredditForm, UserSubredditForm
 from app.helper import validation_error_message, return_subreddit, return_subreddits, return_user_sub,return_user_subs, return_posts
+from sqlalchemy.orm import joinedload
 
 subreddit_routes = Blueprint('subreddits', __name__)
 
@@ -58,6 +59,7 @@ def subreddits_update_specific(subreddit_id):
     user_id = int(current_user.get_id())
 
     admin_check = UserSubreddit.query.filter(UserSubreddit.user_id == user_id, UserSubreddit.subreddit_id == subreddit_id, UserSubreddit.admin_status == True).first()
+        
     if admin_check == None:
         return {"errors": ["You do not have permission to edit this subreddit"]}, 403
 
@@ -102,9 +104,9 @@ def subreddits_delete_specific(subreddit_id):
 def subreddit_users(subreddit_id):
     subreddit_check = Subreddit.query.get(subreddit_id)
     if subreddit_check == None:
-        return {"errors": "Subreddit does not exist"}, 404
+        return {"errors": ["Subreddit does not exist"]}, 404
     
-    user_subs = UserSubreddit.query.filter(UserSubreddit.subreddit_id == subreddit_id).join(Subreddit).all()
+    user_subs = UserSubreddit.query.options(joinedload(UserSubreddit.user_join)).filter(UserSubreddit.subreddit_id == subreddit_id).join(Subreddit).all()
 
     return return_user_subs(user_subs, "user")
 
@@ -147,7 +149,7 @@ def subreddits_leave(subreddit_id):
     if subreddit_check == None:
         return {"errors": ["Subreddit does not exist. User is not part of subreddit"]}, 404
 
-    subreddit_to_leave = UserSubreddit.query.filter(UserSubreddit.user_id == user_id, UserSubreddit.subreddit_id == subreddit_id).first()
+    subreddit_to_leave = UserSubreddit.query.options(joinedload(UserSubreddit.user_join), joinedload(UserSubreddit.subreddit_join)).filter(UserSubreddit.user_id == user_id, UserSubreddit.subreddit_id == subreddit_id).first()
     
     if subreddit_to_leave == None:
         return {"errors": ["User is not part of this subreddit"]}, 404
@@ -168,5 +170,5 @@ def subreddit_posts(subreddit_id):
     if subreddit_check == None:
         return {"errors": ["Subreddit does not exist"]}, 404
     
-    posts = Post.query.filter(Post.subreddit_id == subreddit_id).all()
+    posts = Post.query.options(joinedload(Post.users), joinedload(Post.subreddits), joinedload(Post.post_likes), joinedload(Post.comments), joinedload(Post.images)).filter(Post.subreddit_id == subreddit_id).all()
     return return_posts(posts)

@@ -5,6 +5,7 @@ from app.forms import PostForm, LikeForm, CommentForm
 from app.aws import (
     upload_file_to_s3, allowed_file, get_unique_filename)
 from app.helper import return_post, return_posts, return_post_like, return_post_likes, return_comment, return_comments, validation_error_message
+from sqlalchemy.orm import joinedload
 
 post_routes = Blueprint("posts", __name__)
 
@@ -12,14 +13,15 @@ post_routes = Blueprint("posts", __name__)
 # Get all posts
 @post_routes.route("/")
 def posts_all():
-    posts = Post.query.all()
+    posts = Post.query.options(joinedload(Post.users), joinedload(Post.subreddits), joinedload(Post.images), joinedload(Post.post_likes)).all()
     return return_posts(posts)
 
 # Get specific post
 @post_routes.route("/<int:post_id>")
 def posts_specific(post_id):
-    post = Post.query.get(post_id)
-    return return_post(post)
+    posts = Post.query.options(joinedload(Post.users), joinedload(Post.subreddits), joinedload(Post.images)).get(post_id)
+    
+    return return_post(posts)
 
 # Create a post
 @post_routes.route("/", methods=["POST"])
@@ -63,7 +65,8 @@ def posts_create_new():
 def posts_update_specific(post_id):
     user_id = int(current_user.get_id())
     
-    post_to_edit = Post.query.get(post_id)
+    post_to_edit = Post.query.options(joinedload(Post.users), joinedload(Post.subreddits), joinedload(Post.images)).get(post_id)
+    
     if post_to_edit.user_id != user_id:
         return {"errors": ["You do not have permission to edit this post"]}, 403
 
@@ -83,14 +86,16 @@ def posts_update_specific(post_id):
 @post_routes.route("/<int:post_id>", methods=["DELETE"])
 @login_required
 def posts_delete_specific(post_id):
+    
     user_id = int(current_user.get_id())
         
-    post_to_delete = Post.query.get(post_id)
+    post_to_delete = Post.query.options(joinedload(Post.users), joinedload(Post.subreddits), joinedload(Post.images)).get(post_id)
+
     if post_to_delete == None:
         return {"errors": ["Post does not exist"]}, 404
     
     admin_check = UserSubreddit.query.filter(UserSubreddit.user_id == user_id, UserSubreddit.subreddit_id == post_to_delete.subreddit_id, UserSubreddit.admin_status == True).first()
-    
+        
     if admin_check == None:
         return {"errors": ["You do not have permission to delete this post"]}, 403
 
@@ -111,8 +116,9 @@ def posts_comments(post_id):
     if post_check == None:
         return {"errors": ["Post does not exist"]}, 404
     
-    comments = Comment.query.filter(Comment.post_id == post_id).all()
+    comments = Comment.query.options(joinedload(Comment.replies), joinedload(Comment.comment_likes)).filter(Comment.post_id == post_id).all()
     return return_comments(comments)
+
 
 # Create a new comment on a post
 @post_routes.route("/<int:post_id>/comments", methods=["POST"])
@@ -153,7 +159,7 @@ def get_post_likes(post_id):
     post_check = Post.query.get(post_id)
     if post_check == None:
         return {"errors": ["Post does not exist."]}, 404 
-    
+        
     post_likes = PostLike.query.filter(PostLike.post_id == post_id).all()
     return return_post_likes(post_likes)
 
@@ -214,6 +220,7 @@ def delete_like_on_post(post_id):
     user_id = int(current_user.get_id())
     
     like_to_delete = PostLike.query.filter(PostLike.post_id == post_id, PostLike.user_id == user_id).first()
+
     if like_to_delete == None:
         return {"errors": ["There is no like/dislike to remove"]}, 404
     

@@ -3,6 +3,7 @@ from flask_login import current_user, login_required
 from app.models import db, Comment, User, Subreddit, CommentLike
 from app.forms import CommentForm, LikeForm
 from app.helper import return_comment, return_comments, return_comment_like, return_comment_likes, validation_error_message
+from sqlalchemy.orm import joinedload
 
 comment_routes = Blueprint("comments", __name__)
 
@@ -10,13 +11,13 @@ comment_routes = Blueprint("comments", __name__)
 # Get all comments
 @comment_routes.route("/")
 def comments_all():
-    comments = Comment.query.all()
+    comments = Comment.query.options(joinedload(Comment.comment_likes), joinedload(Comment.replies)).all()
     return return_comments(comments)
 
 # Get specific comment by id
 @comment_routes.route("/<int:comment_id>")
 def comments_specific(comment_id):
-    comment = Comment.query.get(comment_id)
+    comment = Comment.query.options(joinedload(Comment.comment_likes), joinedload(Comment.replies)).get(comment_id)
     return return_comment(comment)
 
 # Create a new comment on a comment
@@ -55,7 +56,7 @@ def create_comment_on_comment(comment_id):
 @login_required
 def comments_update_specific(comment_id):
     user_id = int(current_user.get_id())
-    comment_to_edit = Comment.query.get(comment_id)
+    comment_to_edit = Comment.query.options(joinedload(Comment.comment_likes), joinedload(Comment.replies)).get(comment_id)
 
     if user_id == None:
         return {"errors": ["You must be logged in before leaving a comment"]}, 401
@@ -81,7 +82,8 @@ def comments_update_specific(comment_id):
 @login_required
 def comments_delete_specific(comment_id):
     user_id = int(current_user.get_id())
-    comment_to_delete = Comment.query.get(comment_id)
+    comment_to_delete = Comment.query.options(joinedload(Comment.comment_likes), joinedload(Comment.replies)).get(comment_id)
+
     subreddit = Subreddit.query.get(comment_to_delete.subreddit_id)
 
     if comment_to_delete == None:
@@ -108,7 +110,7 @@ def comments_delete_specific(comment_id):
 # get likes/dislikes on a comment
 @comment_routes.route('/<int:comment_id>/likes')
 def get_comment_likes(comment_id):
-    comment_check = Comment.query.get(comment_id)
+    comment_check = Comment.query.options(joinedload(Comment.comment_likes), joinedload(Comment.replies)).get(comment_id)
     if comment_check == None:
         return {"errors": ["Comment does not exist."]}, 404
     
