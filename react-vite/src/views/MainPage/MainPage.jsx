@@ -1,60 +1,84 @@
 import "./MainPage.css";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 import ErrorHelper from "../../components/ErrorHelper/ErrorHelper";
 
 import { login } from "../../redux/session";
 import { loadAllUserThunk } from "../../redux/user";
+import { createPostThunk, deletePostThunk, loadPostsThunk, putPostThunk, loadPostThunk, loadSubredditPostsThunk } from "../../redux/post";
 import {
-    createPostThunk,
-    deletePostThunk,
-    loadPostsThunk,
-    putPostThunk,
-    loadPostThunk,
-} from "../../redux/post";
+	loadSubredditThunk,
+	loadSubredditsThunk,
+	loadUserSubredditThunk,
+	loadCurrentUserSubredditThunk,
+    createSubredditThunk,
+    updateSubredditThunk,
+    deleteSubredditThunk,
+    userJoinSubredditThunk,
+    userLeaveSubredditThunk,
+} from "../../redux/subreddit";
 
 export default function MainPage() {
-    const dispatch = useDispatch();
-    const [load, setLoad] = useState(false);
+	const dispatch = useDispatch();
+	const [load, setLoad] = useState(false);
+    const [reload, setReload] = useState(0)
 
-    useEffect(() => {
-        dispatch(loadPostsThunk());
-        setLoad(true);
-    }, []);
-    const subreddit_errors = useSelector((state) => state.subreddit.errors);
+	const userInfo = {
+		email: "demo@user.io",
+		password: "password",
+	};
 
-    const test = useSelector((state) => state.post);
-    console.log("booba", test);
+	useEffect(() => {
+		dispatch(loadSubredditPostsThunk(2)).then(() => setLoad(true));
+	}, []);
 
-    // const handleCreate = () => {
-    //     dispatch(
-    //         login({
-    //             email: "demo@user.io",
-    //             password: "password",
-    //         })
-    //     );
+	const handlePost = () => {
+		const body = {
+			name: "new subreddit name 4",
+            description: "new subreddit description"
+		};
 
-    //     const body = {
-    //         subreddit_id: 1,
-    //         title: "test post title",
-    //         body: "test post body 3",
-    //     };
+		dispatch(userJoinSubredditThunk(1));
+	};
 
-    //     dispatch(loadAllUserThunk());
-    // };
+	const handlePut = () => {
+		const body = {
+            subredditId: 1,
+            name: "same subreddit name",
+            description: "updated subreddit description"
+		};
 
-    return load ? (
-        <div>
-            <section>
-                <button onClick={() => dispatch(logout())}>logout</button>
-            </section>
-            <section>
-                <button onClick={() => handleCreate()}>Test Thunk</button>
-            </section>
-            <ErrorHelper errors={subreddit_errors} />
-        </div>
-    ) : (
-        <>not loading fucker</>
-    );
+		// dispatch(updateSubredditThunk(body));
+        dispatch(userLeaveSubredditThunk(1))
+	};
+
+	const test = useSelector((state) => state);
+	const subreddit_errors = useSelector((state) => state.subreddit.errors);
+
+	useEffect(() => {
+		if (load === true) {
+			console.log("booba state", test);
+		}
+	}, [load, reload]);
+
+	return load ? (
+		<div>
+			<ErrorHelper errors={subreddit_errors} />
+			<section>
+				<button onClick={() => dispatch(login(userInfo))}>Login</button>
+			</section>
+			<section>
+				<button onClick={() => dispatch(logout())}>Logout</button>
+			</section>
+			<section>
+				<button onClick={() => handlePost()}>Post</button>
+			</section>
+			<section>
+				<button onClick={() => handlePut()}>Put</button>
+			</section>
+		</div>
+	) : (
+		<>not loading fucker</>
+	);
 }

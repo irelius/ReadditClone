@@ -77,7 +77,6 @@ const userReducer = (state = userState, action) => {
             newState.users = action.payload.all_users
             newState.usersById = action.payload.users_by_id
 
-            console.log('booba', newState)
             return newState
         case DELETE_USER:
             if (errorCheck) return errorCheck

@@ -11,6 +11,8 @@ def validation_error_message(validation_errors):
     return error_messages
 
 #  ----------------------------- User Helper Function ----------------------------
+# returns "users_by_id" and "all_users"
+
 # return one user
 def return_user(user):
     if user == None:
@@ -36,16 +38,28 @@ def return_users(users):
     }
     
 #  --------------------------- User Sub Helper Function --------------------------
+# when getting user data: returns "users_by_id" and "all_users"
+# when getting subreddit data: returns "subreddits_by_id" and "all_subreddits"
+
 # return one user sub. data prepped according to "type"
 def return_user_sub(user_sub, type):
     if user_sub == None:
         return {"errors": ["User sub does not exist"]}, 404
     
-    return {
-        "user_subs_by_id": [user_sub.id],
-        "all_user_subs": {user_sub.id: user_sub.subreddit_data_dict() if type == "subreddit" else user_sub.user_data_dict()}
-    }
-    
+    # if type is subreddit: getting subreddits of a user
+    if type == "subreddit":
+        return {
+            "subreddits_by_id": [user_sub.id],
+            "all_subreddits": {user_sub.id: user_sub.subreddit_data_dict() for subreddit in  user_sub.user_data_dict()}
+        }
+        
+    # if type is user: getting users of a subreddit
+    if type == "user":
+        return {
+            "users_by_id": [user_sub.id],
+            "all_users": {user_sub.id: user_sub.user_data_dict() if type == "subreddit" else user_sub.subreddit_data_dict()}
+        }
+        
 # return user subs. data prepped according to "type"
 def return_user_subs(user_subs, type):
     user_subs_by_id = []
@@ -57,15 +71,26 @@ def return_user_subs(user_subs, type):
         if type == "subreddit":
             all_user_subs[user_sub.id] = user_sub.subreddit_data_dict()
         if type == "user":
-            all_user_subs[user_sub.id] = user_sub.user_data_dict()
-            
-    return {
-        "user_subs_by_id": user_subs_by_id,
-        "all_user_subs": all_user_subs
-    }
+            all_user_subs[user_sub.id] = user_sub.user_data_dict()     
+    
+    # if type is subreddit: getting subreddits of a user
+    if type == "subreddit":
+        return {
+            "subreddits_by_id": user_subs_by_id,
+            "all_subreddits": all_user_subs
+        }
+    
+    # if type is user: getting users of a subreddit
+    if type == "user":
+        return {
+            "users_by_id": user_subs_by_id,
+            "all_users": all_user_subs
+        }
 
 
 #  --------------------------- Subreddit Helper Function --------------------------
+# returns "subreddits_by_id" and "all_subreddits"
+
 # return one subreddit
 def return_subreddit(subreddit):
     if subreddit == None:
@@ -93,6 +118,8 @@ def return_subreddits(subreddits):
 
 
 #  ----------------------------- Post Helper Function -----------------------------
+# returns "posts_by_id" and "all_posts"
+
 # return one post
 def return_post(post):
     if post == None:
@@ -118,6 +145,8 @@ def return_posts(posts):
     }
 
 #  -------------------------- Post Likes Helper Function --------------------------
+# returns "post_likes_by_id" and "all_post_likes"
+
 # return post like
 def return_post_like(post_like):
     if post_like == None:
@@ -144,6 +173,8 @@ def return_post_likes(post_likes):
 
 
 #  ---------------------------- Comment Helper Function ----------------------------
+# returns "comments_by_id" and "all_comments"
+
 # return one comment
 def return_comment(comment):
     if comment == None:
@@ -169,6 +200,8 @@ def return_comments(comments):
     }
     
 #  ------------------------- Comment Likes Helper Function -------------------------
+# returns "comment_likes_by_id" and "all_comment_likes"
+
 # return one comment like
 def return_comment_like(comment_like):
     if comment_like == None:

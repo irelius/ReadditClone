@@ -21,17 +21,12 @@ class UserSubreddit(db.Model):
     user_join = db.relationship("User", back_populates="subreddit_relationship")
     subreddit_join = db.relationship("Subreddit", back_populates="user_relationship")
 
-    # method to return subreddit(s) data 
+    # method to return subreddit(s) data. used for database queries when user is parent
     def subreddit_data_dict(self):
-        return {
-            "subreddits": self.subreddit_join.to_dict(),
-            "admin_status": self.admin_status,
-            "mod_status": self.mod_status,
-            "created_at": self.created_at,
-            "updated_at": self.updated_at
-        }
+        return self.subreddit_join.to_dict()
+        
     
-    # method to return user(s) data 
+    # method to return user(s) data. used for database queries when subreddit is parent
     def user_data_dict(self):
         return {
             "user_data": self.user_join.safe_to_dict(),

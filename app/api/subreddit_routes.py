@@ -2,7 +2,7 @@ from flask import Blueprint, request
 from flask_login import current_user, login_required
 from app.models import db, Subreddit, UserSubreddit, User, Post
 from app.forms import SubredditForm, UserSubredditForm
-from app.helper import validation_error_message, return_subreddit, return_subreddits, return_user_sub,return_user_subs, return_posts
+from app.helper import validation_error_message, return_subreddit, return_subreddits, return_user_sub, return_user_subs, return_posts
 from sqlalchemy.orm import joinedload
 
 subreddit_routes = Blueprint('subreddits', __name__)
@@ -26,16 +26,23 @@ def subreddit_by_id(subreddit_id):
 @login_required
 def subreddits_create_new():
     user_id = int(current_user.get_id())
-
+    
     form = SubredditForm()
     form['csrf_token'].data = request.cookies['csrf_token']
-
+    
     if form.validate_on_submit():
+        new_subreddit_name = form.data["name"].strip(" ").replace(" ", "_")
+        new_subreddit_description = form.data["description"].strip(" ")
+        
+        subreddit_name_check = Subreddit.query.filter(Subreddit.name == new_subreddit_name).first()
+        if(subreddit_name_check) :
+            return {"errors": ["This subreddit already exists"]}, 400
+        
         new_subreddit = Subreddit(
-            name = form.data["name"].strip(" ").replace(" ", "_"),
-            description = form.data["description"].strip(" "),
+            name = new_subreddit_name,
+            description = new_subreddit_description,
         )
-
+        
         db.session.add(new_subreddit)
         db.session.commit()
 
@@ -49,6 +56,7 @@ def subreddits_create_new():
         db.session.add(new_subreddit_user)
         db.session.commit()
         return return_subreddit(new_subreddit)
+    
     
     return {"errors": validation_error_message(form.errors)}, 400
 
@@ -64,7 +72,11 @@ def subreddits_update_specific(subreddit_id):
         return {"errors": ["You do not have permission to edit this subreddit"]}, 403
 
     subreddit_to_edit = Subreddit.query.get(subreddit_id)
+    if subreddit_to_edit == None:
+        return {"errors": ["This subreddit does not exist to update"]}, 403
+    
     form = SubredditForm()
+    form['csrf_token'].data = request.cookies['csrf_token']
 
     if form.validate_on_submit():
         subreddit_to_edit.description = form.data["description"].strip(" ")
@@ -101,7 +113,7 @@ def subreddits_delete_specific(subreddit_id):
 # -------------------------------------------------- User stuff --------------------------------------------------
 # Get all users of subreddit
 @subreddit_routes.route("/<int:subreddit_id>/users")
-def subreddit_users(subreddit_id):
+def subreddit_users(subreddit_id):   
     subreddit_check = Subreddit.query.get(subreddit_id)
     if subreddit_check == None:
         return {"errors": ["Subreddit does not exist"]}, 404
@@ -116,11 +128,15 @@ def subreddit_users(subreddit_id):
 @login_required
 def subreddits_join(subreddit_id):
     user_id = int(current_user.get_id())
-    
-    subreddit = Subreddit.query.get(id)
+      
+    subreddit = Subreddit.query.get(subreddit_id)
     if subreddit == None:
         return {"errors": ["Subreddit does not exist to join."]}, 404
-
+    
+    member_check = UserSubreddit.query.options(joinedload(UserSubreddit.user_join), joinedload(UserSubreddit.subreddit_join)).filter(UserSubreddit.user_id == 1, UserSubreddit.subreddit_id == subreddit_id).first()
+    if member_check:
+        return {"errors": ["User is already a part of this subreddit."]}, 400
+    
     form = UserSubredditForm()
     form['csrf_token'].data = request.cookies['csrf_token']
 
@@ -135,7 +151,8 @@ def subreddits_join(subreddit_id):
         db.session.add(new_user_subreddit)
         db.session.commit()
         
-        return return_user_sub(new_user_subreddit)
+        
+        return return_user_sub(new_user_subreddit, "user")
     
     return {"errors": validation_error_message(form.errors)}, 401
 

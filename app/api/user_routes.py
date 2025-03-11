@@ -1,7 +1,7 @@
 from flask import Blueprint
 from flask_login import current_user, login_required
 from app.models import db, User, UserSubreddit, Post, Comment, CommentLike, PostLike
-from app.helper import return_comments, return_posts, return_user, return_users, return_post_likes, return_comment_likes, return_user_sub, return_user_subs
+from app.helper import return_comments, return_posts, return_user, return_users, return_post_likes, return_comment_likes, return_user_subs
 from sqlalchemy.orm import joinedload
 
 user_routes = Blueprint('users', __name__)
@@ -9,7 +9,6 @@ user_routes = Blueprint('users', __name__)
 # --------------------------------------------- User stuff ---------------------------------------------
 # Get all users
 @user_routes.route('/')
-@login_required
 def users():
     users = User.query.all()
     return return_users(users)
@@ -65,9 +64,9 @@ def user_subreddits(user_id):
     if user_check == None:
         return {"errors": ["User does not exist"]}, 404
     
-    user_subs = UserSubreddit.query.options(joinedload(UserSubreddit.subreddit_join)).filter(UserSubreddit.user_id == user_id).all()
+    user_subs = UserSubreddit.query.options(joinedload(UserSubreddit.subreddit_join)).filter(UserSubreddit.user_id == user_id).join(User).all()
+    
     return return_user_subs(user_subs, "subreddit")
-
 
 # get all subreddits current user is part of
 @user_routes.route('/current/subreddits')
