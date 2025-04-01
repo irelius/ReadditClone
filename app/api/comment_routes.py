@@ -1,12 +1,11 @@
 from flask import Blueprint, request
 from flask_login import current_user, login_required
 from app.models import db, Comment, User, Subreddit, CommentLike
-from app.forms import CommentForm, LikeForm
-from app.helper import return_comment, return_comments, return_comment_like, return_comment_likes, validation_error_message
+from app.forms import PostCommentForm, ReplyCommentForm, UpdateCommentForm, LikeForm
+from app.helper import return_comments, return_comment_likes, validation_error_message
 from sqlalchemy.orm import joinedload
 
 comment_routes = Blueprint("comments", __name__)
-
 # ----------------------------------------------- Comment stuff -----------------------------------------------
 # Get all comments
 @comment_routes.route("/")
@@ -18,60 +17,69 @@ def comments_all():
 @comment_routes.route("/<int:comment_id>")
 def comments_specific(comment_id):
     comment = Comment.query.options(joinedload(Comment.comment_likes), joinedload(Comment.replies)).get(comment_id)
-    return return_comment(comment)
+    return return_comments([comment])
+
 
 # Create a new comment on a comment
+# int:comment_id is the id of the comment that is being responded to
 @comment_routes.route("/<int:comment_id>", methods=["POST"])
 @login_required
 def create_comment_on_comment(comment_id):
     user_id = int(current_user.get_id())
 
+    comment_check = Comment.query.options(joinedload(Comment.replies)).get(comment_id)
+    if comment_check == None:
+        return {"errors": ["Comment does not exist to reply to"]}, 404
+
     if user_id == None:
         return {"errors": ["You must be logged in before leaving a comment"]}, 401
 
-    form = CommentForm()
+    form = ReplyCommentForm()
     form['csrf_token'].data = request.cookies['csrf_token']
 
     if form.validate_on_submit():
         new_comment = Comment(
             body = form.data["body"],
-            is_reply = form.data["is_reply"],
+            is_reply = True,
             deleted = False,
             replies_id = comment_id,
             user_id = user_id,
-            post_id = form.data["post_id"],
-            subreddit_id = form.data["subreddit_id"],
+            post_id = comment_check.post_id,
+            subreddit_id = comment_check.subreddit_id,
         )
 
         db.session.add(new_comment)
         db.session.commit()
 
-        return return_comment(new_comment)
-
+        return return_comments([new_comment])
+    
     return {"errors": validation_error_message(form.errors)}, 401
 
 
-# Update a specific comment
+# Update a comment
 @comment_routes.route("/<int:comment_id>", methods=["PUT"])
 @login_required
 def comments_update_specific(comment_id):
     user_id = int(current_user.get_id())
     comment_to_edit = Comment.query.options(joinedload(Comment.comment_likes), joinedload(Comment.replies)).get(comment_id)
 
-    if user_id == None:
-        return {"errors": ["You must be logged in before leaving a comment"]}, 401
+    if comment_to_edit == None:
+        return {"errors": ["Comment does not exist to update"]}, 404
 
     if comment_to_edit.user_id != user_id:
         return {"errors": ["You do not have permission to edit this comment"]}, 403
 
-    form = CommentForm()
+    if comment_to_edit.deleted == True:
+        return {"errors": ["You cannot change a deleted comment"]}, 403
+
+    form = UpdateCommentForm()
     form['csrf_token'].data = request.cookies['csrf_token']
     
     if form.validate_on_submit():
         comment_to_edit.body = form.data["body"].strip(" ")
         db.session.commit()
         
-        return return_comment(comment_to_edit)
+        return return_comments([comment_to_edit])
     
     return {"errors": validation_error_message(form.errors)}, 401
 
@@ -137,7 +145,7 @@ def create_like_on_comment(comment_id):
         db.session.add(new_like)
         db.session.commit()
         
-        return return_comment_like(new_like)
+        return return_comment_likes([new_like])
         
     return {"errors": validation_error_message(form.errors)}, 401
 
@@ -164,7 +172,7 @@ def update_like_on_comment(like_id):
     if form.validate_on_submit():
         like_to_update.like_status = form.data["like_status"]
         db.session.commit()
-        return return_comment_like(like_to_update)
+        return return_comment_likes([like_to_update])
     
     return {"errors": validation_error_message(form.errors)}, 401
     

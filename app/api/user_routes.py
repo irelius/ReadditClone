@@ -1,7 +1,7 @@
 from flask import Blueprint
 from flask_login import current_user, login_required
 from app.models import db, User, UserSubreddit, Post, Comment, CommentLike, PostLike
-from app.helper import return_comments, return_posts, return_user, return_users, return_post_likes, return_comment_likes, return_user_subs
+from app.helper import return_comments, return_posts, return_users, return_post_likes, return_comment_likes, return_user_subs
 from sqlalchemy.orm import joinedload
 
 user_routes = Blueprint('users', __name__)
@@ -30,7 +30,7 @@ def users_current():
 @user_routes.route('/<int:user_id>')
 def users_specific(user_id):
     user = User.query.get(user_id)
-    return return_user(user)
+    return return_users([user])
 
 
 # delete current user's account

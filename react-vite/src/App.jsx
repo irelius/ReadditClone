@@ -9,14 +9,14 @@ import MainPage from "./views/MainPage";
 
 export default function App() {
 	const dispatch = useDispatch();
-	const [isLoaded, setIsLoaded] = useState(false);
+	const [load, setLoad] = useState(false);
 
 	useEffect(() => {
-		dispatch(authenticate()).then(() => setIsLoaded(true));
+		dispatch(authenticate()).then(() => setLoad(true));
 	}, [dispatch]);
     
 	return (
-		isLoaded && (
+		load && (
 			<>
 				{/* <Navigation /> */}
 				<Routes>

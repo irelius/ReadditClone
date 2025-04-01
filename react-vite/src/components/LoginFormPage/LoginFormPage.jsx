@@ -5,7 +5,7 @@
 import "./LoginForm.css";
 
 function LoginFormPage() {
-    return 'fuck you'
+    return "temp"
 	//   const navigate = useNavigate();
 	//   const dispatch = useDispatch();
 	//   const sessionUser = useSelector((state) => state.session.user);

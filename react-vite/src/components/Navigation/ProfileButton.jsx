@@ -7,7 +7,7 @@
 // import SignupFormModal from "../SignupFormModal";
 
 function ProfileButton() {
-	return "fuck you";
+	return "temp";
 	//   const dispatch = useDispatch();
 	//   const [showMenu, setShowMenu] = useState(false);
 	//   const user = useSelector((store) => store.session.user);

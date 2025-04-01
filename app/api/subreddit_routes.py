@@ -2,7 +2,7 @@ from flask import Blueprint, request
 from flask_login import current_user, login_required
 from app.models import db, Subreddit, UserSubreddit, User, Post
 from app.forms import SubredditForm, UserSubredditForm
-from app.helper import validation_error_message, return_subreddit, return_subreddits, return_user_sub, return_user_subs, return_posts
+from app.helper import validation_error_message, return_subreddits, return_user_subs, return_posts
 from sqlalchemy.orm import joinedload
 
 subreddit_routes = Blueprint('subreddits', __name__)
@@ -18,7 +18,7 @@ def subreddits_all():
 @subreddit_routes.route("/<int:subreddit_id>")
 def subreddit_by_id(subreddit_id):
     subreddit = Subreddit.query.get(subreddit_id)    
-    return return_subreddit(subreddit)
+    return return_subreddits([subreddit])
 
 
 # Create a new subreddit
@@ -55,7 +55,7 @@ def subreddits_create_new():
 
         db.session.add(new_subreddit_user)
         db.session.commit()
-        return return_subreddit(new_subreddit)
+        return return_subreddits([new_subreddit])
     
     
     return {"errors": validation_error_message(form.errors)}, 400
@@ -82,7 +82,7 @@ def subreddits_update_specific(subreddit_id):
         subreddit_to_edit.description = form.data["description"].strip(" ")
         
         db.session.commit()
-        return return_subreddit(subreddit_to_edit)
+        return return_subreddits([subreddit_to_edit])
     
     return {"errors": validation_error_message(form.errors)}, 401 
 
@@ -152,7 +152,7 @@ def subreddits_join(subreddit_id):
         db.session.commit()
         
         
-        return return_user_sub(new_user_subreddit, "user")
+        return return_user_subs([new_user_subreddit], "user")
     
     return {"errors": validation_error_message(form.errors)}, 401
 

@@ -1,110 +1,116 @@
-import { reduxError } from "./helper";
-
 // constants
-const SET_USER = 'SET_USER';
-const LOGOUT_USER = 'LOGOUT_USER';
+const LOAD_SESSION = "LOAD_SESSION";
+const DELETE_SESSION = "DELETE_SESSION";
+const ERROR_SESSION = "ERROR_SESSION";
 
-const setUser = (user) => ({
-    type: SET_USER,
-    payload: user
-});
+const loadSession = (user) => {
+	return {
+		type: LOAD_SESSION,
+		payload: user,
+	};
+};
 
-const logoutUser = () => ({
-    type: LOGOUT_USER,
-})
+const deleteSession = (user) => {
+	return {
+		type: DELETE_SESSION,
+		payload: user,
+	};
+};
 
+const errorSession = (errors) => {
+	return {
+		type: ERROR_SESSION,
+		payload: errors,
+	};
+};
 
 // ------------------------------- THUNKS ------------------------------- //
 export const authenticate = () => async (dispatch) => {
-    const response = await fetch('/api/auth/', {
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    });
+	const res = await fetch("/api/auth/", {
+		headers: {
+			"Content-Type": "application/json",
+		},
+	});
 
-    if (response.ok) {
-        const data = await response.json();
-        dispatch(setUser(data));
-    }
-}
-
-export const login = ({ email, password }) => async (dispatch) => {
-    const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            email,
-            password
-        })
-    });
-    const data = await response.json();
-    return dispatch(setUser(data))
-}
-
-export const logout = () => async (dispatch) => {
-    const response = await fetch('/api/auth/logout', {
-        method: "DELETE",
-        headers: {
-            'Content-Type': 'application/json',
-        }
-    });
-
-    if (response.ok) {
-        dispatch(logoutUser());
-    }
+	const data = await res.json();
+	if (res.ok) return dispatch(loadSession(data));
+	return dispatch(errorSession(data));
 };
 
+export const login =
+	({ email, password }) =>
+	async (dispatch) => {
+		const res = await fetch("/api/auth/login", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				email,
+				password,
+			}),
+		});
+		const data = await res.json();
+		if (res.ok) return dispatch(loadSession(data));
+		return dispatch(errorSession(data));
+	};
 
-export const signUp = ({ username, email, password }) => async (dispatch) => {
-    const response = await fetch('/api/auth/signup', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            username,
-            email,
-            password
-        }),
-    });
+export const logout = () => async (dispatch) => {
+	const res = await fetch("/api/auth/logout", {
+		method: "DELETE",
+		headers: {
+			"Content-Type": "application/json",
+		},
+	});
 
-    const data = await response.json();
-    dispatch(setUser(data))
+	const data = await res.json();
+	if (res.ok) return dispatch(deleteSession(data));
+	return dispatch(errorSession(data));
+};
 
-}
+export const signUp =
+	({ username, email, password }) =>
+	async (dispatch) => {
+		const res = await fetch("/api/auth/signup", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				username,
+				email,
+				password,
+			}),
+		});
 
+		const data = await res.json();
+		if (res.ok) return dispatch(loadSession(data));
+		return dispatch(errorSession(data));
+	};
 
 // ------------------------------ REDUCERS ------------------------------ //
 const sessionState = {
-    loggedIn: false,
-    user: null,
-    errors: []
-}
+	loggedIn: false,
+	user: null,
+};
 
 const sessionReducer = (state = sessionState, action) => {
-    const newState = { ...state }
-    const errorCheck = reduxError(newState, action.payload)
+	const newState = { ...state };
 
-    switch (action.type) {
-        case SET_USER:
-            if (errorCheck) return errorCheck
-            newState.errors = []
+	switch (action.type) {
+		case LOAD_SESSION:
+			newState.loggedIn = true;
+			newState.user = { ...action.payload };
+			return newState;
+		case DELETE_SESSION:
+			newState.loggedIn = false;
+			newState.user = null;
+			return newState;
+		case ERROR_SESSION:
+			return newState;
+		default:
+			return state;
+	}
+};
 
-            newState.loggedIn = true
-            newState.user = { ...action.payload }
-            return newState
-        case LOGOUT_USER:
-            if (errorCheck) return errorCheck
-            newState.errors = []
-
-            newState.loggedIn = false,
-            newState.user = null
-            return newState
-        default:
-            return state;
-    }
-}
-
-export default sessionReducer
+export default sessionReducer;

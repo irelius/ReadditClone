@@ -1,10 +1,10 @@
 from flask import Blueprint, request
 from flask_login import current_user, login_required
 from app.models import db, Post, Comment, Subreddit, User, PostLike, UserSubreddit
-from app.forms import PostForm, LikeForm, CommentForm
+from app.forms import PostForm, LikeForm, PostCommentForm, UpdatePostForm
 from app.aws import (
     upload_file_to_s3, allowed_file, get_unique_filename)
-from app.helper import return_post, return_posts, return_post_like, return_post_likes, return_comment, return_comments, validation_error_message
+from app.helper import return_posts, return_post_likes, return_comments, validation_error_message
 from sqlalchemy.orm import joinedload
 
 post_routes = Blueprint("posts", __name__)
@@ -21,7 +21,7 @@ def posts_all():
 def posts_specific(post_id):
     posts = Post.query.options(joinedload(Post.users), joinedload(Post.subreddits), joinedload(Post.images)).get(post_id)
     
-    return return_post(posts)
+    return return_posts([posts])
 
 # Create a post
 @post_routes.route("/", methods=["POST"])
@@ -55,7 +55,7 @@ def posts_create_new():
         db.session.add(auto_post_like)
         db.session.commit()
 
-        return return_post(new_post)
+        return return_posts([new_post])
     
     return {"errors": validation_error_message(form.errors)}, 400
 
@@ -70,14 +70,14 @@ def posts_update_specific(post_id):
     if post_to_edit.user_id != user_id:
         return {"errors": ["You do not have permission to edit this post"]}, 403
 
-    form = PostForm()
+    form = UpdatePostForm()
     form['csrf_token'].data = request.cookies['csrf_token']
 
-    if form.validate_on_submit():   
+    if form.validate_on_submit():
         post_to_edit.body = form.data["body"].strip(" ")
 
         db.session.commit()
-        return return_post(post_to_edit)
+        return return_posts([post_to_edit])
     
     return {"errors": validation_error_message(form.errors)}, 401
 
@@ -86,7 +86,6 @@ def posts_update_specific(post_id):
 @post_routes.route("/<int:post_id>", methods=["DELETE"])
 @login_required
 def posts_delete_specific(post_id):
-    
     user_id = int(current_user.get_id())
         
     post_to_delete = Post.query.options(joinedload(Post.users), joinedload(Post.subreddits), joinedload(Post.images)).get(post_id)
@@ -114,7 +113,7 @@ def posts_delete_specific(post_id):
 def posts_comments(post_id):
     post_check = Post.query.get(post_id)
     if post_check == None:
-        return {"errors": ["Post does not exist"]}, 404
+        return {"errors": ["Post does not exist to get the comments of"]}, 404
     
     comments = Comment.query.options(joinedload(Comment.replies), joinedload(Comment.comment_likes)).filter(Comment.post_id == post_id).all()
     return return_comments(comments)
@@ -126,22 +125,24 @@ def posts_comments(post_id):
 def create_comment_on_post(post_id):
     user_id = int(current_user.get_id())
 
-    post_check = Post.query.get(post_id)
+    post_check = Post.query.options(joinedload(Post.users), joinedload(Post.subreddits), joinedload(Post.images)).get(post_id)
     if post_check == None:
-        return {"errors": ["Post does not exist"]}, 404
+        return {"errors": ["Post does not exist to comment"]}, 404
 
-    form = CommentForm()
+    form = PostCommentForm()
     form['csrf_token'].data = request.cookies['csrf_token']
 
     if form.validate_on_submit():
         new_comment = Comment(
             body = form.data["body"],
-            is_reply=form.data["is_reply"],
+            is_reply=False,
             deleted = False,
+            
             replies_id = None,
             user_id = user_id,
             post_id = post_id,
-            subreddit_id = form.data["subreddit_id"],
+            
+            subreddit_id = post_check.subreddit_id
         )
 
         db.session.add(new_comment)
@@ -182,7 +183,7 @@ def create_like_on_post(post_id):
         db.session.add(new_like)
         db.session.commit()
 
-        return return_post_like(new_like)
+        return return_post_likes([new_like])
     
     return {"errors": validation_error_message(form.errors)}, 401
 
@@ -208,7 +209,7 @@ def update_like_on_post(like_id):
     if form.validate_on_submit():
         like_to_update.like_status = form.data["like_status"]
         db.session.commit()
-        return return_post_like(like_to_update)
+        return return_post_likes([like_to_update])
     
     return {"errors": validation_error_message(form.errors)}, 401
     
@@ -231,6 +232,6 @@ def delete_like_on_post(post_id):
     db.session.commit()
     
     return {
-        "id": like_to_delete["id"],
+        "id": like_to_delete.id,
         "message": "Like/dislike successfully deleted"
     }

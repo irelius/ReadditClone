@@ -11,8 +11,8 @@ class Comment(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.String, nullable=False)
-    is_reply = db.Column(db.Boolean, nullable=False, default=False)
-    deleted = db.Column(db.Boolean, nullable=False, default=False)
+    is_reply = db.Column(db.Boolean, nullable=True, default=False)
+    deleted = db.Column(db.Boolean, nullable=True, default=False)
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
@@ -20,10 +20,14 @@ class Comment(db.Model):
     comment_likes = db.relationship("CommentLike", cascade="all, delete")
     replies = db.relationship("Comment")
     
-    replies_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("comments.id")), nullable=True)
+    replies_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("comments.id")), nullable=True, default=None)
     user_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("users.id")), nullable=False)
     post_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("posts.id")), nullable=False)
+    
+    # Is this relationship necessary? Maybe for some advanced feature of searching for a comment within a subreddit
     subreddit_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("subreddits.id")), nullable=False)
+    
+    
     
     def calc_likes(self):
         likes = len([like for like in self.comment_likes if like.like_status == "like"])

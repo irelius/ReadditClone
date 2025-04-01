@@ -4,7 +4,7 @@
 // import { thunkSignup } from "../../redux/session";
 
 function SignupFormPage() {
-    return "fuck you"
+    return "temp"
 	//   const dispatch = useDispatch();
 	//   const navigate = useNavigate();
 	//   const sessionUser = useSelector((state) => state.session.user);

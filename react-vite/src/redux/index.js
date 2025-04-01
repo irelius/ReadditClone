@@ -8,12 +8,14 @@ import sessionReducer from "./session";
 import userReducer from "./user"
 import subredditReducer from "./subreddit";
 import postReducer from "./post";
+import commentReducer from "./comment";
 
 const rootReducer = combineReducers({
     user: userReducer,
     session: sessionReducer,
     subreddit: subredditReducer,
-    post: postReducer
+    post: postReducer,
+    comment: commentReducer
 });
 
 let enhancer;

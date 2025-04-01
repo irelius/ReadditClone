@@ -4,25 +4,27 @@ import { useEffect, useState, useRef } from "react";
 
 import ErrorHelper from "../../components/ErrorHelper/ErrorHelper";
 
-import { login } from "../../redux/session";
-import { loadAllUserThunk } from "../../redux/user";
-import { createPostThunk, deletePostThunk, loadPostsThunk, putPostThunk, loadPostThunk, loadSubredditPostsThunk } from "../../redux/post";
+import { login, logout } from "../../redux/session";
+// import { loadAllUserThunk } from "../../redux/user";
 import {
-	loadSubredditThunk,
-	loadSubredditsThunk,
-	loadUserSubredditThunk,
-	loadCurrentUserSubredditThunk,
-    createSubredditThunk,
-    updateSubredditThunk,
-    deleteSubredditThunk,
-    userJoinSubredditThunk,
-    userLeaveSubredditThunk,
-} from "../../redux/subreddit";
+	createPostThunk,
+	deletePostThunk,
+	loadPostsThunk,
+	updatePostThunk,
+	loadPostThunk,
+	loadSubredditPostsThunk,
+	loadUserPostsThunk,
+} from "../../redux/post";
+import { createCommentOnCommentThunk, updateCommentThunk, loadCommentThunk } from "../../redux/comment";
+import { loadSubredditThunk } from "../../redux/subreddit";
+import errorSetter from "../../helper/error";
+// import { loadErrorsThunk } from "../../redux/error";
 
 export default function MainPage() {
 	const dispatch = useDispatch();
 	const [load, setLoad] = useState(false);
-    const [reload, setReload] = useState(0)
+	const [counter, setCounter] = useState(0);
+	const [errors, setErrors] = useState([]);
 
 	const userInfo = {
 		email: "demo@user.io",
@@ -30,41 +32,34 @@ export default function MainPage() {
 	};
 
 	useEffect(() => {
-		dispatch(loadSubredditPostsThunk(2)).then(() => setLoad(true));
+		dispatch(loadCommentThunk(1)).then(() => setLoad(true));
+		setLoad(true);
 	}, []);
 
 	const handlePost = () => {
 		const body = {
-			name: "new subreddit name 4",
-            description: "new subreddit description"
+			// title: "new post title 1",
+			// is_reply: false,
+			body: "reply body",
 		};
 
-		dispatch(userJoinSubredditThunk(1));
+		dispatch(createCommentOnCommentThunk(body, 200)).then((res) => {
+            errorSetter(res, setErrors)
+		});
 	};
 
-	const handlePut = () => {
-		const body = {
-            subredditId: 1,
-            name: "same subreddit name",
-            description: "updated subreddit description"
-		};
+    useEffect(() => {
+        console.log('errors', errors)
+    }, [errors])
 
-		// dispatch(updateSubredditThunk(body));
-        dispatch(userLeaveSubredditThunk(1))
-	};
-
-	const test = useSelector((state) => state);
-	const subreddit_errors = useSelector((state) => state.subreddit.errors);
-
-	useEffect(() => {
-		if (load === true) {
-			console.log("booba state", test);
-		}
-	}, [load, reload]);
 
 	return load ? (
 		<div>
-			<ErrorHelper errors={subreddit_errors} />
+			<section>
+				{errors.map((el, i) => {
+					return <section key={i}>{el}</section>;
+				})}
+			</section>
 			<section>
 				<button onClick={() => dispatch(login(userInfo))}>Login</button>
 			</section>
@@ -74,11 +69,11 @@ export default function MainPage() {
 			<section>
 				<button onClick={() => handlePost()}>Post</button>
 			</section>
-			<section>
+			{/* <section>
 				<button onClick={() => handlePut()}>Put</button>
-			</section>
+			</section> */}
 		</div>
 	) : (
-		<>not loading fucker</>
+		<>not loading error</>
 	);
 }

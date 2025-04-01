@@ -5,7 +5,7 @@
 import "./SignupForm.css";
 
 function SignupFormModal() {
-    return 'fuck you'
+    return 'temp'
 	//   const dispatch = useDispatch();
 	//   const [email, setEmail] = useState("");
 	//   const [username, setUsername] = useState("");

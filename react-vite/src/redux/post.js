@@ -1,10 +1,9 @@
-import { reduxError } from "./helper";
-
 // ------------------------------- ACTIONS ------------------------------- //
 const LOAD_POSTS = "LOAD_POSTS";
 const CREATE_POST = "CREATE_POST";
 const PUT_POST = "PUT_POST";
 const DELETE_POST = "DELETE_POST";
+const ERROR_POST = "ERROR_POST";
 
 // Get posts
 export const loadPosts = (posts) => {
@@ -38,40 +37,52 @@ export const deletePost = (post) => {
 	};
 };
 
+export const errorPost = (errors) => {
+	return {
+		type: ERROR_POST,
+		payload: errors,
+	};
+};
+
 // ------------------------------- THUNKS ------------------------------- //
 // load all posts
 export const loadPostsThunk = () => async (dispatch) => {
 	const res = await fetch(`/api/posts/`);
 	const data = await res.json();
-	return dispatch(loadPosts(data));
+	if (res.ok) return dispatch(loadPosts(data));
+	return dispatch(errorPost(data));
 };
 
 // load a specific post
 export const loadPostThunk = (postId) => async (dispatch) => {
 	const res = await fetch(`/api/posts/${postId}`);
 	const data = await res.json();
-	return dispatch(loadPosts(data));
+	if (res.ok) return dispatch(loadPosts(data));
+	return dispatch(errorPost(data));
 };
 
 // load a specific user's posts
 export const loadUserPostsThunk = (userId) => async (dispatch) => {
 	const res = await fetch(`/api/users/${userId}/posts`);
 	const data = await res.json();
-	return dispatch(loadPosts(data));
+	if (res.ok) return dispatch(loadPosts(data));
+	return dispatch(errorPost(data));
 };
 
 // load current user's posts
 export const loadCurrentUserPostsThunk = () => async (dispatch) => {
 	const res = await fetch(`/api/users/current/posts`);
 	const data = await res.json();
-	return dispatch(loadPosts(data));
+	if (res.ok) return dispatch(loadPosts(data));
+	return dispatch(errorPost(data));
 };
 
 // load a subreddit's posts
 export const loadSubredditPostsThunk = (subredditId) => async (dispatch) => {
 	const res = await fetch(`/api/subreddits/${subredditId}/posts`);
 	const data = await res.json();
-	return dispatch(loadPosts(data));
+	if (res.ok) return dispatch(loadPosts(data));
+	return dispatch(errorPost(data));
 };
 
 // create a new post
@@ -85,11 +96,12 @@ export const createPostThunk = (postInfo) => async (dispatch) => {
 	});
 
 	const data = await res.json();
-	return dispatch(createPost(data));
+	if (res.ok) return dispatch(createPost(data));
+	return dispatch(errorPost(data));
 };
 
 // update an existing post
-export const putPostThunk = (postInfo, postId) => async (dispatch) => {
+export const updatePostThunk = (postInfo, postId) => async (dispatch) => {
 	const res = await fetch(`/api/posts/${postId}`, {
 		method: "PUT",
 		headers: {
@@ -99,7 +111,8 @@ export const putPostThunk = (postInfo, postId) => async (dispatch) => {
 	});
 
 	const data = await res.json();
-	return dispatch(updatePost(data));
+	if (res.ok) return dispatch(updatePost(data));
+	return dispatch(errorPost(data));
 };
 
 // delete a post
@@ -109,7 +122,8 @@ export const deletePostThunk = (postId) => async (dispatch) => {
 	});
 
 	const data = await res.json();
-	return dispatch(deletePost(data));
+	if (res.ok) return dispatch(deletePost(data));
+	return dispatch(errorPost(data));
 };
 
 // ------------------------------ REDUCERS ------------------------------ //
@@ -117,44 +131,32 @@ export const deletePostThunk = (postId) => async (dispatch) => {
 const initialState = {
 	postsById: [],
 	posts: {},
-	errors: [],
 };
 
 const postReducer = (state = initialState, action) => {
 	const newState = { ...state };
-	const errorCheck = reduxError(newState, action.payload);
 
 	// gets the id that would be returned from a single post query
 	const postId = action.payload && "posts_by_id" in action.payload ? action.payload.posts_by_id[0] : null;
 
 	switch (action.type) {
 		case LOAD_POSTS:
-			if (errorCheck) return errorCheck;
-			newState.errors = [];
-
 			newState.postsById = action.payload.posts_by_id;
 			newState.posts = action.payload.all_posts;
 			return newState;
 		case CREATE_POST:
-			if (errorCheck) return errorCheck;
-			newState.errors = [];
-
 			newState.postsById.push(postId);
 			newState.posts[postId] = action.payload.all_posts;
 			return newState;
 		case PUT_POST:
-			if (errorCheck) return errorCheck;
-			newState.errors = [];
-
 			newState.posts[postId] = action.payload.all_posts;
 			return newState;
 		case DELETE_POST:
-			if (errorCheck) return errorCheck;
-			newState.errors = [];
-
-			newState.postsById = newState.postsById.filter((el) => el !== postId);
-			delete newState[postId];
+			newState.postsById = newState.postsById.filter((el) => el !== action.payload.id);
+			delete newState.posts[action.payload.id];
 			return newState;
+        case ERROR_POST:
+            return newState
 		default:
 			return newState;
 	}

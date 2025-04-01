@@ -12,19 +12,10 @@ def validation_error_message(validation_errors):
 
 #  ----------------------------- User Helper Function ----------------------------
 # returns "users_by_id" and "all_users"
-
-# return one user
-def return_user(user):
-    if user == None:
+def return_users(users):    
+    if users[0] == None:
         return {"errors": ["User does not exist"]}, 404
     
-    return {
-        "users_by_id": [user.id],
-        "all_users": {user.id: user.safe_to_dict()}
-    }
-
-# return users
-def return_users(users):
     user_by_id = []
     all_user = {}
 
@@ -40,28 +31,11 @@ def return_users(users):
 #  --------------------------- User Sub Helper Function --------------------------
 # when getting user data: returns "users_by_id" and "all_users"
 # when getting subreddit data: returns "subreddits_by_id" and "all_subreddits"
-
-# return one user sub. data prepped according to "type"
-def return_user_sub(user_sub, type):
-    if user_sub == None:
-        return {"errors": ["User sub does not exist"]}, 404
-    
-    # if type is subreddit: getting subreddits of a user
-    if type == "subreddit":
-        return {
-            "subreddits_by_id": [user_sub.id],
-            "all_subreddits": {user_sub.id: user_sub.subreddit_data_dict() for subreddit in  user_sub.user_data_dict()}
-        }
-        
-    # if type is user: getting users of a subreddit
-    if type == "user":
-        return {
-            "users_by_id": [user_sub.id],
-            "all_users": {user_sub.id: user_sub.user_data_dict() if type == "subreddit" else user_sub.subreddit_data_dict()}
-        }
-        
 # return user subs. data prepped according to "type"
 def return_user_subs(user_subs, type):
+    if user_subs[0] == None:
+        return {"errors": ["User sub does not exist"]}, 404
+    
     user_subs_by_id = []
     all_user_subs = {}
     
@@ -90,20 +64,10 @@ def return_user_subs(user_subs, type):
 
 #  --------------------------- Subreddit Helper Function --------------------------
 # returns "subreddits_by_id" and "all_subreddits"
-
-# return one subreddit
-def return_subreddit(subreddit):
-    if subreddit == None:
+def return_subreddits(subreddits):
+    if subreddits[0] == None:
         return {"errors": ["Subreddit does not exist."]}, 404
     
-    return {
-        "subreddits_by_id": [subreddit.id],
-        "all_subreddits": {subreddit.id: subreddit.to_dict()}
-    }
-
-
-# Return subreddits
-def return_subreddits(subreddits):  
     subreddit_by_id = []
     all_subreddits = {}
 
@@ -119,19 +83,10 @@ def return_subreddits(subreddits):
 
 #  ----------------------------- Post Helper Function -----------------------------
 # returns "posts_by_id" and "all_posts"
-
-# return one post
-def return_post(post):
-    if post == None:
+def return_posts(posts):  
+    if posts[0] == None:
         return {"errors": ["Post does not exist."]}, 404
-    
-    return {
-        "posts_by_id": [post.id],
-        "all_posts": {post.id: post.to_dict()}
-    }
-    
-# Return posts
-def return_posts(posts):   
+     
     post_by_id = []
     all_posts = {}
     
@@ -146,19 +101,10 @@ def return_posts(posts):
 
 #  -------------------------- Post Likes Helper Function --------------------------
 # returns "post_likes_by_id" and "all_post_likes"
-
-# return post like
-def return_post_like(post_like):
-    if post_like == None:
+def return_post_likes(post_likes):
+    if post_likes[0] == None:
         return {"errors": ["Like on post does not exist"]}, 404
-
-    return {
-        "post_likes_by_id": [post_like.id],
-        "all_post_likes": {post_like.id: post_like.to_dict()}
-    }
-
-# Return posts likes
-def return_post_likes(post_likes):   
+    
     post_likes_by_id = []
     all_post_likes = {}
     
@@ -174,19 +120,10 @@ def return_post_likes(post_likes):
 
 #  ---------------------------- Comment Helper Function ----------------------------
 # returns "comments_by_id" and "all_comments"
-
-# return one comment
-def return_comment(comment):
-    if comment == None:
+def return_comments(comments):
+    if comments[0] == None:
         return {"errors": ["Comment does not exist"]}, 404
-    
-    return {
-        "comments_by_id": [comment.id],
-        "all_comments": {comment.id: comment.to_dict()}
-    }
 
-# Return comments based on length
-def return_comments(comments):    
     comment_by_id = []
     all_comments = {}
     
@@ -201,19 +138,10 @@ def return_comments(comments):
     
 #  ------------------------- Comment Likes Helper Function -------------------------
 # returns "comment_likes_by_id" and "all_comment_likes"
-
-# return one comment like
-def return_comment_like(comment_like):
-    if comment_like == None:
+def return_comment_likes(comment_likes):
+    if comment_likes[0] == None:
         return {"errors": ["Like on comment does not exist"]}, 404
-
-    return {
-        "comment_likes_by_id": [comment_like.id],
-        "all_comment_likes": {comment_like.id: comment_like.to_dict()}
-    }
-
-# Return comment likes
-def return_comment_likes(comment_likes):    
+    
     comment_likes_by_id = []
     all_comment_likes = {}
     

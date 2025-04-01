@@ -1,10 +1,9 @@
-import { reduxError } from "./helper";
-
 // ------------------------------- ACTIONS ------------------------------- //
 const LOAD_SUBREDDITS = "LOAD_SUBREDDITS";
 const PUT_SUBREDDIT = "PUT_SUBREDDIT";
 const CREATE_SUBREDDIT = "CREATE_SUBREDDIT";
 const DELETE_SUBREDDIT = "DELETE_SUBREDDIT";
+const ERROR_SUBREDDIT = "ERROR_SUBREDDIT";
 
 export const loadSubreddits = (subreddits) => {
 	return {
@@ -34,33 +33,44 @@ export const deleteSubreddit = (subreddit) => {
 	};
 };
 
+export const errorSubreddit = (errors) => {
+	return {
+		type: ERROR_SUBREDDIT,
+		payload: errors,
+	};
+};
+
 // ------------------------------- THUNKS ------------------------------- //
 // load all subreddits
 export const loadSubredditsThunk = () => async (dispatch) => {
 	const res = await fetch("/api/subreddits/");
 	const data = await res.json();
-	return dispatch(loadSubreddits(data));
+	if (res.ok) return dispatch(loadSubreddits(data));
+	return dispatch(errorSubreddit(data));
 };
 
 // load a specific subreddit
 export const loadSubredditThunk = (subredditId) => async (dispatch) => {
 	const res = await fetch(`/api/subreddits/${subredditId}`);
 	const data = await res.json();
-	return dispatch(loadSubreddits(data));
+	if (res.ok) return dispatch(loadSubreddits(data));
+	return dispatch(errorSubreddit(data));
 };
 
 // load a specific user's subreddits
 export const loadUserSubredditThunk = (userId) => async (dispatch) => {
 	const res = await fetch(`/api/users/${userId}/subreddits`);
 	const data = await res.json();
-	return dispatch(loadSubreddits(data));
+	if (res.ok) return dispatch(loadSubreddits(data));
+	return dispatch(errorSubreddit(data));
 };
 
 // load current user's subreddits
 export const loadCurrentUserSubredditThunk = () => async (dispatch) => {
 	const res = await fetch(`/api/users/current/subreddits`);
 	const data = await res.json();
-	return dispatch(loadSubreddits(data));
+	if (res.ok) return dispatch(loadSubreddits(data));
+	return dispatch(errorSubreddit(data));
 };
 
 // create subreddit
@@ -79,7 +89,8 @@ export const createSubredditThunk =
 		});
 
 		const data = await res.json();
-		dispatch(createSubreddit(data));
+		if (res.ok) return dispatch(createSubreddit(data));
+		return dispatch(errorSubreddit(data));
 	};
 
 // edit subreddit (currently only updates description)
@@ -93,13 +104,14 @@ export const updateSubredditThunk =
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify({
-                name,
+				name,
 				description,
 			}),
 		});
 
 		const data = await res.json();
-		dispatch(updateSubreddit(data));
+		if (res.ok) return dispatch(updateSubreddit(data));
+		return dispatch(errorSubreddit(data));
 	};
 
 // user joins subreddit as a member
@@ -113,7 +125,8 @@ export const userJoinSubredditThunk = (subredditId) => async (dispatch) => {
 
 	// TODO see how to update the state in the reducer for this thunk
 	const data = await res.json();
-    dispatch(loadSubreddits(data));
+	if (res.ok) return dispatch(loadSubreddits(data));
+	return dispatch(errorSubreddit(data));
 };
 
 // user leaves subreddit
@@ -126,7 +139,8 @@ export const userLeaveSubredditThunk = (subredditId) => async (dispatch) => {
 	});
 
 	const data = await res.json();
-    dispatch(loadSubreddits(data));
+	if (res.ok) return dispatch(loadSubreddits(data));
+	return dispatch(errorSubreddit(data));
 };
 
 // delete subreddit
@@ -136,7 +150,8 @@ export const deleteSubredditThunk = (subredditId) => async (dispatch) => {
 	});
 
 	const data = await res.json();
-	dispatch(deleteSubreddit(data));
+	if (res.ok) return dispatch(deleteSubreddit(data));
+	return dispatch(errorSubreddit(data));
 };
 
 // ------------------------------ REDUCERS ------------------------------ //
@@ -144,12 +159,10 @@ export const deleteSubredditThunk = (subredditId) => async (dispatch) => {
 const subredditState = {
 	subredditsById: [],
 	subreddits: {},
-	errors: [],
 };
 
 const subredditReducer = (state = subredditState, action) => {
 	const newState = { ...state };
-	const errorCheck = reduxError(newState, action.payload);
 
 	// gets the id that would be returned from a single subreddit query
 	const subredditId =
@@ -157,34 +170,24 @@ const subredditReducer = (state = subredditState, action) => {
 
 	switch (action.type) {
 		case LOAD_SUBREDDITS:
-			if (errorCheck) return errorCheck;
-			newState.errors = [];
-
 			newState.subredditsById = action.payload.subreddits_by_id;
 			newState.subreddits = action.payload.all_subreddits;
 			return newState;
 		case CREATE_SUBREDDIT:
-			if (errorCheck) return errorCheck;
-			newState.errors = [];
-
 			newState.subredditsById = [subredditId];
 			newState.subreddits = action.payload.all_subreddits;
 
 			return newState;
 		case PUT_SUBREDDIT:
-			if (errorCheck) return errorCheck;
-			newState.errors = [];
-
-            newState.subredditsById = [subredditId];
+			newState.subredditsById = [subredditId];
 			newState.subreddits = action.payload.all_subreddits;
 
 			return newState;
 		case DELETE_SUBREDDIT:
-			if (errorCheck) return errorCheck;
-			newState.errors = [];
-
-			newState.subredditsById = newState.subredditsById.filter((el) => el !== subredditId);
-			delete newState[subredditId];
+			newState.subredditsById = newState.subredditsById.filter((el) => el !== action.payload.id);
+			delete newState.subreddits[action.payload.id];
+			return newState;
+		case ERROR_SUBREDDIT:
 			return newState;
 		default:
 			return newState;

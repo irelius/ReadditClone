@@ -18,3 +18,6 @@ class PostForm(FlaskForm):
     subreddit_id = IntegerField("subreddit_id", validators=[DataRequired(message="Subreddit ID is required")])
     # image = StringField("image")
     # video = StringField("video")
+
+class UpdatePostForm(FlaskForm):
+    body = StringField("body")
