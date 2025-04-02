@@ -60,10 +60,6 @@ export default function MainPage() {
     const commentsById = useSelector(state => state.comment.commentsById)
 	const comment = useSelector((state) => state.comment.comments);
 
-    if(1 in comment) {
-        console.log('booba', comment[1].total_likes)
-    }
-
 	return load && commentsById.length > 0 ? (
 		<div>
 			<section>
