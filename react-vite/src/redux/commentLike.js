@@ -1,8 +1,7 @@
 // ------------------------------- ACTIONS ------------------------------- //
 const LOAD_COMMENT_LIKES = "LOAD_COMMENT_LIKES";
-const CREATE_COMMENT_LIKES = "CREATE_COMMENT_LIKES";
-// const PUT_COMMENT_LIKES = 'PUT_COMMENT_LIKES'
-const DELETE_COMMENT_LIKES = "DELETE_COMMENT_LIKES";
+const HANDLE_COMMENT_LIKES = "HANDLE_COMMENT_LIKES";
+// const DELETE_COMMENT_LIKES = "DELETE_COMMENT_LIKES";
 const ERROR_COMMENT_LIKES = "ERROR_COMMENT_LIKES";
 
 // Get likes for a comment
@@ -13,26 +12,10 @@ export const loadCommentLikes = (likes) => {
 	};
 };
 
-// create likes for comment
-export const createCommentLike = (commentId) => {
+// handle when user clicks on like/dislike for comments
+export const handleCommentLikes = (commentId) => {
 	return {
-		type: CREATE_COMMENT_LIKES,
-		payload: commentId,
-	};
-};
-
-// // TODO: test if updating a like is viable
-// export const putLikesComment = (commentId) => {
-//     return {
-//         type: PUT_COMMENT_LIKES,
-//         commentId
-//     }
-// }
-
-// delete like for a comment
-export const deleteCommentLike = (commentId) => {
-	return {
-		type: DELETE_COMMENT_LIKES,
+		type: HANDLE_COMMENT_LIKES,
 		payload: commentId,
 	};
 };
@@ -70,8 +53,7 @@ export const loadUserCommentLikesThunk = (userId) => async () => {
 	return dispatch(errorCommentLike(data));
 };
 
-export const createCommentLikesThunk = (likeInfo, commentId) => async (dispatch) => {
-	// TODO
+export const handleCommentLikesThunk = (likeInfo, commentId) => async (dispatch) => {
 	const res = await fetch(`/api/comments/${commentId}/likes`, {
 		method: "POST",
 		headers: {
@@ -81,19 +63,7 @@ export const createCommentLikesThunk = (likeInfo, commentId) => async (dispatch)
 	});
 
 	const data = await res.json();
-	if (res.ok) return dispatch(createCommentLike(data));
-	return dispatch(errorCommentLike(data));
-};
-
-// // TODO: test if updating a like is viable
-
-export const deleteCommentLikesThunk = (commentId) => async (dispatch) => {
-	const res = await fetch(`/api/comments/${commentId}/likes`, {
-		method: "DELETE",
-	});
-
-	const data = await res.json();
-	if (res.ok) return dispatch(deleteCommentLike(data));
+	if (res.ok) return dispatch(handleCommentLikes(data));
 	return dispatch(errorCommentLike(data));
 };
 
@@ -116,14 +86,14 @@ const commentLikesReducer = (state = initialState, action) => {
 			newState.commentLikesById = action.payload.comment_likes_by_id;
 			newState.commentLikes = action.payload.all_comment_likes;
 			return newState;
-		case CREATE_COMMENT_LIKES:
+		case HANDLE_COMMENT_LIKES:
 			newState.commentLikesById.push(commentLikeId);
 			newState.commentLikes[commentLikeId] = action.payload.all_comment_likes;
 			return newState;
-		case DELETE_COMMENT_LIKES:
-			newState.commentLikesById = newState.commentLikesById.filter(el !== action.payload.id);
-			delete newState.commentLikes[action.payload.id];
-			return newState;
+		// case DELETE_COMMENT_LIKES:
+		// 	newState.commentLikesById = newState.commentLikesById.filter(el !== action.payload.id);
+		// 	delete newState.commentLikes[action.payload.id];
+		// 	return newState;
         case ERROR_COMMENT_LIKES:
             return newState
 		default:

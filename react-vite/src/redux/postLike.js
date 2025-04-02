@@ -1,8 +1,7 @@
 // ------------------------------- ACTIONS ------------------------------- //
 const LOAD_POST_LIKES = "LOAD_POST_LIKES";
-const CREATE_POST_LIKES = "CREATE_POST_LIKES";
-// const PUT_POST_LIKES = 'PUT_POST_LIKES'
-const DELETE_POST_LIKES = "DELETE_POST_LIKES";
+const HANDLE_POST_LIKES = "HANDLE_POST_LIKES";
+// const DELETE_POST_LIKES = "DELETE_POST_LIKES";
 const ERROR_POST_LIKES = "ERROR_POST_LIKES";
 
 // Get likes for a post
@@ -13,29 +12,21 @@ export const loadPostLikes = (likes) => {
 	};
 };
 
-// create likes/dislikes for a post
-export const createPostLike = (likes) => {
+// handle when user clicks on like/dislike for posts
+export const handlePostLikes = (postId) => {
 	return {
-		type: CREATE_POST_LIKES,
-		payload: likes,
-	};
-};
-
-// // edit like for a post, TODO: see if this is viable
-// export const putLikesPost = (postId) => {
-//     return {
-//         type: PUT_POST_LIKES,
-//         postId
-//     }
-// }
-
-// delete like for a post
-export const deletePostLike = (postId) => {
-	return {
-		type: DELETE_POST_LIKES,
+		type: HANDLE_POST_LIKES,
 		payload: postId,
 	};
 };
+
+// // delete like for a post
+// export const deletePostLike = (postId) => {
+// 	return {
+// 		type: DELETE_POST_LIKES,
+// 		payload: postId,
+// 	};
+// };
 
 export const errorPostLike = (errors) => {
 	return {
@@ -71,7 +62,7 @@ export const loadUserPostLikesThunk = (userId) => async () => {
 };
 
 // create a like/dislike on a post
-export const createLikePostThunk = (likeInfo, postId) => async (dispatch) => {
+export const handlePostLikesThunk = (likeInfo, postId) => async (dispatch) => {
 	const res = await fetch(`/api/posts/${postId}/likes`, {
 		method: "POST",
 		headers: {
@@ -81,21 +72,19 @@ export const createLikePostThunk = (likeInfo, postId) => async (dispatch) => {
 	});
 
 	const data = await res.json();
-	if (res.ok) return dispatch(createPostLike(data));
+	if (res.ok) return dispatch(handlePostLikes(data));
 	return dispatch(errorPostLike);
 };
 
-// TODO: see if editing a post like is viable
+// export const deleteLikePostThunk = (postId) => async (dispatch) => {
+// 	const res = await fetch(`/api/posts/${postId}/likes`, {
+// 		method: "DELETE",
+// 	});
 
-export const deleteLikePostThunk = (postId) => async (dispatch) => {
-	const res = await fetch(`/api/posts/${postId}/likes`, {
-		method: "DELETE",
-	});
-
-	const data = await res.json();
-	if (res.ok) return dispatch(deletePostLike(data));
-	return dispatch(errorPostLike);
-};
+// 	const data = await res.json();
+// 	if (res.ok) return dispatch(deletePostLike(data));
+// 	return dispatch(errorPostLike);
+// };
 
 // ------------------------------ REDUCERS ------------------------------ //
 
@@ -115,14 +104,14 @@ const postLikesReducer = (state = initialState, action) => {
 			newState.postLikesById = action.payload.post_likes_by_id;
 			newState.postLikes = action.payload.all_post_likes;
 			return newState;
-		case CREATE_POST_LIKES:
+		case HANDLE_POST_LIKES:
 			newState.postLikesById.push(postLikeId);
 			newState.postLikes[postLikeId] = action.payload.all_post_likes;
 			return newState;
-		case DELETE_POST_LIKES:
-			newState.postLikesById = newState.postLikesById.filter((el) => el !== action.payload.id);
-			delete newState.postLikes[action.payload.id];
-			return newState;
+		// case DELETE_POST_LIKES:
+		// 	newState.postLikesById = newState.postLikesById.filter((el) => el !== action.payload.id);
+		// 	delete newState.postLikes[action.payload.id];
+		// 	return newState;
 		case ERROR_POST_LIKES:
 			return newState;
 		default:
