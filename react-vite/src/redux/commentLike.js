@@ -89,6 +89,8 @@ const commentLikesReducer = (state = initialState, action) => {
 		case HANDLE_COMMENT_LIKES:
 			newState.commentLikesById.push(commentLikeId);
 			newState.commentLikes[commentLikeId] = action.payload.all_comment_likes;
+
+            // console.log('booba', action.payload)
 			return newState;
 		// case DELETE_COMMENT_LIKES:
 		// 	newState.commentLikesById = newState.commentLikesById.filter(el !== action.payload.id);

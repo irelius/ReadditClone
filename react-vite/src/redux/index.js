@@ -9,13 +9,15 @@ import userReducer from "./user"
 import subredditReducer from "./subreddit";
 import postReducer from "./post";
 import commentReducer from "./comment";
+import commentLikesReducer from "./commentLike";
 
 const rootReducer = combineReducers({
     user: userReducer,
     session: sessionReducer,
     subreddit: subredditReducer,
     post: postReducer,
-    comment: commentReducer
+    comment: commentReducer,
+    commentLikes: commentLikesReducer
 });
 
 let enhancer;

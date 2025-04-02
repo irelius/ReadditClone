@@ -20,7 +20,7 @@ export default function App() {
 			<>
 				{/* <Navigation /> */}
 				<Routes>
-					<Route exact path="/" element={<MainPage />} />
+					<Route exact path="/comments/:commentId" element={<MainPage />} />
 				</Routes>
 			</>
 		)
