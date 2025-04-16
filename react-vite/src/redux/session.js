@@ -71,18 +71,18 @@ export const logout = () => async (dispatch) => {
 export const signUp =
 	({ username, email, password }) =>
 	async (dispatch) => {
-		const res = await fetch("/api/auth/signup", {
-			method: "POST",
+        const res = await fetch("/api/auth/signup", {
+            method: "POST",
 			headers: {
-				"Content-Type": "application/json",
+                "Content-Type": "application/json",
 			},
 			body: JSON.stringify({
-				username,
+                username,
 				email,
 				password,
 			}),
 		});
-
+        
 		const data = await res.json();
 		if (res.ok) return dispatch(loadSession(data));
 		return dispatch(errorSession(data));

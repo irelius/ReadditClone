@@ -1,0 +1,37 @@
+{
+	"LOGIN": "-----------------------------------------------------------------------------------",
+	"Invalid credentials": "No account with provided email exists or the provided password is incorrect",
+	"Email is required (login)": "Email is required to signin",
+	"Password is required (login)": "Password is required to signin",
+
+	"SIGNUP": "-----------------------------------------------------------------------------------",
+	"Email address is already in use": "An account with that email already exists",
+	"Email entered is invalid": "Email provided is improper syntax",
+	"Username is already in use": "An account with that username already exists",
+	"Letters, numbers, dashes, and underscores only. Please try again without symbols": "Username provided has unallowed characters",
+    "Username must be between 3 and 20 characters": "Username character length must be between 3 and 20 characters",
+	"Password length must be at least 8 characters long": "Password provided is too short to be used",
+	"Username is required": "Username is required to create an account",
+	"Email is required (signup)": "Email is required to create an account",
+	"Password is required (signup)": "Password is required to create an account",
+
+	"SUBREDDITS": "-----------------------------------------------------------------------------------",
+	"This subreddit name is already in use": "Subreddit name is already in use",
+    "Subreddit name is required": "Subreddit name data must be provided",
+	"A subreddit name is required": "Subreddit name must be longer than 0 characters (trimmed)",
+    "Subreddit name is too long. Please limit to 21 characters": "Subreddit name has a max cap of 21 characters",
+	"Subreddit description is too long. Please limit to 500 characters": "Subreddit description has a max cap of 500 characters",
+
+	"POSTS": "-----------------------------------------------------------------------------------",
+	"A post title is required": "Post's title length cannot be 0; one must be provided",
+	"Post title is too long. Please limit to 300 characters": "Post title has a max cap of 300 characters",
+	"Post title is required": "Post title data must be provided",
+    "Subreddit ID is required": "Post creation must provide the id of which subreddit it belongs to",
+
+	"COMMENTS": "-----------------------------------------------------------------------------------",
+	"Comment body is required": "Comment data must be provided",
+	"Comment body cannot be empty": "Comment must be longer than 0 characters (trimmed",
+
+	"LIKES": "-----------------------------------------------------------------------------------",
+	"Request for liking/disliking post has invalid data": "Validation to make sure user is trying to create either a 'like' or 'dislike' and not manually create some other value for the row"
+}

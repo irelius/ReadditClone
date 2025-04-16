@@ -8,6 +8,8 @@ def validation_error_message(validation_errors):
     for field in validation_errors:
         for error in validation_errors[field]:
             error_messages.append(error)
+            
+    return validation_errors
     return error_messages
 
 #  ----------------------------- User Helper Function ----------------------------

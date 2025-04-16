@@ -9,21 +9,21 @@ def user_exists(form, field):
     email = field.data.strip()
     user = User.query.filter(User.email == email).first()
     if user:
-        raise ValidationError('Email address is already in use.')
+        raise ValidationError('Email address is already in use')
     
 # Check that email is valid format
 def check_valid_email(form, field):
     EMAIL_REGEX = re.compile(r"[^@]+@[^@]+\.[^@]+")
 
     if not EMAIL_REGEX.match(field.data):
-        raise ValidationError("Email entered is invalid.")
+        raise ValidationError("Email entered is invalid")
 
 # Checking if username is already in use
 def username_exists(form, field):
     username = field.data.strip()
     user = User.query.filter(User.username == username).first()
     if user:
-        raise ValidationError('Username is already in use.')
+        raise ValidationError('Username is already in use')
 
 
 # Check that username has valid characters and is of appropriate length
@@ -32,7 +32,7 @@ def check_username(form, field):
     special_characters = " `~!@#$%^&*()+=[{]}\|;:,.<>/?'\"\""
     
     if any(c in special_characters for c in username):
-        raise ValidationError("Letters, numbers, dashes, and underscores only. Please try again without symbols.")
+        raise ValidationError("Letters, numbers, dashes, and underscores only. Please try again without symbols")
     
     if 3 > len(username) or 20 < len(username):
         raise ValidationError("Username must be between 3 and 20 characters")
@@ -47,6 +47,6 @@ def check_password (form, field):
 
 
 class SignUpForm(FlaskForm):
-    username = StringField('username', validators=[DataRequired(message="Username is required."), username_exists, check_username])
-    email = StringField('email', validators=[DataRequired(message="Email is required."), user_exists, check_valid_email])
-    password = StringField('password', validators=[DataRequired("Password is required."), check_password])
+    username = StringField('username', validators=[DataRequired(message="Username is required"), username_exists, check_username])
+    email = StringField('email', validators=[DataRequired(message="Email is required"), user_exists, check_valid_email])
+    password = StringField('password', validators=[DataRequired("Password is required"), check_password])

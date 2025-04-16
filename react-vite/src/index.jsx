@@ -1,4 +1,4 @@
-import React from "react";
+import React, { createElement, StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 
 import "./reset.css";
