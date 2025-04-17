@@ -1,7 +1,7 @@
 import "./LoginForm.css";
 
 import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../../redux/session";
 import errorSetter from "../../../helper/error";
@@ -15,7 +15,6 @@ const LoginForm = ({ currUser, keepOpen }) => {
 		email: [],
 		password: [],
 	});
-	const user = useSelector((state) => state.session.user);
 
 	const onLogin = async (e) => {
 		e.preventDefault();
@@ -56,7 +55,6 @@ const LoginForm = ({ currUser, keepOpen }) => {
 						</p>
 					</div>
 					<div className="login-form-modal-email-container">
-						{/* <label htmlFor='email'>Email</label> */}
 						<input
 							className="login-form-modal-email-input"
 							name="email"
@@ -70,7 +68,6 @@ const LoginForm = ({ currUser, keepOpen }) => {
 						/>
 					</div>
 					<div className="login-form-modal-password-container">
-						{/* <label htmlFor='password'>Password</label> */}
 						<input
 							className="login-form-modal-password-input"
 							name="password"
@@ -89,7 +86,7 @@ const LoginForm = ({ currUser, keepOpen }) => {
 							className="login-form-modal-demo-button"
 							onClick={() => {
 								setErrors({ email: [], password: [] });
-								setEmail("demo@aa.io");
+								setEmail("demo@user.io");
 								setPassword("password");
 							}}
 							type="submit"

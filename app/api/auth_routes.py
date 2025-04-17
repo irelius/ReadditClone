@@ -11,10 +11,8 @@ auth_routes = Blueprint('auth', __name__)
 @auth_routes.route('/')
 def authenticate():
     if current_user.is_authenticated:
-        return {
-            "users_by_id": [current_user.id],
-            "all_users": {current_user.id: current_user.to_dict()}
-        }
+        user = User.query.get(current_user.id)
+        return user.to_dict()
     return {'errors': ["Authentication error"]}, 401
 
 

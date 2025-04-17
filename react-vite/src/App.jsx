@@ -20,14 +20,14 @@ export default function App() {
 	return (
 		load && (
 			<>
-				{/* <NavBar /> */}
+				<NavBar />
 				{/* <Navigation /> */}
 				<Routes>
 					<Route exact path="/" element={<MainPage />} />
 				</Routes>
-				<Routes>
+				{/* <Routes>
 					<Route exact path="/test" element={<SignUpForm />} />
-				</Routes>
+				</Routes> */}
 			</>
 		)
 	);

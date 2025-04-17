@@ -26,12 +26,13 @@ const errorSession = (errors) => {
 
 // ------------------------------- THUNKS ------------------------------- //
 export const authenticate = () => async (dispatch) => {
-	const res = await fetch("/api/auth/", {
-		headers: {
-			"Content-Type": "application/json",
+    
+    const res = await fetch("/api/auth/", {
+        headers: {
+            "Content-Type": "application/json",
 		},
 	});
-
+    
 	const data = await res.json();
 	if (res.ok) return dispatch(loadSession(data));
 	return dispatch(errorSession(data));

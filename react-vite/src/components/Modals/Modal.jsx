@@ -5,9 +5,8 @@ export default function Modal({ isOpen, keepOpen, children }) {
 	if (!isOpen) return null;
 
 	return ReactDOM.createPortal(
-		<div className="modal-background">
-			<div className="modal-class">
-				{/* <section onClick={() => keepOpen(false)}>XXX</section> */}
+		<div className="modal-background" onClick={() => keepOpen(false)}>
+			<div className="modal-class" onClick={(e) => e.stopPropagation()}>
 				{children}
 			</div>
 		</div>,

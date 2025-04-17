@@ -1,12 +1,16 @@
 import "./NavBar.css";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 // import NavBarProfileMenu from "./NavBarComponents/NavBarProfileMenu/NavBarProfileMenu";
-import NavBarProfileMenu from "./NavBarProfileMenu/NavBarProfileMenu"
-import SignUpFormModal from "../SignupFormModal"
+import NavBarProfileMenu from "./NavBarProfileMenu/NavBarProfileMenu";
+import SignUpFormModal from "../SignupFormModal";
+import { logout } from "../../redux/session";
+import Modal from "../Modals";
+import LoginForm from "../Modals/LoginModal/LoginForm";
+import SignUpForm from "../Modals/SignUpModal/SignUpForm";
 // import LoginModal from "../Modals/LoginModal";
 // import SignUpFormModal from "../Modals/SignUpModal";
 
@@ -14,11 +18,21 @@ const NavBar = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
-	const loggedIn = useSelector((state) => state);
-	const currUserId = useSelector((state) => state.session.user.users_by_id[0]);
-	const currUser = useSelector((state) => state.session.user.all_users[currUserId]);
+	// const [currUserId, setCurrUserId] = useState()
+	const [currUser, setCurrUser] = useState();
+
+	const session = useSelector((state) => state.session);
+
+	useEffect(() => {
+		if (session.loggedIn === true) {
+			// setCurrUserId(session.user.id)
+			setCurrUser(session.user);
+		}
+	}, [session]);
 
 	const [searchInput, setSearchInput] = useState("");
+	const [openSignupModal, setOpenSignupModal] = useState(false);
+	const [openLoginModal, setOpenLoginModal] = useState(false);
 
 	return (
 		<div className="navbar-main-container">
@@ -76,20 +90,41 @@ const NavBar = () => {
 				</section>
 			</section>
 
-			{loggedIn ? (
+			{session.loggedIn === true ? (
 				<div>
-					<NavBarProfileMenu />
+					<section
+						onClick={() => {
+							dispatch(logout());
+                            setOpenLoginModal(false)
+                            setOpenSignupModal(false)
+						}}
+					>
+						booba
+					</section>
+					{/* <NavBarProfileMenu /> */}
 					{/* NVProfileMenu */}
 				</div>
 			) : (
 				<div className="navbar-right">
 					<aside className="navbar-right-button-signup">
-						<SignUpFormModal currUser={currUser} />
-						{/* signupmodal */}
+						<button onClick={() => setOpenSignupModal(true)}>Signup</button>
+						{/* <SignUpFormModal currUser={currUser} /> */}
+						<Modal
+							className="test-class"
+							isOpen={openSignupModal}
+							keepOpen={setOpenSignupModal}
+							children={<SignUpForm currUser={currUser} keepOpen={setOpenSignupModal} />}
+						/>
 					</aside>
 					<aside className="navbar-right-button-login">
-						<LoginModal />
-						loginmodal
+						{/* <LoginModal currUser={currUser} /> */}
+						<button onClick={() => setOpenLoginModal(true)}>Login</button>
+						<Modal
+							className="test-class"
+							isOpen={openLoginModal}
+							keepOpen={setOpenLoginModal}
+							children={<LoginForm currUser={currUser} keepOpen={setOpenLoginModal} />}
+						/>
 					</aside>
 				</div>
 			)}
