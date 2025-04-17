@@ -32,7 +32,7 @@ const NavBarProfileMenu = () => {
 					</aside>
 				</button>
 			</section>
-			<Modal isOpen={showProfileMenu} onClose={setShowProfileMenu}>
+			<Modal isOpen={showProfileMenu} keepOpen={setShowProfileMenu}>
 				asdf
 				{/* <ProfileMenuModal setShowProfileMenu={setShowProfileMenu}/> */}
 			</Modal>

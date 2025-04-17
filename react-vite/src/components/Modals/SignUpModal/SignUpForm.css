@@ -171,23 +171,3 @@
 
 
 /* -----------------------------------------------------------------------*/
-
-
-.test {
-    background-color: orange;
-    position: absolute;
-    top: 0;
-    right:0;
-    bottom: 0;
-    left: 0;
-    z-index: 1000;
-}
-
-
-.signup-class {
-    justify-content: center;
-    align-items: center;
-    height: 300px;
-    width: 200px;
-    margin:1em;
-}

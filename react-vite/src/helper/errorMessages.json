@@ -1,6 +1,7 @@
 {
 	"LOGIN": "-----------------------------------------------------------------------------------",
 	"Invalid credentials": "No account with provided email exists or the provided password is incorrect",
+    "Invalid email provided (login)": "Provided email is not of valid format",
 	"Email is required (login)": "Email is required to signin",
 	"Password is required (login)": "Password is required to signin",
 
@@ -12,6 +13,7 @@
     "Username must be between 3 and 20 characters": "Username character length must be between 3 and 20 characters",
 	"Password length must be at least 8 characters long": "Password provided is too short to be used",
 	"Username is required": "Username is required to create an account",
+    "Invalid email provided (signup)": "Provided email is not of valid format",
 	"Email is required (signup)": "Email is required to create an account",
 	"Password is required (signup)": "Password is required to create an account",
 

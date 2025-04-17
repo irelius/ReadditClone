@@ -30,6 +30,8 @@ zipp = "==3.17.0"
 psycopg2-binary = "==2.9.10"
 boto3 = "==1.26.13"
 botocore = "==1.29.13"
+email_validator = "==2.2.0"
+
 
 [dev-packages]
 

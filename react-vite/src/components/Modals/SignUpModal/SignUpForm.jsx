@@ -6,7 +6,7 @@ import { signUp } from "../../../redux/session";
 import errorSetter from "../../../helper/error";
 import { useNavigate } from "react-router-dom";
 
-const SignUpForm = ({ currUser, onClose }) => {
+const SignUpForm = ({ currUser, keepOpen }) => {
 	const dispatch = useDispatch();
     const navigate = useNavigate();
 	const [email, setEmail] = useState("");
@@ -40,7 +40,7 @@ const SignUpForm = ({ currUser, onClose }) => {
 	return (
 		<div className="signup-modal-main-container">
 			<section className="signup-modal-exit-container">
-				<button onClick={() => onClose(false)} className="signup-modal-exit-button">
+				<button onClick={() => keepOpen(false)} className="signup-modal-exit-button">
 					<i className="fa-solid fa-xmark fa-lg"></i>
 				</button>
 			</section>

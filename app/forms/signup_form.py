@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField
+from wtforms import StringField, EmailField
 from wtforms.validators import DataRequired, Email, ValidationError
 from app.models import User
 import re
@@ -10,13 +10,6 @@ def user_exists(form, field):
     user = User.query.filter(User.email == email).first()
     if user:
         raise ValidationError('Email address is already in use')
-    
-# Check that email is valid format
-def check_valid_email(form, field):
-    EMAIL_REGEX = re.compile(r"[^@]+@[^@]+\.[^@]+")
-
-    if not EMAIL_REGEX.match(field.data):
-        raise ValidationError("Email entered is invalid")
 
 # Checking if username is already in use
 def username_exists(form, field):
@@ -24,7 +17,6 @@ def username_exists(form, field):
     user = User.query.filter(User.username == username).first()
     if user:
         raise ValidationError('Username is already in use')
-
 
 # Check that username has valid characters and is of appropriate length
 def check_username(form, field):
@@ -47,6 +39,6 @@ def check_password (form, field):
 
 
 class SignUpForm(FlaskForm):
-    username = StringField('username', validators=[DataRequired(message="Username is required"), username_exists, check_username])
-    email = StringField('email', validators=[DataRequired(message="Email is required"), user_exists, check_valid_email])
+    username = StringField('username', validators=[DataRequired(message="Username is required"), check_username, username_exists])
+    email = EmailField('email', validators=[Email("Invalid email provided"), DataRequired(message="Email is required"), user_exists])
     password = StringField('password', validators=[DataRequired("Password is required"), check_password])
