@@ -52,9 +52,9 @@ export default function MainPage() {
 		});
 	};
 
-	useEffect(() => {
-		console.log("main page errors: ", errors);
-	}, [errors]);
+	// useEffect(() => {
+	// 	console.log("main page errors: ", errors);
+	// }, [errors]);
 
 	const postsById = useSelector((state) => state.post.postsById);
 	const post = useSelector((state) => state.post.posts);

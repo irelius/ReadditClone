@@ -14,7 +14,6 @@ export default function MainPage() {
 		<div>
 			<button onClick={() => setOpenModal(true)}>show modal</button>
 			<Modal
-				className="test-class"
 				isOpen={openModal}
 				keepOpen={setOpenModal}
 				children={<LoginForm keepOpen={setOpenModal} />}
