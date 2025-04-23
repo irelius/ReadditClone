@@ -1,6 +1,6 @@
 import "./SignUpForm.css";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { signUp } from "../../../redux/session";
 import errorSetter from "../../../helper/error";

@@ -33,11 +33,11 @@ export default function MainPage() {
 		password: "password",
 	};
 
-    useEffect(() => {
-        dispatch(loadPostThunk(id)).then((res) => {
-            setLoad(true);
-        });
-    }, [dispatch, id]);
+	useEffect(() => {
+		dispatch(loadPostThunk(id)).then((res) => {
+			setLoad(true);
+		});
+	}, [dispatch, id]);
 
 	const handlePost = (likeStatus) => {
 		const body = {

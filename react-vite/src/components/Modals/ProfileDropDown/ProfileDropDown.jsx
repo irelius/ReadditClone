@@ -7,7 +7,9 @@ import { logout } from "../../../redux/session";
 import ReactDom from "react-dom";
 
 const ProfileDropDown = ({ isOpen, keepOpen }) => {
-	if (!isOpen) return null;
+	if (!isOpen) {
+		return null;
+	}
 
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
@@ -27,7 +29,7 @@ const ProfileDropDown = ({ isOpen, keepOpen }) => {
 		return window.location.reload();
 	};
 
-	return ReactDom.createPortal(
+	return (
 		<div className="li-navbar-right">
 			<section className="li-navbar-right-part-one">
 				<aside className="navbar-profile-icon">
@@ -35,7 +37,7 @@ const ProfileDropDown = ({ isOpen, keepOpen }) => {
 				</aside>
 				<aside className="navbar-profile-name">My Stuff</aside>
 			</section>
-			<section className="navbar-right-profile" onClick={profileRedirect}>
+			<section className="navbar-right-profile" onClick={(e) => profileRedirect(e)}>
 				Profile
 			</section>
 			{/* TO DO, implement function to turn on dark mode and not */}
@@ -52,15 +54,14 @@ const ProfileDropDown = ({ isOpen, keepOpen }) => {
 					{/* <SubredditCreateModal keepOpen={keepOpen} /> */}
 				</aside>
 			</section>
-			<section className="li-navbar-right-part-four" onClick={handleLogout}>
+			<section className="li-navbar-right-part-four" onClick={(e) => handleLogout(e)}>
 				<aside className="navbar-logout-icon">
 					<i className="fa-solid fa-arrow-right-from-bracket" />
 				</aside>
 				<aside className="navbar-right-logout">Logout</aside>
 			</section>
 			<section className="li-navbar-footer">2022 Readdit.</section>
-		</div>,
-		document.getElementById("modal")
+		</div>
 	);
 };
 

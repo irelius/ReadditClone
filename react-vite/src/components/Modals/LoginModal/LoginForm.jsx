@@ -1,6 +1,6 @@
 import "./LoginForm.css";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../../redux/session";
@@ -89,8 +89,7 @@ const LoginForm = ({ currUser, keepOpen }) => {
 								setEmail("demo@user.io");
 								setPassword("password");
 							}}
-							type="submit"
-						>
+							type="submit">
 							Demo User
 						</button>
 					</div>

@@ -30,26 +30,26 @@ export const errorCommentLike = (errors) => {
 // ------------------------------- THUNKS ------------------------------- //
 
 // load all likes/dislikes for a commment
-export const loadCommentLikesThunk = (commentId) => async () => {
+export const loadCommentLikesThunk = (commentId) => async (dispatch) => {
 	const res = await fetch(`/api/comments/${commentId}/likes`);
 	const data = await res.json();
-	if (res.ok) return dipatch(loadCommentLikes(res));
+	if (res.ok) return dispatch(loadCommentLikes(res));
 	return dispatch(errorCommentLike(data));
 };
 
 // load like status for a comment made by current user
-export const loadCurrentUserCommentLikesThunk = (commentId) => async () => {
+export const loadCurrentUserCommentLikesThunk = (commentId) => async (dispatch) => {
 	const res = await fetch(`/api/users/current/comments/${commentId}/likes`);
 	const data = await res.json();
-	if (res.ok) return dipatch(loadCommentLikes(res));
+	if (res.ok) return dispatch(loadCommentLikes(res));
 	return dispatch(errorCommentLike(data));
 };
 
 // load all comment likes made by a specific user
-export const loadUserCommentLikesThunk = (userId) => async () => {
+export const loadUserCommentLikesThunk = (userId) => async (dispatch) => {
 	const res = await fetch(`/api/users/${userId}/comment_likes`);
 	const data = await res.json();
-	if (res.ok) return dipatch(loadCommentLikes(res));
+	if (res.ok) return dispatch(loadCommentLikes(res));
 	return dispatch(errorCommentLike(data));
 };
 

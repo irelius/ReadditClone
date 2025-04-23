@@ -1,12 +1,7 @@
 import "./ProfileButton.css";
 
-// import ProfileDropDown from "../../../Modals/ProfileDropDown/ProfileDropDown";
-// import { Modal } from "../../../../context/Modal";
-// import Modal from "../../Modals/Modal";
-import Modal from "../Modal";
 import ProfileDropDown from "../ProfileDropDown/ProfileDropDown";
 import { useState } from "react";
-import { useSelector } from "react-redux";
 
 const ProfileButton = ({ currUser }) => {
 	const [openProfileMenu, setOpenProfileMenu] = useState(false);

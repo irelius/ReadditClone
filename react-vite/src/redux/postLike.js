@@ -38,7 +38,7 @@ export const errorPostLike = (errors) => {
 // ------------------------------- THUNKS ------------------------------- //
 
 // load likes for a post
-export const loadLikesPostThunk = (postId) => async () => {
+export const loadLikesPostThunk = (postId) => async (dispatch) => {
 	const res = await fetch(`/api/posts/${postId}/likes`);
 	const data = await res.json();
 	if (res.ok) return dispatch(loadPostLikes(data));
@@ -46,7 +46,7 @@ export const loadLikesPostThunk = (postId) => async () => {
 };
 
 // load post likes from current user
-export const loadCurrentUserPostLikesThunk = (postId) => async () => {
+export const loadCurrentUserPostLikesThunk = (postId) => async (dispatch) => {
 	const res = await fetch(`/api/users/current/posts/${postId}/likes`);
 	const data = await res.json();
 	if (res.ok) return dispatch(loadPostLikes(data));
@@ -54,7 +54,7 @@ export const loadCurrentUserPostLikesThunk = (postId) => async () => {
 };
 
 // load all post likes from a specific user
-export const loadUserPostLikesThunk = (userId) => async () => {
+export const loadUserPostLikesThunk = (userId) => async (dispatch) => {
 	const res = await fetch(`/api/users/${userId}/post_likes`);
 	const data = await res.json();
 	if (res.ok) return dispatch(loadPostLikes(data));

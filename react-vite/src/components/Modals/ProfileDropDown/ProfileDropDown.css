@@ -7,9 +7,9 @@
 /* -----------------------------------------------------------------------*/
 /* Modal CSS */
 
-.modal-background {
+/* .modal-background {
     background-color: transparent;
-}
+} */
 
 /* -----------------------------------------------------------------------*/
 /* LI Navbar Right Section */
@@ -31,6 +31,8 @@
 
     border: 1px solid #343536;
     border-radius: 5px;
+
+    z-index: 1000;
 }
 
 

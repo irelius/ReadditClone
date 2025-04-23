@@ -26,7 +26,7 @@ const errorUser = (errors) => {
 
 // ------------------------------- THUNKS ------------------------------- //
 // load all users
-export const loadAllUserThunk = () => async () => {
+export const loadAllUserThunk = () => async (dispatch) => {
 	const res = await fetch("/api/users/");
 
 	const data = await res.json();
@@ -35,7 +35,7 @@ export const loadAllUserThunk = () => async () => {
 };
 
 // load current user
-export const loadCurrentUserThunk = () => async () => {
+export const loadCurrentUserThunk = () => async (dispatch) => {
 	const res = await fetch("/api/users/current");
 
 	const data = await res.json();
@@ -44,7 +44,7 @@ export const loadCurrentUserThunk = () => async () => {
 };
 
 // load a specific user
-export const loadUserThunk = (userId) => async () => {
+export const loadUserThunk = (userId) => async (dispatch) => {
 	const res = await fetch(`/api/users/${userId}`);
 
 	const data = await res.json();
@@ -53,7 +53,7 @@ export const loadUserThunk = (userId) => async () => {
 };
 
 // load a subreddit's users
-export const loadSubredditUsersThunk = (subredditId) => async () => {
+export const loadSubredditUsersThunk = (subredditId) => async (dispatch) => {
 	const res = await fetch(`/api/subreddits/${subredditId}/users`);
 
 	const data = await res.json();
