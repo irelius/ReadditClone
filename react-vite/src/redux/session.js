@@ -26,7 +26,6 @@ const errorSession = (errors) => {
 
 // ------------------------------- THUNKS ------------------------------- //
 export const authenticate = () => async (dispatch) => {
-    
     const res = await fetch("/api/auth/", {
         headers: {
             "Content-Type": "application/json",

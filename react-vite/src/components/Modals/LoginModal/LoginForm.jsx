@@ -21,6 +21,7 @@ const LoginForm = ({ currUser, keepOpen }) => {
 		dispatch(login({ email, password })).then((res) => {
 			errorSetter(res, setErrors);
 		});
+        keepOpen(false)
 	};
 
 	if (currUser) {

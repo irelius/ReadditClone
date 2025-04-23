@@ -1,32 +1,33 @@
 import "./ProfileDropDown.css";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-// import SubredditCreateModal from "../SubredditCreateModal";
 import { logout } from "../../../redux/session";
-import ReactDom from "react-dom";
+import Modal from "../Modal";
+import CreateSubredditModal from "../CreateSubredditModal";
+// import SubredditCreateModal from "../SubredditCreateModal";
 
-const ProfileDropDown = ({ isOpen, keepOpen }) => {
-	if (!isOpen) {
-		return null;
-	}
+const ProfileDropDown = ({ isOpen, keepOpen, currUser }) => {
+	if (!isOpen) return null;
 
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const currentUser = useSelector((state) => state.session.user);
+
+	const [openCreateSubredditModal, setOpenCreateSubredditModal] = useState(false);
 
 	// Redirect to User's Profile page
 	const profileRedirect = (e) => {
 		e.preventDefault();
 		keepOpen(false);
-		return navigate(`/users/${currentUser.username}`);
+		return navigate(`/users/${currUser.username}`);
 	};
 
 	// Handle Logout
 	const handleLogout = async (e) => {
 		e.preventDefault();
 		dispatch(logout());
-		return window.location.reload();
+		keepOpen(false);
 	};
 
 	return (
@@ -45,13 +46,23 @@ const ProfileDropDown = ({ isOpen, keepOpen }) => {
                 View Options
                 <li>Dark Mode</li>
             </section> */}
-			<section className="li-navbar-right-part-three">
+			<section
+				className="li-navbar-right-part-three"
+				onClick={() => {
+					setOpenCreateSubredditModal(true);
+				}}>
 				<aside className="navbar-community-icon">
 					<i className="fa-brands fa-ravelry" />
 				</aside>
 				<aside className="navbar-right-community">
-					temp create subreddit modal
-					{/* <SubredditCreateModal keepOpen={keepOpen} /> */}
+					Create a subreddit
+					{/* <Modal isOpen={openCreateSubredditModal} keepOpen={setOpenCreateSubredditModal}>
+						<CreateSubredditModal
+							isOpen={openCreateSubredditModal}
+							keepOpen={setOpenCreateSubredditModal}
+							currUser={currUser}
+						/>
+					</Modal> */}
 				</aside>
 			</section>
 			<section className="li-navbar-right-part-four" onClick={(e) => handleLogout(e)}>
