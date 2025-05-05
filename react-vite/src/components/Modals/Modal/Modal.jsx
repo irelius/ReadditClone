@@ -1,14 +1,15 @@
 import "./Modal.css";
 import ReactDOM from "react-dom";
 
-export default function Modal({ optionalStyle, isOpen, keepOpen, children }) {
+export default function Modal({ optionalStyle = {}, isOpen, keepOpen, children }) {
 	if (!isOpen) return null;
 
 	return ReactDOM.createPortal(
 		<div
 			style={optionalStyle}
 			className="modal-background"
-			onClick={() => {
+			onClick={(e) => {
+                e.stopPropagation()
 				keepOpen(false);
 			}}>
 			<div className="modal-class" onClick={(e) => e.stopPropagation()}>

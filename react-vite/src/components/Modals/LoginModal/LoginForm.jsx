@@ -18,9 +18,11 @@ const LoginForm = ({ currUser, keepOpen }) => {
 
 	const onLogin = async (e) => {
 		e.preventDefault();
-        keepOpen(false)
 		dispatch(login({ email, password })).then((res) => {
-			errorSetter(res, setErrors);
+            errorSetter(res, setErrors);
+            if(res.type === "LOAD_SESSION") {
+                keepOpen(false)
+            }
 		});
 	};
 

@@ -3,7 +3,5 @@ export default function errorSetter(res, setErrors) {
 
     if (errors) {
         setErrors(errors)
-    } else {
-        setErrors(null)
     }
 }

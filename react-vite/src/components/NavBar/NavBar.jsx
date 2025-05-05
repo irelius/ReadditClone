@@ -15,10 +15,10 @@ const NavBar = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const [currUser, setCurrUser] = useState(null);
-    const [searchInput, setSearchInput] = useState("");
-    const [openSignupModal, setOpenSignupModal] = useState(false);
-    const [openLoginModal, setOpenLoginModal] = useState(false);
-    const [openProfileMenu, setOpenProfileMenu] = useState(false);
+	const [searchInput, setSearchInput] = useState("");
+	const [openSignupModal, setOpenSignupModal] = useState(false);
+	const [openLoginModal, setOpenLoginModal] = useState(false);
+	const [openProfileMenu, setOpenProfileMenu] = useState(false);
 
 	const session = useSelector((state) => state.session);
 
@@ -26,13 +26,13 @@ const NavBar = () => {
 		if (session.loggedIn === true) {
 			setCurrUser(session.user);
 		} else {
-            setCurrUser(null)
-        }
+			setCurrUser(null);
+		}
 	}, [session]);
 
-    const profileDropdownStyle = {
-        "background-color": "transparent"
-    }
+	const profileDropdownStyle = {
+		backgroundColor: "transparent",
+	};
 
 	return (
 		<div className="navbar-main-container">
@@ -119,7 +119,7 @@ const NavBar = () => {
 						</section>
 					</div>
 					<Modal optionalStyle={profileDropdownStyle} isOpen={openProfileMenu} keepOpen={setOpenProfileMenu}>
-						<ProfileDropDown isOpen={openProfileMenu} keepOpen={setOpenProfileMenu} currUser={currUser}/>
+						<ProfileDropDown isOpen={openProfileMenu} keepOpen={setOpenProfileMenu} currUser={currUser} />
 					</Modal>
 				</div>
 			) : (
@@ -136,7 +136,7 @@ const NavBar = () => {
 							<LoginForm currUser={currUser} keepOpen={setOpenLoginModal} />
 						</Modal>
 					</aside>
-                    {/* test button on navbar */}
+					{/* test button on navbar */}
 					{/* <aside className="navbar-right-button-signup">
 						<button onClick={() => setOpenProfileMenu(true)}>Test</button>
 						<Modal isOpen={openProfileMenu} keepOpen={setOpenProfileMenu}>

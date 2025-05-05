@@ -20,9 +20,11 @@ const SignUpForm = ({ currUser, keepOpen }) => {
 
 	const onSignup = async (e) => {
 		e.preventDefault();
-        keepOpen(false)
 		dispatch(signUp({ username, email, password })).then((res) => {
-			errorSetter(res, setErrors);
+            errorSetter(res, setErrors);
+            if(res.type === "LOAD_SESSION") {
+                keepOpen(false)
+            }
 		});
 	};
 

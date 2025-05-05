@@ -1,6 +1,6 @@
 import "./ProfileDropDown.css";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../../redux/session";
@@ -41,7 +41,7 @@ const ProfileDropDown = ({ isOpen, keepOpen, currUser }) => {
 			<section className="navbar-right-profile" onClick={(e) => profileRedirect(e)}>
 				Profile
 			</section>
-			{/* TO DO, implement function to turn on dark mode and not */}
+			{/* TODO, implement function to turn on dark mode and not */}
 			{/* <section className="li-navbar-right-part-two">
                 View Options
                 <li>Dark Mode</li>
@@ -56,13 +56,13 @@ const ProfileDropDown = ({ isOpen, keepOpen, currUser }) => {
 				</aside>
 				<aside className="navbar-right-community">
 					Create a subreddit
-					{/* <Modal isOpen={openCreateSubredditModal} keepOpen={setOpenCreateSubredditModal}>
+					<Modal isOpen={openCreateSubredditModal} keepOpen={setOpenCreateSubredditModal}>
 						<CreateSubredditModal
 							isOpen={openCreateSubredditModal}
-							keepOpen={setOpenCreateSubredditModal}
 							currUser={currUser}
+							keepOpen={setOpenCreateSubredditModal}
 						/>
-					</Modal> */}
+					</Modal>
 				</aside>
 			</section>
 			<section className="li-navbar-right-part-four" onClick={(e) => handleLogout(e)}>

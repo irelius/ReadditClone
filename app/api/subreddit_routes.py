@@ -23,16 +23,16 @@ def subreddit_by_id(subreddit_id):
 
 # Create a new subreddit
 @subreddit_routes.route("/", methods=["POST"])
-@login_required
+# @login_required
 def subreddits_create_new():
     user_id = int(current_user.get_id())
     
     form = SubredditForm()
     form['csrf_token'].data = request.cookies['csrf_token']
-    
+               
     if form.validate_on_submit():
-        new_subreddit_name = form.data["name"].strip(" ").replace(" ", "_")
-        new_subreddit_description = form.data["description"].strip(" ")
+        new_subreddit_name = form.data["name"]
+        new_subreddit_description = form.data["description"]
         
         subreddit_name_check = Subreddit.query.filter(Subreddit.name == new_subreddit_name).first()
         if(subreddit_name_check) :
@@ -55,8 +55,8 @@ def subreddits_create_new():
 
         db.session.add(new_subreddit_user)
         db.session.commit()
+        
         return return_subreddits([new_subreddit])
-    
     
     return {"errors": validation_error_message(form.errors)}, 400
 
