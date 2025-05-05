@@ -18,13 +18,14 @@ const LoginForm = ({ currUser, keepOpen }) => {
 
 	const onLogin = async (e) => {
 		e.preventDefault();
+        keepOpen(false)
 		dispatch(login({ email, password })).then((res) => {
 			errorSetter(res, setErrors);
 		});
-        keepOpen(false)
 	};
 
 	if (currUser) {
+        keepOpen(false)
 		return navigate("/");
 	}
 
@@ -44,10 +45,6 @@ const LoginForm = ({ currUser, keepOpen }) => {
 			</section>
 			<section>
 				<form onSubmit={(e) => onLogin(e)} className="login-form-modal-main-container">
-					<div className="login-form-modal-errors-container">
-						{errors.email && errors.email.map((error, i) => <div key={i}>{error}</div>)}
-						{errors.password && errors.password.map((error, i) => <div key={i}>{error}</div>)}
-					</div>
 					<div className="login-form-modal-text-container">
 						<h2>Log In</h2>
 						<p>
@@ -67,6 +64,10 @@ const LoginForm = ({ currUser, keepOpen }) => {
 								setEmail(e.target.value);
 							}}
 						/>
+					</div>
+					<div className="login-form-modal-errors-container">
+						{errors.email && errors.email.map((error, i) => <div key={i}>{error}</div>)}
+						{errors.password && errors.password.map((error, i) => <div key={i}>{error}</div>)}
 					</div>
 					<div className="login-form-modal-password-container">
 						<input

@@ -20,12 +20,14 @@ const SignUpForm = ({ currUser, keepOpen }) => {
 
 	const onSignup = async (e) => {
 		e.preventDefault();
+        keepOpen(false)
 		dispatch(signUp({ username, email, password })).then((res) => {
 			errorSetter(res, setErrors);
 		});
 	};
 
 	if (currUser) {
+        keepOpen(false)
         return navigate("/")
 	}
 
@@ -46,10 +48,6 @@ const SignUpForm = ({ currUser, keepOpen }) => {
 			</section>
 			<section>
 				<form onSubmit={(e) => onSignup(e)} className="signup-form-modal-main-container">
-					<div className="signup-form-modal-errors-container">
-						{errors.email && errors.email.map((error, i) => <div key={i}>{error}</div>)}
-						{errors.password && errors.password.map((error, i) => <div key={i}>{error}</div>)}
-					</div>
 					<div className="signup-form-modal-text-container">
 						<h2>Sign Up</h2>
 						<p>
@@ -68,6 +66,10 @@ const SignUpForm = ({ currUser, keepOpen }) => {
 								setEmail(e.target.value);
 							}}
 						/>
+					</div>
+					<div className="signup-form-modal-errors-container">
+						{errors.email && errors.email.map((error, i) => <div key={i}>{error}</div>)}
+						{errors.password && errors.password.map((error, i) => <div key={i}>{error}</div>)}
 					</div>
 					<div className="signup-form-modal-password-container">
 						<input
@@ -88,9 +90,6 @@ const SignUpForm = ({ currUser, keepOpen }) => {
 							name, you can’t change it.
 						</p>
 					</div>
-					<div className="signup-form-modal-errors-container">
-						{errors.username && errors.username.map((error, i) => <div key={i}>{error}</div>)}
-					</div>
 					<div className="signup-form-modal-username-container">
 						<input
 							className="signup-form-modal-username-input"
@@ -103,6 +102,9 @@ const SignUpForm = ({ currUser, keepOpen }) => {
 								setUsername(e.target.value);
 							}}
 						/>
+					</div>
+					<div className="signup-form-modal-errors-container">
+						{errors.username && errors.username.map((error, i) => <div key={i}>{error}</div>)}
 					</div>
 					<div className="signup-form-modal-signup-container">
 						<button className="signup-form-signup-button" type="submit">

@@ -136,6 +136,7 @@ const NavBar = () => {
 							<LoginForm currUser={currUser} keepOpen={setOpenLoginModal} />
 						</Modal>
 					</aside>
+                    {/* test button on navbar */}
 					{/* <aside className="navbar-right-button-signup">
 						<button onClick={() => setOpenProfileMenu(true)}>Test</button>
 						<Modal isOpen={openProfileMenu} keepOpen={setOpenProfileMenu}>

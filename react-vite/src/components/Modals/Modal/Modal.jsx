@@ -9,7 +9,6 @@ export default function Modal({ optionalStyle, isOpen, keepOpen, children }) {
 			style={optionalStyle}
 			className="modal-background"
 			onClick={() => {
-				console.log("booba", children);
 				keepOpen(false);
 			}}>
 			<div className="modal-class" onClick={(e) => e.stopPropagation()}>

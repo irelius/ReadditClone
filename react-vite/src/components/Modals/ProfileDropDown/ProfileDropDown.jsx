@@ -26,8 +26,8 @@ const ProfileDropDown = ({ isOpen, keepOpen, currUser }) => {
 	// Handle Logout
 	const handleLogout = async (e) => {
 		e.preventDefault();
-		dispatch(logout());
 		keepOpen(false);
+		dispatch(logout());
 	};
 
 	return (
