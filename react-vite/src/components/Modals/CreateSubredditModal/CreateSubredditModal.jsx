@@ -29,8 +29,9 @@ export default function CreateSubredditModal({ isOpen, keepOpen, currUser }) {
 
 		dispatch(createSubredditThunk(subredditInfo)).then((res) => {
 			errorSetter(res, setErrors);
-			if (res.type === "LOAD_SUBREDDIT") {
+			if (res.type === "CREATE_SUBREDDIT") {
 				keepOpen(false);
+                return navigate(`/r/${subredditName}`)
 			}
 		});
 	};
