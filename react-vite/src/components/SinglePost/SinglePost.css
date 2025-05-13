@@ -1,0 +1,11 @@
+.post-image-container {
+    display: flex;
+    justify-content: center;
+
+    background-color: black;
+}
+
+.post-image {
+    max-height: 30em;
+    object-fit: cover;
+}

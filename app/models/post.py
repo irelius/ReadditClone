@@ -43,6 +43,18 @@ class Post(db.Model):
     def to_dict(self):
         likes, dislikes, total = self.calc_likes()
         
+        return_images = {
+            "images_by_id": [],
+            "images": {}
+        }
+        
+        for x in self.images:
+            image = x.to_dict()
+            id = image["id"]
+            return_images["images"][id] = image
+            return_images["images_by_id"].append(id)
+            
+        
         return {
             "id": self.id,
             "user_id": self.user_id,
@@ -51,7 +63,7 @@ class Post(db.Model):
             "subreddits": self.subreddits.to_dict(),
             "title": self.title,
             "body": self.body,
-            "images":  {image.id: image.to_dict() for image in self.images},
+            "images": return_images,
             "likes": likes,
             "dislikes": dislikes,
             "total_likes": total,

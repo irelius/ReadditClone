@@ -1,5 +1,4 @@
 /* TODO: Add sitewide styles */
-/* TODO Add site wide styles */
 
 html, body {
     display: flex;
@@ -23,6 +22,10 @@ body #signup-modal-main-container{
     margin-top: 100px;
 }
 
+.navbar-height-correction {
+    margin-top: 3em;
+}
+
 .nothing {
     margin: 0;
     padding: 0;
@@ -32,7 +35,58 @@ body #signup-modal-main-container{
     background-color: black;
 }
 
+.dot {
+    font-size: 5px;
+}
 
+
+/* Display Flex */
+.fdr {
+    display: flex;
+    flex-direction: row;
+}
+
+.fdc {
+    display: flex;
+    flex-direction: column;
+}
+
+.jcc {
+    justify-content: center;
+}
+
+.aic {
+    align-items: center;
+}
+
+/* Spacing */
+.gap-05em {
+    gap: 0.5em
+}
+
+.gap-1em {
+    gap: 1em
+}
+
+.gap-2em {
+    gap: 1em
+}
+
+.gap-5px {
+    gap: 5px
+}
+
+.gap-10px {
+    gap: 10px
+}
+
+.gap-15px {
+    gap: 15px
+}
+
+.gap-20px {
+    gap: 20px
+}
 
 /* temporate testing */
 
