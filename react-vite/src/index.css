@@ -39,6 +39,10 @@ body #signup-modal-main-container{
     font-size: 5px;
 }
 
+.pointer:hover {
+    cursor: pointer;
+}
+
 
 /* Display Flex */
 .fdr {
