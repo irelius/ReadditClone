@@ -20,7 +20,7 @@ export default function SinglePost({ post }) {
 	const subreddit = post.subreddits;
 	const imagesById = post.images.images_by_id;
 	const images = post.images.images;
-    
+
 	const timeAgo = new TimeAgo("en-US");
 	const time = timeAgo.format(new Date(post.created_at), "round");
 
@@ -43,16 +43,19 @@ export default function SinglePost({ post }) {
 				<aside>{time}</aside>
 			</section>
 			<section>{post.title}</section>
-			{/* <section>{post.body}</section> */}
 			<section>
 				{imagesById.length > 0 ? (
 					<section className="post-image-container dfr aic">
-						<aside className="pointer" onClick={() => imageRotation("left")}>
-							{"<"}
+						<aside
+							className={`image-arrow-container image-arrow-${imageIndex === 0}`}
+							onClick={() => imageRotation("left")}>
+							<i className={`fa-solid fa-chevron-left fa-xl`}></i>
 						</aside>
 						<img className="post-image" src={`${images[imagesById[imageIndex]].image_url}`} />
-						<aside className="pointer" onClick={() => imageRotation("right")}>
-							{">"}
+						<aside
+							className={`image-arrow-container image-arrow-${imageIndex === imagesById.length - 1}`}
+							onClick={() => imageRotation("right")}>
+							<i className={`fa-solid fa-chevron-right fa-xl`}></i>
 						</aside>
 					</section>
 				) : (
