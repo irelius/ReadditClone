@@ -23,7 +23,6 @@ def password_matches(form, field):
     if user == None or not user.check_password(password):
         raise ValidationError('Invalid credentials')
 
-
 class LoginForm(FlaskForm):
     email = EmailField('email', validators=[DataRequired(message="Email is required"), Email('Invalid email provided')])
     password = StringField('password', validators=[DataRequired(message="Password is required"), password_matches])

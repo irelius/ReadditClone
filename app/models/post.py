@@ -47,6 +47,7 @@ class Post(db.Model):
             "images_by_id": [],
             "images": {}
         }
+
         
         for x in self.images:
             image = x.to_dict()
@@ -68,5 +69,6 @@ class Post(db.Model):
             "dislikes": dislikes,
             "total_likes": total,
             "created_at": self.created_at,
-            "updated_at": self.updated_at
+            "updated_at": self.updated_at,
+            "comments_count": len(self.comments)
         }

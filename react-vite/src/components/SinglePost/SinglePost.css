@@ -1,39 +1,137 @@
+.single-post-container {
+	display: flex;
+	flex-direction: column;
+
+	max-width: 50em;
+	width: 50em;
+
+	gap: 0.5em;
+}
+
+/* CSS - SinglePost - top row section (logo, subreddit, post date) */
+.reddit-logo-container {
+	margin-right: 0.1em;
+
+	height: 1.5em;
+	width: 1.5em;
+
+	border-radius: 100%;
+	background-color: #ff4500;
+}
+
+/* CSS - SinglePost - image section */
 .post-image-container {
-    display: flex;
-    justify-content: space-between;
-    
-    max-width: 50em;
-    width: 50em;
-    padding-left: 1.5em;
-    padding-right: 1.5em;
-    
-    
-    background-color: black;
+	display: flex;
+	justify-content: space-between;
+
+	padding-left: 1.5em;
+	padding-right: 1.5em;
+
+	border-radius: 1.5em;
+
+	background-color: black;
 }
 
 .post-image {
-    max-height: 30em;
-    object-fit: cover;
+	max-height: 30em;
+	object-fit: cover;
 }
 
 .image-arrow-container {
-    height: 2.5em;
-    width: 2.5em;
-    
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 100%;
-    
-    background-color: rgba(50, 50, 50, 0.75);
+	height: 2.5em;
+	width: 2.5em;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 100%;
+
+	background-color: rgba(50, 50, 50, 0.75);
 }
 
 .image-arrow-true {
-    opacity: 0%;
-    transition: all 0.2s ease;
+	opacity: 0%;
+	transition: all 0.2s ease;
 }
 
 .image-arrow-false {
-    color: white;
-    transition: all 0.2s ease;
+	color: white;
+	transition: all 0.2s ease;
+	cursor: pointer;
+}
+
+/* CSS - SinglePost - post body section (text stuff) */
+
+/* CSS - SinglePost - vote and comment section */
+.post-bottom-bar > * {
+	/* background-color: orange; */
+	height: 2em;
+	border-radius: 2em;
+}
+
+.vote-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+
+    gap: 3px;
+    width: fit-content;
+    max-width: 6em;
+
+
+}
+
+.vote-arrow {
+	font-size: 1.75em;
+	background-color: transparent;
+	border-radius: 100%;
+	color: white;
+}
+
+.arrow-up-true {
+    color: #ff4500;
+}
+
+.arrow-down-true {
+    color: #6A5CFF;
+}
+
+.arrow-up-false:hover {
+	background-color: #333d42;
+	color: #ff4500;
+}
+
+.arrow-down-false:hover {
+	background-color: #333d42;
+	color: #6A5CFF;
+}
+
+.post-likes-total {
+	width: fit-content;
+	max-width: 3.5em;
+	padding-left: 0.25em;
+	padding-right: 0.25em;
+}
+
+.comments-container {
+	/* color:  */
+	justify-content: space-around;
+
+	padding-left: 0.75em;
+	padding-right: 0.75em;
+
+	width: fit-content;
+	max-width: 5em;
+}
+
+.comments-container:hover {
+    background-color: #333d42
+}
+
+/* CSS - SinglePost - last section, bottom border line */
+.post-border {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+	border-bottom: 1px solid #26282a;
 }

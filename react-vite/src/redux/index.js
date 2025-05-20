@@ -10,12 +10,14 @@ import subredditReducer from "./subreddit";
 import postReducer from "./post";
 import commentReducer from "./comment";
 import commentLikesReducer from "./commentLike";
+import postLikesReducer from "./postLike";
 
 const rootReducer = combineReducers({
     user: userReducer,
     session: sessionReducer,
     subreddit: subredditReducer,
     post: postReducer,
+    postLikes: postLikesReducer,
     comment: commentReducer,
     commentLikes: commentLikesReducer
 });

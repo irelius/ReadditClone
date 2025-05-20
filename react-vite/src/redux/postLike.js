@@ -45,13 +45,22 @@ export const loadLikesPostThunk = (postId) => async (dispatch) => {
 	return dispatch(errorPostLike);
 };
 
-// load post likes from current user
-export const loadCurrentUserPostLikesThunk = (postId) => async (dispatch) => {
+// load post like status of a specific post from current user
+export const loadCurrentUserAllPostLikesThunk = () => async (dispatch) => {
+	const res = await fetch(`/api/users/current/posts/all/likes`);
+	const data = await res.json();
+	if (res.ok) return dispatch(loadPostLikes(data));
+	return dispatch(errorPostLike);
+};
+
+// load post like status of a specific post from current user
+export const loadCurrentUserOnePostLikesThunk = (postId) => async (dispatch) => {
 	const res = await fetch(`/api/users/current/posts/${postId}/likes`);
 	const data = await res.json();
 	if (res.ok) return dispatch(loadPostLikes(data));
 	return dispatch(errorPostLike);
 };
+
 
 // load all post likes from a specific user
 export const loadUserPostLikesThunk = (userId) => async (dispatch) => {
@@ -89,6 +98,7 @@ export const handlePostLikesThunk = (likeInfo, postId) => async (dispatch) => {
 // ------------------------------ REDUCERS ------------------------------ //
 
 const initialState = {
+    likedPosts: {},
 	postLikesById: [],
 	postLikes: {},
 };
@@ -101,6 +111,7 @@ const postLikesReducer = (state = initialState, action) => {
 
 	switch (action.type) {
 		case LOAD_POST_LIKES:
+            newState.likedPosts = action.payload.liked_posts
 			newState.postLikesById = action.payload.post_likes_by_id;
 			newState.postLikes = action.payload.all_post_likes;
 			return newState;

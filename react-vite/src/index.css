@@ -1,102 +1,175 @@
-/* TODO: Add sitewide styles */
+/* ------------ TODO: Add sitewide styles ------------ */
 
-html, body {
-    display: flex;
-    justify-content: center;
+html,
+body {
+	display: flex;
+	justify-content: center;
 
-    margin: 0px;
-    padding: 0px;
+	margin: 0px;
+	padding: 0px;
 
-    /* background-color: #030303; */
+	font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif;
 
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-
-    background-color: darkslategray;
+	background-color: #0e1113;
+	/* color: white; */
 }
 
-body #login-modal-main-container{
-    margin-top: 100px;
+body #login-modal-main-container {
+	margin-top: 100px;
 }
 
-body #signup-modal-main-container{
-    margin-top: 100px;
+body #signup-modal-main-container {
+	margin-top: 100px;
 }
 
 .navbar-height-correction {
-    margin-top: 3em;
-}
-
-.nothing {
-    margin: 0;
-    padding: 0;
-}
-
-.black-background {
-    background-color: black;
+	margin-top: 4em;
 }
 
 .dot {
-    font-size: 5px;
+	font-size: 3px;
 }
 
 .pointer:hover {
-    cursor: pointer;
+	cursor: pointer;
 }
 
-
-/* Display Flex */
-.fdr {
-    display: flex;
-    flex-direction: row;
+/* ------------ Display Flex ------------ */
+.dfr {
+	display: flex;
+	flex-direction: row;
 }
 
-.fdc {
-    display: flex;
-    flex-direction: column;
+.dfc {
+	display: flex;
+	flex-direction: column;
 }
 
 .jcc {
-    justify-content: center;
+	justify-content: center;
 }
 
 .aic {
-    align-items: center;
+	align-items: center;
 }
 
-/* Spacing */
+/* ------------ Spacing ------------ */
 .gap-05em {
-    gap: 0.5em
+	gap: 0.5em;
 }
 
 .gap-1em {
-    gap: 1em
+	gap: 1em;
 }
 
 .gap-2em {
-    gap: 1em
+	gap: 2em;
+}
+
+.gap-3em {
+	gap: 3em;
+}
+
+.gap-5em {
+	gap: 5em;
 }
 
 .gap-5px {
-    gap: 5px
+	gap: 5px;
 }
 
 .gap-10px {
-    gap: 10px
+	gap: 10px;
 }
 
 .gap-15px {
-    gap: 15px
+	gap: 15px;
 }
 
 .gap-20px {
-    gap: 20px
+	gap: 20px;
 }
 
-/* temporate testing */
+.no-spacing {
+	margin: 0px;
+	padding: 0px;
+}
 
+/* ------------ Font ------------ */
+.font-10 {
+	font-size: 10px;
+}
+
+.font-12 {
+	font-size: 12px;
+}
+
+.font-16 {
+	font-size: 16px;
+}
+
+.font-20 {
+	font-size: 20px;
+}
+
+.font-24 {
+	font-size: 24px;
+}
+
+.font-bold {
+	font-weight: bold;
+}
+
+.font-light {
+	font-weight: lighter;
+}
+
+.font-underline {
+	text-decoration: underline;
+}
+
+.font-white {
+	color: #eef1f3;
+}
+
+.font-gray {
+	color: #697b84;
+}
+
+.font-light-gray {
+	color: #b7cad4;
+}
+
+/* ------------ Color ------------ */
+.color-white {
+	color: white;
+}
+
+.color-reddit-red {
+	color: #ff4500;
+}
+
+.color-reddit-blue {
+	color: #6a5cff;
+}
+
+/* ------------ Background ------------ */
+.background-black {
+	background-color: black;
+}
+
+.background-gray {
+	background-color: #2a3236;
+}
+
+/* ------------ temporary testing ------------ */
 .orange {
-    border: 1px solid orange;
-    background-color: orange;
+	border: 1px solid red;
+	background-color: orange;
 
-    z-index: 10000;
+	z-index: 10000;
+}
+
+.asdf {
+	font-size: 1.75em;
 }

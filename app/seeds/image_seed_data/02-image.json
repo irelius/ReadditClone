@@ -2,5 +2,9 @@
     {
         "post_id": 2,
         "image_url": "https://kbreaddit.s3.us-west-1.amazonaws.com/picture1.jpg"
+    },
+    {
+        "post_id": 2,
+        "image_url": "https://kbreaddit.s3.us-west-1.amazonaws.com/e4b1285f13264f67b19b4e96b2fffabd.jpg"
     }
 ]

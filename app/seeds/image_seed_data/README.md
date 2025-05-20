@@ -1,0 +1,1 @@
+The image seeder JSON files are named for which post the image belongs to.

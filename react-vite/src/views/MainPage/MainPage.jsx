@@ -9,6 +9,7 @@ import LoginForm from "../../components/Modals/LoginModal/LoginForm";
 import SinglePost from "../../components/SinglePost/SinglePost";
 import { useDispatch, useSelector } from "react-redux";
 import { loadPostsThunk } from "../../redux/post";
+import { loadCurrentUserAllPostLikesThunk } from "../../redux/postLike";
 
 export default function MainPage() {
 	const dispatch = useDispatch();
@@ -18,21 +19,21 @@ export default function MainPage() {
 
 	useEffect(() => {
 		dispatch(loadPostsThunk());
+		dispatch(loadCurrentUserAllPostLikesThunk());
 		setLoad(true);
 	}, []);
 
 	const posts = useSelector((state) => state.post.posts);
 	const postsById = useSelector((state) => state.post.postsById);
+	const postLikes = useSelector((state) => state.postLikes);
+
+	console.log("booba 123", postLikes);
 
 	return load ? (
-		<div className="asdf">
+		<div>
 			{postsById.map((el, i) => {
-				return <SinglePost post={posts[el]} key={i} />;
+				return <SinglePost post={posts[el]} postLike={postLikes.likedPosts[el]} key={i} />;
 			})}
-			{/* <button onClick={() => setOpenModal(true)}>show modal</button>
-			<Modal isOpen={openModal} keepOpen={setOpenModal}>
-				<LoginForm keepOpen={setOpenModal} />
-			</Modal> */}
 		</div>
 	) : (
 		<></>
