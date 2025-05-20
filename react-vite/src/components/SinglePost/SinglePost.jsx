@@ -43,7 +43,7 @@ export default function SinglePost({ post, likeStatus = null }) {
 		dispatch(handlePostLikesThunk(status, post.id)).then((res) => {
 			if (res.like_status !== null) {
                 const newLikeStatus = res.total_likes === 1 ? "like" : "dislike"
-				setPostLikeStatus((prev) => newLikeStatus);
+				setPostLikeStatus(newLikeStatus);
 			} else {
 				setPostLikeStatus(res.like_status);
 			}

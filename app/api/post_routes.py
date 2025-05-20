@@ -205,8 +205,6 @@ def handle_like_on_post(post_id):
                 
                 db.session.delete(existing_like)
                 db.session.commit()
-                
-                print('booba')
                 return {
                     "id": existing_like.id,
                     "message": "Like/dislike on post successfully deleted",
