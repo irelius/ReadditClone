@@ -104,30 +104,33 @@ def return_posts(posts):
 #  -------------------------- Post Likes Helper Function --------------------------
 # returns "post_likes_by_id" and "all_post_likes"
 def return_post_likes(post_likes):
-    liked_posts = {}
-    post_likes_by_id = []
-    all_post_likes = {}
+    like_info = {
+        "liked_posts": {},
+        "post_likes_by_id": [],
+        "all_post_likes": {},
+        "total_likes": 0
+    }
     
     if len(post_likes) == 0:
-        return {
-            "liked_posts": {},
-            "post_likes_by_id": post_likes_by_id,
-            "all_post_likes": all_post_likes
-        }
+        return like_info
     
     if post_likes[0] == None:
         return {"errors": ["Like on post does not exist"]}, 404
     
+    likes = 0
+    dislikes = 0
     for post_like in post_likes:
-        liked_posts[post_like.post_id] = post_like.like_status
-        post_likes_by_id.append(post_like.id)
-        all_post_likes[post_like.id] = post_like.to_dict()
+        if post_like.like_status == "like": 
+            likes += 1
+        elif post_like.like_status == "dislike":
+            dislikes += 1
+            
+        like_info["liked_posts"][post_like.post_id] = post_like.like_status
+        like_info["post_likes_by_id"].append(post_like.id)
+        like_info["all_post_likes"][post_like.id] = post_like.to_dict()
+        like_info["total_likes"] = likes - dislikes
     
-    return {
-        "liked_posts": liked_posts,
-        "post_likes_by_id": post_likes_by_id,
-        "all_post_likes": all_post_likes
-    }
+    return like_info
 
 
 #  ---------------------------- Comment Helper Function ----------------------------

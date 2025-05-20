@@ -36,12 +36,15 @@ export const errorPostLike = (errors) => {
 };
 
 // ------------------------------- THUNKS ------------------------------- //
-
 // load likes for a post
 export const loadLikesPostThunk = (postId) => async (dispatch) => {
 	const res = await fetch(`/api/posts/${postId}/likes`);
 	const data = await res.json();
-	if (res.ok) return dispatch(loadPostLikes(data));
+
+	if (res.ok) {
+		dispatch(loadPostLikes(data));
+		return data.total_likes;
+	}
 	return dispatch(errorPostLike);
 };
 
@@ -61,7 +64,6 @@ export const loadCurrentUserOnePostLikesThunk = (postId) => async (dispatch) => 
 	return dispatch(errorPostLike);
 };
 
-
 // load all post likes from a specific user
 export const loadUserPostLikesThunk = (userId) => async (dispatch) => {
 	const res = await fetch(`/api/users/${userId}/post_likes`);
@@ -77,11 +79,14 @@ export const handlePostLikesThunk = (likeInfo, postId) => async (dispatch) => {
 		headers: {
 			"Content-Type": "application/json",
 		},
-		body: JSON.stringify(likeInfo),
+		body: JSON.stringify({ like_status: likeInfo }),
 	});
 
 	const data = await res.json();
-	if (res.ok) return dispatch(handlePostLikes(data));
+	if (res.ok) {
+		dispatch(handlePostLikes(data));
+        return data
+	}
 	return dispatch(errorPostLike);
 };
 
@@ -98,9 +103,10 @@ export const handlePostLikesThunk = (likeInfo, postId) => async (dispatch) => {
 // ------------------------------ REDUCERS ------------------------------ //
 
 const initialState = {
-    likedPosts: {},
+	likedPosts: {},
 	postLikesById: [],
 	postLikes: {},
+	total_likes: 0,
 };
 
 const postLikesReducer = (state = initialState, action) => {
@@ -111,7 +117,8 @@ const postLikesReducer = (state = initialState, action) => {
 
 	switch (action.type) {
 		case LOAD_POST_LIKES:
-            newState.likedPosts = action.payload.liked_posts
+			newState.total_likes = action.payload.total_likes;
+			newState.likedPosts = action.payload.liked_posts;
 			newState.postLikesById = action.payload.post_likes_by_id;
 			newState.postLikes = action.payload.all_post_likes;
 			return newState;

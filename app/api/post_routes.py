@@ -160,7 +160,7 @@ def get_post_likes(post_id):
     post_check = Post.query.get(post_id)
     if post_check == None:
         return {"errors": ["Post does not exist."]}, 404 
-        
+
     post_likes = PostLike.query.filter(PostLike.post_id == post_id).all()
     return return_post_likes(post_likes)
 
@@ -171,16 +171,16 @@ def handle_like_on_post(post_id):
     user_id = int(current_user.get_id())
     
     # check if user has a like/dislike on the post already
-    like_check = PostLike.query.filter(PostLike.post_id == post_id, PostLike.user_id == user_id).first()    
+    existing_like = PostLike.query.filter(PostLike.post_id == post_id, PostLike.user_id == user_id).first()    
     
     # get form data sent by user
     form = LikeForm()
     form['csrf_token'].data = request.cookies['csrf_token']
     request_like_value = form.data["like_status"]
     
-    # POST: if like/dislike on post doesn't exist, create the like or dislike as a new row
-    if like_check == None:
-        if form.validate_on_submit():
+    if form.validate_on_submit():
+        # POST: if like/dislike on post doesn't exist, create the like or dislike as a new row
+        if existing_like == None:
             new_like = PostLike(
                 like_status = request_like_value,
                 post_id = post_id,
@@ -190,33 +190,37 @@ def handle_like_on_post(post_id):
             db.session.commit()
             
             return return_post_likes([new_like])
+
+        # if like/dislike already exists for post, manipulate the currently existing row in the database
+        #   DELETE: if liking a liked post (or disliking a disliked post), delete existing row
+        #   PUT: if liking a disliked post (or vice versa), update existing row
+        else:
+            curr_like_status = existing_like.like_status
+            deleting_like = True if request_like_value == curr_like_status else False
     
-    # if like/dislike already exists for post, manipulate the currently existing row in the database
-    # exact manipulation depends on the action done by the user
-    else:
-        curr_like_status = like_check.like_status
-        deleting_like = True if request_like_value == curr_like_status else False
-        
-        if form.validate_on_submit():
             # DELETE: liking a liked post or disliking a disliked post, delete the existing row to undo the like/dislike
             if deleting_like == True:
-                if like_check.user_id != user_id:
+                if existing_like.user_id != user_id:
                     return {"errors": ["You do not have permission to delete this like/dislike"]}, 403
                 
-                db.session.delete(like_check)
+                db.session.delete(existing_like)
                 db.session.commit()
                 
+                print('booba')
                 return {
-                    "id": like_check.id,
-                    "message": "Like/dislike on post successfully deleted"
+                    "id": existing_like.id,
+                    "message": "Like/dislike on post successfully deleted",
+                    "like_status": None
                 }
                 
             # PUT: liking a disliked post or disliking a liked post, edit the existing row to change like value
             else:
-                if like_check.user_id != user_id:
+                if existing_like.user_id != user_id:
                     return {"errors": ["You do not have permission to edit this like/dislike"]}, 403
                 
-                like_check.like_status = request_like_value
+                existing_like.like_status = request_like_value                
                 db.session.commit()
-                return return_post_likes([like_check])
+                
+                return return_post_likes([existing_like])
+            
     return {"errors": validation_error_message(form.errors)}, 401

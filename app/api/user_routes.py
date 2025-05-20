@@ -124,7 +124,7 @@ def current_user_post_likes(post_id):
     post_likes = PostLike.query.filter(PostLike.post_id == post_id, PostLike.user_id == user_id).all()
     return return_post_likes(post_likes)
 
-# Get like status of a post by current user
+# Get like status of all posts by current user
 @user_routes.route("/current/posts/all/likes")
 @login_required
 def current_user_posts_likes():

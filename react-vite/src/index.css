@@ -164,7 +164,7 @@ body #signup-modal-main-container {
 
 /* ------------ temporary testing ------------ */
 .orange {
-	border: 1px solid red;
+	/* border: 1px solid red; */
 	background-color: orange;
 
 	z-index: 10000;

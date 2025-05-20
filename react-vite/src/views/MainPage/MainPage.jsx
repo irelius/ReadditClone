@@ -25,14 +25,12 @@ export default function MainPage() {
 
 	const posts = useSelector((state) => state.post.posts);
 	const postsById = useSelector((state) => state.post.postsById);
-	const postLikes = useSelector((state) => state.postLikes);
-
-	console.log("booba 123", postLikes);
+	const userPostLikes = useSelector((state) => state.postLikes);
 
 	return load ? (
 		<div>
 			{postsById.map((el, i) => {
-				return <SinglePost post={posts[el]} postLike={postLikes.likedPosts[el]} key={i} />;
+				return <SinglePost post={posts[el]} likeStatus={userPostLikes.likedPosts[el]} key={i} />;
 			})}
 		</div>
 	) : (

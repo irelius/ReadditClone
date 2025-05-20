@@ -89,14 +89,6 @@ const NavBar = () => {
 
 			{currUser ? (
 				<div>
-					<section
-						onClick={() => {
-							dispatch(logout());
-							setOpenLoginModal(false);
-							setOpenSignupModal(false);
-						}}>
-						logout
-					</section>
 					<div className="navbar-profile-main-container">
 						<section className="navbar-profile-menu-container">
 							<button className="navbar-profile-menu-button" onClick={() => setOpenProfileMenu((prev) => !prev)}>
