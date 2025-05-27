@@ -18,19 +18,21 @@ export default function MainPage() {
 	const [openModal, setOpenModal] = useState(false);
 
 	useEffect(() => {
-		dispatch(loadPostsThunk());
+        dispatch(loadPostsThunk());
 		dispatch(loadCurrentUserAllPostLikesThunk());
 		setLoad(true);
 	}, []);
 
 	const posts = useSelector((state) => state.post.posts);
 	const postsById = useSelector((state) => state.post.postsById);
-	const userPostLikes = useSelector((state) => state.postLikes);
+	const userPostLikes = useSelector((state) => state.postLike.likedPosts);
 
-	return load ? (
+    return load ? (
 		<div>
 			{postsById.map((el, i) => {
-				return <SinglePost post={posts[el]} likeStatus={userPostLikes.likedPosts[el]} key={i} />;
+				// const likeStatus = userPostLikes.likedPosts[el]
+				let likeStatus = el in userPostLikes ? userPostLikes[el].like_status : null;
+				return <SinglePost post={posts[el]} likeStatus={likeStatus} key={i} />;
 			})}
 		</div>
 	) : (

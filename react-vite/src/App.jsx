@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { authenticate } from "./redux/session";
 import MainPage from "./views/MainPage";
 import NavBar from "./components/NavBar";
+import TestPage from "./views/TestPage"
 // import SignUpForm from "./components/Modals/SignUpModal/SignUpForm";
 
 export default function App() {
@@ -24,9 +25,9 @@ export default function App() {
 					<Routes>
 						<Route exact path="/" element={<MainPage />} />
 					</Routes>
-					{/* <Routes>
-						<Route exact path="/test" element={<SignUpForm />} />
-					</Routes> */}
+					<Routes>
+						<Route exact path="/test" element={<TestPage />} />
+					</Routes>
 				</div>
 			</>
 		)

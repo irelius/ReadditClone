@@ -1,7 +1,7 @@
 from flask import Blueprint
 from flask_login import current_user, login_required
 from app.models import db, User, UserSubreddit, Post, Comment, CommentLike, PostLike
-from app.helper import return_comments, return_posts, return_users, return_post_likes, return_comment_likes, return_user_subs
+from app.helper import return_comments, return_posts, return_users, return_comment_likes, return_user_subs
 from sqlalchemy.orm import joinedload
 
 user_routes = Blueprint('users', __name__)
@@ -101,36 +101,73 @@ def current_user_posts():
 
 
 # ----------------------------------------- Post Likes stuff -----------------------------------------
-# Get all likes made to posts by specific user
-@user_routes.route("/<int:user_id>/post_likes")
+# Get a specific post liked/dislike status by current user
+@user_routes.route("/current/posts/<int:post_id>/likes")
+@login_required
+def current_user_post_likes(post_id):
+    user_id = int(current_user.get_id()) 
+    
+    post_check = Post.query.options(joinedload(Post.post_likes), joinedload(Post.comments), joinedload(Post.images), joinedload(Post.users), joinedload(Post.subreddits)).get(post_id)
+    if post_check == None:
+        return {"errors": ["Post does not exist."]}, 404
+    
+    post_like = PostLike.query.options(joinedload(PostLike.posts)).filter(PostLike.post_id == post_id, PostLike.user_id == user_id).first()
+    
+    liked_posts_data = {
+        "liked_posts_by_id": [],
+        "liked_posts": {}
+    }
+    
+    if post_like == None:
+        return liked_posts_data
+
+    for post_like in [post_like]:
+        liked_posts_data["liked_posts_by_id"].append(post_like.post_id)
+        liked_posts_data["liked_posts"][post_like.post_id] = post_like.to_dict()
+    
+    return liked_posts_data
+
+
+# Get all posts liked/disliked by current user
+@user_routes.route("/current/posts/all/likes")
+@login_required
+def current_user_posts_likes():
+    user_id = int(current_user.get_id())
+    
+    post_likes = PostLike.query.options(joinedload(PostLike.posts)).filter(PostLike.user_id == user_id).all()
+    
+    liked_posts_data = {
+        "liked_posts_by_id": [],
+        "liked_posts": {},
+    }
+    
+    for post_like in post_likes:
+        liked_posts_data["liked_posts_by_id"].append(post_like.post_id)
+        liked_posts_data["liked_posts"][post_like.post_id] = post_like.to_dict()
+    
+    return liked_posts_data
+
+
+# Get all post likes made by specific user
+@user_routes.route("/<int:user_id>/posts/all/likes")
 def user_post_likes(user_id):
     user_check = User.query.get(user_id)
     if user_check == None:
         return {"errors": ["User does not exist"]}, 404
     
-    post_likes = PostLike.query.filter(PostLike.user_id == user_id).all()
-    return return_post_likes(post_likes)
-
-# Get like status of a post by current user
-@user_routes.route("/current/posts/<int:post_id>/likes")
-@login_required
-def current_user_post_likes(post_id):
-    user_id = int(current_user.get_id())    
-    post_check = Post.query.options(joinedload(Post.post_likes), joinedload(Post.comments), joinedload(Post.images), joinedload(Post.users), joinedload(Post.subreddits)).get(post_id)
+    post_likes = PostLike.query.options(joinedload(PostLike.posts)).filter(PostLike.user_id == user_id).all()
     
-    if post_check == None:
-        return {"errors": ["Post does not exist."]}, 404
-        
-    post_likes = PostLike.query.filter(PostLike.post_id == post_id, PostLike.user_id == user_id).all()
-    return return_post_likes(post_likes)
+    liked_posts_data = {
+        "liked_posts_by_id": [],
+        "liked_posts": {},
+    }
+    
+    for post_like in post_likes:
+        liked_posts_data["liked_posts_by_id"].append(post_like.post_id)
+        liked_posts_data["liked_posts"][post_like.post_id] = post_like.to_dict()
+    
+    return liked_posts_data
 
-# Get like status of all posts by current user
-@user_routes.route("/current/posts/all/likes")
-@login_required
-def current_user_posts_likes():
-    user_id = int(current_user.get_id())    
-    post_likes = PostLike.query.filter(PostLike.user_id == user_id).all()
-    return return_post_likes(post_likes)
 
 
 

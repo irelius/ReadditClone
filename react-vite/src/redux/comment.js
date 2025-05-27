@@ -1,7 +1,7 @@
 // ------------------------------- ACTIONS ------------------------------- //
 const LOAD_COMMENTS = "LOAD_COMMENTS";
 const CREATE_COMMENT = "CREATE_COMMENT";
-const PUT_COMMENT = "PUT_COMMENT";
+const UPDATE_COMMENT = "PUT_COMMENT";
 const DELETE_COMMENT = "DELETE_COMMENT";
 const ERROR_COMMENT = "ERROR_COMMENT";
 
@@ -24,7 +24,7 @@ export const createComment = (comment) => {
 // Update a comment
 export const updateComment = (comment) => {
 	return {
-		type: PUT_COMMENT,
+		type: UPDATE_COMMENT,
 		payload: comment,
 	};
 };
@@ -164,7 +164,7 @@ const commentReducer = (state = initialState, action) => {
 			newState.commentsById.push(commentId);
 			newState.comments[commentId] = action.payload.all_comments;
 			return newState;
-		case PUT_COMMENT:
+		case UPDATE_COMMENT:
 			newState.comments[commentId] = action.payload.all_comments;
 			return newState;
 		case DELETE_COMMENT:

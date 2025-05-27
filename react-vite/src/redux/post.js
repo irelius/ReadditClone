@@ -1,7 +1,7 @@
 // ------------------------------- ACTIONS ------------------------------- //
 const LOAD_POSTS = "LOAD_POSTS";
 const CREATE_POST = "CREATE_POST";
-const PUT_POST = "PUT_POST";
+const UPDATE_POST = "PUT_POST";
 const DELETE_POST = "DELETE_POST";
 const ERROR_POST = "ERROR_POST";
 
@@ -24,7 +24,7 @@ export const createPost = (post) => {
 // Update a post
 export const updatePost = (post) => {
 	return {
-		type: PUT_POST,
+		type: UPDATE_POST,
 		payload: post,
 	};
 };
@@ -148,7 +148,7 @@ const postReducer = (state = initialState, action) => {
 			newState.postsById.push(postId);
 			newState.posts[postId] = action.payload.all_posts;
 			return newState;
-		case PUT_POST:
+		case UPDATE_POST:
 			newState.posts[postId] = action.payload.all_posts;
 			return newState;
 		case DELETE_POST:

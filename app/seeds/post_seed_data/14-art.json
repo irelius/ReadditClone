@@ -10,5 +10,11 @@
         "body": "I've been experimenting with using shadows in my artwork to create contrast and mood. There's something about playing with light and dark that brings so much emotion to a piece. Anyone else enjoy working with shadow in their art?",
         "subreddit_id": 14,
         "user_id": 4
+    },
+        {
+        "title": "Ghost Post",
+        "body": "This is a ghost post. Made by user 1 and belongs to subreddit 1, but it has no likes or comments",
+        "subreddit_id": 1,
+        "user_id": 1
     }
 ]

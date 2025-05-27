@@ -15,11 +15,13 @@ class Post(db.Model):
     # TODO: add in a video functionality
 
     # One to Many Relationships, Unidirectional FROM Post
-    post_likes = db.relationship("PostLike", cascade="all, delete")
     comments = db.relationship("Comment", cascade="all, delete")
     images = db.relationship("Image", cascade="all, delete")
     
-    # One to Many relationship, Bidirectional
+    # One to Many relationship, Bidirectional FROM Post
+    post_likes = db.relationship("PostLike", back_populates="posts", cascade="all, delete")
+    
+    # One to Many relationship, Bidirectional TO Post
     users = db.relationship("User", back_populates="posts")
     subreddits = db.relationship("Subreddit", back_populates="posts")
 
@@ -34,11 +36,22 @@ class Post(db.Model):
         total = likes - dislikes
         return likes, dislikes, total
 
-    def test_comments(self):
+    def simple_to_dict(self):
+        likes, dislikes, total = self.calc_likes()            
+        
         return {
             "id": self.id,
-            "comments": {comment.id: comment.to_dict() for comment in self.comments }
+            "user_id": self.user_id,
+            "subreddit_id": self.subreddit_id,
+            "title": self.title,
+            "body": self.body,
+            "likes": likes,
+            "dislikes": dislikes,
+            "total_likes": total,
+            "created_at": self.created_at,
+            "updated_at": self.updated_at,
         }
+
 
     def to_dict(self):
         likes, dislikes, total = self.calc_likes()
@@ -48,7 +61,6 @@ class Post(db.Model):
             "images": {}
         }
 
-        
         for x in self.images:
             image = x.to_dict()
             id = image["id"]

@@ -1,6 +1,6 @@
 // ------------------------------- ACTIONS ------------------------------- //
 const LOAD_SUBREDDITS = "LOAD_SUBREDDITS";
-const PUT_SUBREDDIT = "PUT_SUBREDDIT";
+const UPDATE_SUBREDDIT = "PUT_SUBREDDIT";
 const CREATE_SUBREDDIT = "CREATE_SUBREDDIT";
 const DELETE_SUBREDDIT = "DELETE_SUBREDDIT";
 const ERROR_SUBREDDIT = "ERROR_SUBREDDIT";
@@ -21,7 +21,7 @@ export const createSubreddit = (subreddit) => {
 
 export const updateSubreddit = (subreddit) => {
 	return {
-		type: PUT_SUBREDDIT,
+		type: UPDATE_SUBREDDIT,
 		payload: subreddit,
 	};
 };
@@ -178,7 +178,7 @@ const subredditReducer = (state = subredditState, action) => {
 			newState.subreddits = action.payload.all_subreddits;
 
 			return newState;
-		case PUT_SUBREDDIT:
+		case UPDATE_SUBREDDIT:
 			newState.subredditsById = [subredditId];
 			newState.subreddits = action.payload.all_subreddits;
 

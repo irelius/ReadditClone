@@ -103,32 +103,19 @@ def return_posts(posts):
 
 #  -------------------------- Post Likes Helper Function --------------------------
 # returns "post_likes_by_id" and "all_post_likes"
-def return_post_likes(post_likes):
+def return_post_likes(post_likes, action_type):    
     like_info = {
-        "liked_posts": {},
+        "action_type": action_type,
         "post_likes_by_id": [],
         "all_post_likes": {},
-        "total_likes": 0
     }
     
     if len(post_likes) == 0:
         return like_info
     
-    if post_likes[0] == None:
-        return {"errors": ["Like on post does not exist"]}, 404
-    
-    likes = 0
-    dislikes = 0
     for post_like in post_likes:
-        if post_like.like_status == "like": 
-            likes += 1
-        elif post_like.like_status == "dislike":
-            dislikes += 1
-            
-        like_info["liked_posts"][post_like.post_id] = post_like.like_status
         like_info["post_likes_by_id"].append(post_like.id)
         like_info["all_post_likes"][post_like.id] = post_like.to_dict()
-        like_info["total_likes"] = likes - dislikes
     
     return like_info
 

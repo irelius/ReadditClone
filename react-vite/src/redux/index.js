@@ -17,9 +17,9 @@ const rootReducer = combineReducers({
     session: sessionReducer,
     subreddit: subredditReducer,
     post: postReducer,
-    postLikes: postLikesReducer,
+    postLike: postLikesReducer,
     comment: commentReducer,
-    commentLikes: commentLikesReducer
+    commentLike: commentLikesReducer
 });
 
 let enhancer;

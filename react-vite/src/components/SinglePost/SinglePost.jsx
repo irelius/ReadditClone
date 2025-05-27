@@ -7,7 +7,7 @@ import en from "javascript-time-ago/locale/en";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loadPostCommentsThunk } from "../../redux/comment";
-import { handlePostLikesThunk, loadLikesPostThunk } from "../../redux/postLike";
+import { handlePostLikesThunk } from "../../redux/postLike";
 
 export default function SinglePost({ post, likeStatus = null }) {
 	const dispatch = useDispatch();
@@ -18,49 +18,59 @@ export default function SinglePost({ post, likeStatus = null }) {
 
 	const [load, setLoad] = useState(false);
 	const [imageIndex, setImageIndex] = useState(0);
-	const [commentsCount, setCommentsCount] = useState(0);
+	const [commentsCount, setCommentsCount] = useState(post.comments_count);
 	const [postLikeStatus, setPostLikeStatus] = useState(likeStatus);
-	const [likesCount, setLikesCount] = useState(millify(post.total_likes));
+	const [likesCount, setLikesCount] = useState(post.total_likes);
+	const [likeError, setLikeError] = useState(null);
 
 	useEffect(() => {
 		if (post.id) {
-			// setCommentsCount(millify(post.comments_count));
 			setLoad(true);
 		}
 	}, []);
-
-	// // millify the comment counts
-	// useEffect(() => {
-	// 	const commentsCount = millify(post.comments_count);
-	// 	setCommentsCount(commentsCount);
-	// }, [commentsCount]);
 
 	const subreddit = post.subreddits;
 	const imagesById = post.images.images_by_id;
 	const images = post.images.images;
 
-	const handlePostLike = (status) => {
-		dispatch(handlePostLikesThunk(status, post.id)).then((res) => {
-			if (res.like_status !== null) {
-                const newLikeStatus = res.total_likes === 1 ? "like" : "dislike"
-				setPostLikeStatus(newLikeStatus);
-			} else {
-				setPostLikeStatus(res.like_status);
-			}
-			dispatch(loadLikesPostThunk(post.id)).then((res) => {
-				setLikesCount(millify(res));
-			});
-		});
-	};
-
-	// postLikeStatus = useSelector((state) => state.postLikes.likedPosts)[post.id];
-
+	// function to handle image rotation
 	const imageRotation = (dir) => {
 		if (dir === "left") {
 			setImageIndex((prev) => Math.max(prev - 1, 0));
 		} else if (dir === "right") {
 			setImageIndex((prev) => Math.min(prev + 1, imagesById.length - 1));
 		}
+	};
+
+	// handle liking a post. done with optimistic UI and backend confirmation
+	const handlePostLike = (action) => {
+		dispatch(handlePostLikesThunk(action, post.id)).then((res) => {
+			if (res) {
+				const likeAdjustments = {
+					like: {
+						like: -1,
+						dislike: -2,
+					},
+					dislike: {
+						like: 2,
+						dislike: 1,
+					},
+					neutral: {
+						like: 1,
+						dislike: -1,
+					},
+				};
+
+				const adjustment = postLikeStatus === null ? 0 : likeAdjustments[postLikeStatus][action];
+				setLikesCount((prev) => prev + adjustment);
+
+				const newStatus = postLikeStatus === action ? "neutral" : action;
+				setPostLikeStatus(newStatus);
+			} else {
+				if (action === "like") setLikeError("Oops. There was an error liking this post.");
+				else setLikeError("Oops. There was an error disliking this post.");
+			}
+		});
 	};
 
 	return load ? (
@@ -115,7 +125,7 @@ export default function SinglePost({ post, likeStatus = null }) {
 							className={`pointer vote-arrow arrow-up-${postLikeStatus === "like"} fa-regular fa-circle-up`}
 						/>
 					</aside>
-					<aside className="dfr aic jcc post-likes-total font-12">{likesCount}</aside>
+					<aside className="dfr aic jcc post-likes-total font-12">{millify(likesCount)}</aside>
 					<aside>
 						<i
 							onClick={() => handlePostLike("dislike")}
