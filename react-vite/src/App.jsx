@@ -6,7 +6,8 @@ import { useDispatch } from "react-redux";
 import { authenticate } from "./redux/session";
 import MainPage from "./views/MainPage";
 import NavBar from "./components/NavBar";
-import TestPage from "./views/TestPage"
+import TestPage from "./views/TestPage";
+import PostPage from "./views/PostPage/PostPage";
 // import SignUpForm from "./components/Modals/SignUpModal/SignUpForm";
 
 export default function App() {
@@ -27,6 +28,9 @@ export default function App() {
 					</Routes>
 					<Routes>
 						<Route exact path="/test" element={<TestPage />} />
+					</Routes>
+					<Routes>
+						<Route exact path="/r/:subredditName/:postId" element={<PostPage />} />
 					</Routes>
 				</div>
 			</>

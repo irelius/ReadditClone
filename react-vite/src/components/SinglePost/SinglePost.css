@@ -6,6 +6,14 @@
 	width: 50em;
 
 	gap: 0.5em;
+
+    border-radius: 1em;
+    padding: 0.2em 1em 0.2em 1em;
+}
+
+.single-post-container:hover {
+    background-color: #181C1F;
+    cursor: pointer;
 }
 
 /* CSS - SinglePost - top row section (logo, subreddit, post date) */
@@ -125,11 +133,4 @@
 
 .comments-container:hover {
     background-color: #333d42
-}
-
-/* CSS - SinglePost - last section, bottom border line */
-.post-border {
-	margin-top: 0.5em;
-	margin-bottom: 0.5em;
-	border-bottom: 1px solid #26282a;
 }

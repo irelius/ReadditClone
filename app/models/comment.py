@@ -27,6 +27,8 @@ class Comment(db.Model):
     # Is this relationship necessary? Maybe for some advanced feature of searching for a comment within a subreddit
     subreddit_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("subreddits.id")), nullable=False)
     
+    # One to Many relationship, Bidirectional TO Comment
+    users = db.relationship("User", back_populates="comments")
     
     
     def calc_likes(self):
@@ -41,6 +43,7 @@ class Comment(db.Model):
         return {
             "id": self.id,
             "user_id": self.user_id,
+            "users": self.users.safe_to_dict(),
             "post_id": self.post_id,
             "subreddit_id": self.subreddit_id,
             "body": self.body,

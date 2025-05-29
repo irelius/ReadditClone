@@ -143,7 +143,6 @@ export default function SinglePost({ post, likeStatus = null }) {
 				</aside>
 				{/* <aside>share</aside> */}
 			</section>
-			<section className="post-border"></section>
 		</div>
 	) : (
 		<></>

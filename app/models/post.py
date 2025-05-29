@@ -42,6 +42,7 @@ class Post(db.Model):
         return {
             "id": self.id,
             "user_id": self.user_id,
+            "users": self.users.safe_to_dict(),
             "subreddit_id": self.subreddit_id,
             "title": self.title,
             "body": self.body,

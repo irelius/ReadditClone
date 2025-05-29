@@ -10,15 +10,17 @@ import SinglePost from "../../components/SinglePost/SinglePost";
 import { useDispatch, useSelector } from "react-redux";
 import { loadPostsThunk } from "../../redux/post";
 import { loadCurrentUserAllPostLikesThunk } from "../../redux/postLike";
+import { useNavigate } from "react-router-dom";
 
 export default function MainPage() {
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 
 	const [load, setLoad] = useState(false);
 	const [openModal, setOpenModal] = useState(false);
 
 	useEffect(() => {
-        dispatch(loadPostsThunk());
+		dispatch(loadPostsThunk());
 		dispatch(loadCurrentUserAllPostLikesThunk());
 		setLoad(true);
 	}, []);
@@ -27,12 +29,23 @@ export default function MainPage() {
 	const postsById = useSelector((state) => state.post.postsById);
 	const userPostLikes = useSelector((state) => state.postLike.likedPosts);
 
-    return load ? (
+	const redirectToPostPage = (e, postId, subredditName) => {
+		e.preventDefault();
+		e.stopPropagation();
+		return navigate(`/r/${subredditName}/${postId}`);
+	};
+
+	return load ? (
 		<div>
 			{postsById.map((el, i) => {
-				// const likeStatus = userPostLikes.likedPosts[el]
-				let likeStatus = el in userPostLikes ? userPostLikes[el].like_status : null;
-				return <SinglePost post={posts[el]} likeStatus={likeStatus} key={i} />;
+				const likeStatus = el in userPostLikes ? userPostLikes[el].like_status : null;
+				const subredditName = posts[el].subreddits.name;
+				return (
+					<div key={i} onClick={(e) => redirectToPostPage(e, el, subredditName)}>
+						<SinglePost post={posts[el]} likeStatus={likeStatus} />
+						<section className="post-border" />
+					</div>
+				);
 			})}
 		</div>
 	) : (
