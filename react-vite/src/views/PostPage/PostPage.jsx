@@ -28,7 +28,7 @@ export default function PostPage() {
     const commentsById = useSelector(state => state.comment.commentsById)
 
 	return load && post && comments ? (
-		<div>
+		<div className="post-page-container font-white">
 			<section>
 				<PostSection post={post} />
 			</section>

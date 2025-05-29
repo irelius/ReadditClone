@@ -17,31 +17,24 @@ export default function MainPage() {
 	const navigate = useNavigate();
 
 	const [load, setLoad] = useState(false);
-	const [openModal, setOpenModal] = useState(false);
+	// const [openModal, setOpenModal] = useState(false);
 
 	useEffect(() => {
 		dispatch(loadPostsThunk());
 		dispatch(loadCurrentUserAllPostLikesThunk());
-		setLoad(true);
+        setLoad(true);
 	}, []);
 
 	const posts = useSelector((state) => state.post.posts);
 	const postsById = useSelector((state) => state.post.postsById);
 	const userPostLikes = useSelector((state) => state.postLike.likedPosts);
 
-	const redirectToPostPage = (e, postId, subredditName) => {
-		e.preventDefault();
-		e.stopPropagation();
-		return navigate(`/r/${subredditName}/${postId}`);
-	};
-
 	return load ? (
 		<div>
-			{postsById.map((el, i) => {
+			{postsById.map((el) => {
 				const likeStatus = el in userPostLikes ? userPostLikes[el].like_status : null;
-				const subredditName = posts[el].subreddits.name;
 				return (
-					<div key={i} onClick={(e) => redirectToPostPage(e, el, subredditName)}>
+					<div key={el}>
 						<SinglePost post={posts[el]} likeStatus={likeStatus} />
 						<section className="post-border" />
 					</div>

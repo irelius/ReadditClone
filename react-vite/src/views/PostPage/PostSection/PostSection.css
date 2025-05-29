@@ -1,0 +1,28 @@
+/* CSS - PostSection - main container stuff */
+.post-section-container {
+	/* nothing for now */
+}
+
+/* CSS - PostSection - subreddit icon */
+.subreddit-icon {
+	height: 2em;
+	width: 2em;
+
+	border-radius: 100%;
+	background-color: #ff4500;
+}
+
+/* CSS - PostSection - images icon */
+.post-section-image-container {
+    display: flex;
+	justify-content: space-between;
+    
+	padding-left: 1.5em;
+	padding-right: 1.5em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    
+	border-radius: 1.5em;
+    
+	background-color: black;
+}

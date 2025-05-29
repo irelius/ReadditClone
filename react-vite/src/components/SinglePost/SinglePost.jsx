@@ -8,9 +8,13 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loadPostCommentsThunk } from "../../redux/comment";
 import { handlePostLikesThunk } from "../../redux/postLike";
+import { useNavigate } from "react-router-dom";
+
+import redirectToPostPage from "../../helper/redirectToPostPage";
 
 export default function SinglePost({ post, likeStatus = null }) {
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 
 	TimeAgo.addLocale(en);
 	const timeAgo = new TimeAgo("en-US");
@@ -43,7 +47,8 @@ export default function SinglePost({ post, likeStatus = null }) {
 	};
 
 	// handle liking a post. done with optimistic UI and backend confirmation
-	const handlePostLike = (action) => {
+	const handlePostLike = (e, action) => {
+		e.stopPropagation();
 		dispatch(handlePostLikesThunk(action, post.id)).then((res) => {
 			if (res) {
 				const likeAdjustments = {
@@ -61,7 +66,8 @@ export default function SinglePost({ post, likeStatus = null }) {
 					},
 				};
 
-				const adjustment = postLikeStatus === null ? likeAdjustments["neutral"][action] : likeAdjustments[postLikeStatus][action];
+				const adjustment =
+					postLikeStatus === null ? likeAdjustments["neutral"][action] : likeAdjustments[postLikeStatus][action];
 				setLikesCount((prev) => prev + adjustment);
 
 				const newStatus = postLikeStatus === action ? "neutral" : action;
@@ -74,7 +80,11 @@ export default function SinglePost({ post, likeStatus = null }) {
 	};
 
 	return load ? (
-		<div className="single-post-container">
+		<div
+			className="single-post-container"
+			onClick={(e) => {
+				redirectToPostPage(e, navigate, post.id, subreddit.name);
+			}}>
 			{/* Single Post - top section (subreddit name & icon, post date) */}
 			<section className="dfr aic gap-5px">
 				<aside className="reddit-logo-container dfr jcc aic color-white">
@@ -97,13 +107,19 @@ export default function SinglePost({ post, likeStatus = null }) {
 					<section className="post-image-container dfr aic">
 						<aside
 							className={`image-arrow-container image-arrow-${imageIndex === 0}`}
-							onClick={() => imageRotation("left")}>
+							onClick={(e) => {
+								e.stopPropagation();
+								imageRotation("left");
+							}}>
 							<i className={`fa-solid fa-chevron-left fa-xl`}></i>
 						</aside>
 						<img className="post-image" src={`${images[imagesById[imageIndex]].image_url}`} />
 						<aside
 							className={`image-arrow-container image-arrow-${imageIndex === imagesById.length - 1}`}
-							onClick={() => imageRotation("right")}>
+							onClick={(e) => {
+								e.stopPropagation();
+								imageRotation("right");
+							}}>
 							<i className={`fa-solid fa-chevron-right fa-xl`}></i>
 						</aside>
 					</section>
@@ -118,17 +134,17 @@ export default function SinglePost({ post, likeStatus = null }) {
 			{/* SinglePost - vote and comment section */}
 			<section className="dfr aic gap-1em post-bottom-bar">
 				{/* vote aside */}
-				<aside className="dfr aic jcc font-white background-gray vote-container">
+				<aside className={`dfr aic jcc font-white background-gray vote-container post-${postLikeStatus}`}>
 					<aside>
 						<i
-							onClick={() => handlePostLike("like")}
+							onClick={(e) => handlePostLike(e, "like")}
 							className={`pointer vote-arrow arrow-up-${postLikeStatus === "like"} fa-regular fa-circle-up`}
 						/>
 					</aside>
-					<aside className="dfr aic jcc post-likes-total font-12">{millify(likesCount)}</aside>
+					<aside className={`dfr aic jcc post-likes-total font-12`}>{millify(likesCount)}</aside>
 					<aside>
 						<i
-							onClick={() => handlePostLike("dislike")}
+							onClick={(e) => handlePostLike(e, "dislike")}
 							className={`pointer vote-arrow arrow-down-${postLikeStatus === "dislike"} fa-regular fa-circle-down`}
 						/>
 					</aside>

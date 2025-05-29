@@ -6,8 +6,6 @@ import millify from "millify";
 import en from "javascript-time-ago/locale/en";
 
 export default function PostSection({ post }) {
-	console.log("booba", post);
-
 	TimeAgo.addLocale(en);
 	const timeAgo = new TimeAgo("en-US");
 	const time = timeAgo.format(new Date(post.created_at), "round");
@@ -30,28 +28,30 @@ export default function PostSection({ post }) {
 	};
 
 	return (
-		<div>
-			<section>
-				<aside>reddit logo</aside>
-				<aside>
+		<div className="dfc post-section-container gap-05em">
+			{/* PostSection - post top section (subreddit and poster info) */}
+			<section className="dfr gap-05em">
+				<aside className="subreddit-icon dfr jcc aic pointer">
+					<i className="fa-brands fa-reddit-alien fa-xl"></i>
+				</aside>
+				<aside className="dfc jcc gap-3px">
 					<section className="dfr aic gap-5px">
-						<aside className="reddit-logo-container dfr jcc aic color-white">
-							<i className="fa-brands fa-reddit-alien fa-lg"></i>
-						</aside>
-						<aside className="font-12 font-light-gray">r/{subreddit}</aside>
-						<aside className="dfr aic">
+						<aside className="font-12 font-light-gray pointer">r/{subreddit}</aside>
+						<aside className="dfr aic"> 
 							<i className="fa-solid fa-circle dot font-gray"></i>
 						</aside>
 						<aside className="font-12 font-gray">{time}</aside>
 					</section>
-                    <section>
-                        {poster}
-                    </section>
+					<section className="font-12 pointer">{poster}</section>
 				</aside>
 			</section>
-			<section>{title}</section>
+
+			{/* PostSection - post title */}
+			<section className="font-bold font-24">{title}</section>
+
+			{/* PostSection - image section (if images exist) */}
 			{imagesById.length > 0 ? (
-				<section>
+				<section className="post-section-image-container dfr aic">
 					<aside
 						className={`image-arrow-container image-arrow-${imageIndex === 0}`}
 						onClick={() => imageRotation("left")}>
@@ -67,7 +67,11 @@ export default function PostSection({ post }) {
 			) : (
 				<></>
 			)}
-			<section>{post.body}</section>
+
+			{/* PostSection - post body */}
+			<section className="font-16 font-light-gray">{post.body}</section>
+
+			{/* PostSection - vote and comment section */}
 			<section>post likes and whatnot bar</section>
 		</div>
 	);
