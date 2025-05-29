@@ -61,7 +61,7 @@ export default function SinglePost({ post, likeStatus = null }) {
 					},
 				};
 
-				const adjustment = postLikeStatus === null ? 0 : likeAdjustments[postLikeStatus][action];
+				const adjustment = postLikeStatus === null ? likeAdjustments["neutral"][action] : likeAdjustments[postLikeStatus][action];
 				setLikesCount((prev) => prev + adjustment);
 
 				const newStatus = postLikeStatus === action ? "neutral" : action;
