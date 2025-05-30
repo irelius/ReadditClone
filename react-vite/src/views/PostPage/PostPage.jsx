@@ -32,12 +32,12 @@ export default function PostPage() {
 		}
 	}, []);
 
+
+
 	const post = useSelector((state) => state.post.posts[postId]);
 	const comments = useSelector((state) => state.comment.comments);
 	const commentsById = useSelector((state) => state.comment.commentsById);
 	const userLikeStatus = useSelector((state) => state.postLike.likedPosts);
-
-	// console.log('booba', userLikeStatus)
 
 	return load && post && comments ? (
 		<div className="post-page-container font-white dfc gap-2em">

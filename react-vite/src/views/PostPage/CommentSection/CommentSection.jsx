@@ -1,8 +1,6 @@
 import "./CommentSection.css";
 
 export default function CommentSection({ comments, commentsById }) {
-	// console.log("booba", comments);
-
 	return commentsById.length > 0 ? (
 		<div>
 			{commentsById.map((el, i) => {
