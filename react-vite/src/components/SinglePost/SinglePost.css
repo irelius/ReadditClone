@@ -72,8 +72,7 @@
 /* CSS - SinglePost - post body section (text stuff) */
 
 /* CSS - SinglePost - vote and comment section */
-.post-bottom-bar > * {
-	/* background-color: orange; */
+.post-bottom-section > * {
 	height: 2em;
 	border-radius: 2em;
 }

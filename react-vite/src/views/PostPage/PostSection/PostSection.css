@@ -3,7 +3,7 @@
 	/* nothing for now */
 }
 
-/* CSS - PostSection - subreddit icon */
+/* CSS - PostSection - post info section */
 .subreddit-icon {
 	height: 2em;
 	width: 2em;
@@ -14,15 +14,95 @@
 
 /* CSS - PostSection - images icon */
 .post-section-image-container {
-    display: flex;
+	display: flex;
 	justify-content: space-between;
-    
+
 	padding-left: 1.5em;
 	padding-right: 1.5em;
-    margin-top: 1em;
-    margin-bottom: 1em;
-    
+	margin-top: 1em;
+	margin-bottom: 1em;
+
 	border-radius: 1.5em;
-    
+
 	background-color: black;
+}
+
+/* CSS - PostSection - post body section */
+.post-body-section {
+	margin-top: 0.5em;
+	margin-bottom: 1em;
+}
+
+/* CSS - PostSection - create a comment on a post section */
+.create-comment-container {
+	margin-top: 0.5em;
+}
+
+/* placeholder stuff when user hasn't clicked on the create comment section */
+.create-comment-section-false {
+	display: flex;
+	align-items: center;
+
+	height: 2.5em;
+	width: 100%;
+	border: 1px solid #2a3236;
+	border-radius: 3em;
+}
+
+.create-comment-section-false:hover {
+	background-color: #131f23;
+	border: 1px solid #898f91;
+	cursor: text;
+}
+
+.create-comment-textholder {
+	margin: 1em;
+}
+
+/* css when the user has clicked on the create comment section */
+.create-comment-section-true {
+	padding: 0.75em;
+
+	height: fit-content;
+	width: 100%;
+
+	border: 1px solid #2a3236;
+	border-radius: 1.25em;
+}
+
+/* .create-comment-section-true:focus {
+	border: 1px solid #85898a;
+} */
+
+.border-highlight-true {
+	border: 1px solid #85898a;
+}
+
+/* create comment input textarea*/
+.create-comment-input {
+	resize: vertical;
+	min-height: 2em;
+	width: 100%;
+}
+
+/* create comment section buttons */
+.create-comment-buttons-container {
+	display: flex;
+	justify-content: end;
+	gap: 0.5em;
+	margin-right: 0.5em;
+}
+
+.create-comment-cancel {
+	padding: 0.75em;
+	color: white;
+	background-color: #1a282d;
+	border-radius: 1.5em;
+}
+
+.create-comment-confirm {
+	padding: 0.75em;
+	color: white;
+	background-color: #0045ac;
+	border-radius: 1.5em;
 }

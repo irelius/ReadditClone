@@ -25,11 +25,7 @@ export default function App() {
 				<div className="navbar-height-correction">
 					<Routes>
 						<Route exact path="/" element={<MainPage />} />
-					</Routes>
-					<Routes>
 						<Route exact path="/test" element={<TestPage />} />
-					</Routes>
-					<Routes>
 						<Route exact path="/r/:subredditName/:postId" element={<PostPage />} />
 					</Routes>
 				</div>

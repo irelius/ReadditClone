@@ -22,26 +22,26 @@ export default function MainPage() {
 	useEffect(() => {
 		dispatch(loadPostsThunk());
 		dispatch(loadCurrentUserAllPostLikesThunk());
-        setLoad(true);
+		setLoad(true);
 	}, []);
 
 	const posts = useSelector((state) => state.post.posts);
 	const postsById = useSelector((state) => state.post.postsById);
 	const userPostLikes = useSelector((state) => state.postLike.likedPosts);
 
-	return load ? (
-		<div>
-			{postsById.map((el) => {
-				const likeStatus = el in userPostLikes ? userPostLikes[el].like_status : null;
-				return (
-					<div key={el}>
-						<SinglePost post={posts[el]} likeStatus={likeStatus} />
-						<section className="post-border" />
-					</div>
-				);
-			})}
-		</div>
-	) : (
-		<></>
+	return (
+		load && (
+			<div>
+				{postsById.map((el) => {
+					const likeStatus = el in userPostLikes ? userPostLikes[el].like_status : null;
+					return (
+						<div key={el}>
+							<SinglePost post={posts[el]} likeStatus={likeStatus} />
+							<section className="post-border" />
+						</div>
+					);
+				})}
+			</div>
+		)
 	);
 }
