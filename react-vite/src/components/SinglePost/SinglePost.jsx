@@ -64,6 +64,19 @@ export default function SinglePost({ post, likeStatus = null }) {
 	return (
 		load && (
 			<div
+				className="single-post-container font-white"
+				onClick={(e) => {
+					redirectToPostPage(e, navigate, post.id, subreddit.name);
+				}}>
+                <section className="font-white font-20">{post.title}</section>
+				<section>{likesCount}</section>
+			</div>
+		)
+	);
+
+	return (
+		load && (
+			<div
 				className="single-post-container"
 				onClick={(e) => {
 					redirectToPostPage(e, navigate, post.id, subreddit.name);

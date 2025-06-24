@@ -21,8 +21,8 @@ export default function MainPage() {
 
 	useEffect(() => {
 		dispatch(loadPostsThunk());
-		dispatch(loadCurrentUserAllPostLikesThunk());
-		setLoad(true);
+		dispatch(loadCurrentUserAllPostLikesThunk())
+        setLoad(true);
 	}, []);
 
 	const posts = useSelector((state) => state.post.posts);
