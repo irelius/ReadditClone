@@ -42,7 +42,7 @@ export default function PostSection({ post, postLikeStatus, setPostLikeStatus })
 	};
 
 	const handlePostLike = (e, action) => {
-		e.stopPropagation();
+		// e.stopPropagation();
 		dispatch(handlePostLikesThunk(action, post.id)).then((res) => {
 			if (res) {
 				postLikeHandlerHelper(action, setPostLikesCount, postLikeStatus, setPostLikeStatus);

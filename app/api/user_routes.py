@@ -108,6 +108,7 @@ def current_user_post_likes(post_id):
     user_id = int(current_user.get_id()) 
     
     post_check = Post.query.options(joinedload(Post.post_likes), joinedload(Post.comments), joinedload(Post.images), joinedload(Post.users), joinedload(Post.subreddits)).get(post_id)
+    
     if post_check == None:
         return {"errors": ["Post does not exist."]}, 404
     
@@ -124,7 +125,7 @@ def current_user_post_likes(post_id):
     for post_like in [post_like]:
         liked_posts_data["liked_posts_by_id"].append(post_like.post_id)
         liked_posts_data["liked_posts"][post_like.post_id] = post_like.to_dict()
-    
+
     return liked_posts_data
 
 

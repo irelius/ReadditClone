@@ -47,7 +47,9 @@ export const loadCurrentUserOnePostLikesThunk = (postId) => async (dispatch) => 
 	const data = await res.json();
 	if (res.ok) {
 		dispatch(loadLikedPosts(data));
-        return data
+        const likeId = data.liked_posts_by_id[0]
+        const likeStatus = data.liked_posts[likeId]?.like_status || "neutral"
+        return likeStatus
 	}
 	dispatch(errorPostLike);
     return

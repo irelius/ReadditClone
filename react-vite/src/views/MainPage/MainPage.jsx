@@ -20,9 +20,13 @@ export default function MainPage() {
 	// const [openModal, setOpenModal] = useState(false);
 
 	useEffect(() => {
-		dispatch(loadPostsThunk());
-		dispatch(loadCurrentUserAllPostLikesThunk())
-        setLoad(true);
+		const sendDispatches = async () => {
+			await dispatch(loadPostsThunk());
+			await dispatch(loadCurrentUserAllPostLikesThunk());
+		};
+		sendDispatches().then(() => {
+			setLoad(true);
+		});
 	}, []);
 
 	const posts = useSelector((state) => state.post.posts);
