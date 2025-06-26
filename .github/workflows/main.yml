@@ -1,5 +1,5 @@
 name: Main Branch Pull Request Protection
-run-name: ${}
+run-name: Main branch PR protection
 on:
   pull_request:
     branches:
