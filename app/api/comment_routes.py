@@ -2,7 +2,7 @@ from flask import Blueprint, request
 from flask_login import current_user, login_required
 from app.models import db, Comment, User, Subreddit, CommentLike
 from app.forms import PostCommentForm, ReplyCommentForm, UpdateCommentForm, LikeForm
-from app.helper import return_comments, return_comment_likes, validation_error_message
+from app.helper import return_comments, return_comments_flat, return_comment_likes, validation_error_message
 from sqlalchemy.orm import joinedload
 
 comment_routes = Blueprint("comments", __name__)
@@ -11,7 +11,7 @@ comment_routes = Blueprint("comments", __name__)
 @comment_routes.route("/")
 def comments_all():
     comments = Comment.query.options(joinedload(Comment.comment_likes), joinedload(Comment.replies)).all()
-    return return_comments(comments)
+    return return_comments_flat(comments)
 
 # Get specific comment by id
 @comment_routes.route("/<int:comment_id>")

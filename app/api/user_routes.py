@@ -1,7 +1,7 @@
 from flask import Blueprint
 from flask_login import current_user, login_required
 from app.models import db, User, UserSubreddit, Post, Comment, CommentLike, PostLike
-from app.helper import return_comments, return_posts, return_users, return_comment_likes, return_user_subs
+from app.helper import return_comments, return_comments_flat, return_posts, return_users, return_comment_likes, return_user_subs
 from sqlalchemy.orm import joinedload
 
 user_routes = Blueprint('users', __name__)
@@ -181,7 +181,7 @@ def users_comments(user_id):
         return {"errors": ["User does not exist"]}, 404
     
     comments = Comment.query.options(joinedload(Comment.comment_likes), joinedload(Comment.replies)).filter(Comment.user_id == user_id).all()
-    return return_comments(comments)
+    return return_comments_flat(comments)
 
 # Get comments of current user
 @user_routes.route("/current/comments")
@@ -189,7 +189,7 @@ def users_comments(user_id):
 def current_user_comments():
     user_id = int(current_user.get_id())
     comments = Comment.query.options(joinedload(Comment.comment_likes), joinedload(Comment.replies)).filter(Comment.user_id == user_id).all()
-    return return_comments(comments)
+    return return_comments_flat(comments)
 
 
 # --------------------------------------- Comment Likes stuff ---------------------------------------

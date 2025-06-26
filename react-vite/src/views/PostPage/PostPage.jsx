@@ -41,8 +41,6 @@ export default function PostPage() {
 	const commentsById = useSelector((state) => state.comment.commentsById);
 	const userLikeStatus = useSelector((state) => state.postLike.likedPosts);
 
-    console.log('booba', comments)
-
 	return (
 		load &&
 		post &&
