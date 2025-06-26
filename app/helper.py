@@ -125,13 +125,14 @@ def return_post_likes(post_likes, action_type):
 def return_comments(comments):
     if comments[0] == None:
         return {"errors": ["Comment does not exist"]}, 404
-
+    
     comment_by_id = []
     all_comments = {}
     
     for comment in comments:
-        comment_by_id.append(comment.id)
-        all_comments[comment.id] = comment.to_dict()
+        if comment.is_reply == False:
+            comment_by_id.append(comment.id)
+            all_comments[comment.id] = comment.to_dict()
 
     return {
         "comments_by_id": comment_by_id,

@@ -40,6 +40,13 @@ class Comment(db.Model):
     def to_dict(self):
         likes, dislikes, total = self.calc_likes()
 
+        replies = {}
+        replies_by_id = []
+        
+        for reply in self.replies:
+            replies_by_id.append(reply.id)
+            replies[reply.id] = reply.to_dict()
+
         return {
             "id": self.id,
             "user_id": self.user_id,
@@ -51,7 +58,8 @@ class Comment(db.Model):
             "likes": likes,
             "dislikes": dislikes,
             "total_likes": total,
-            "replies": {reply.id: reply.to_dict() for reply in self.replies},
+            "replies": replies,
+            "replies_by_id": replies_by_id,
             'created_at': self.created_at,
             'updated_at': self.updated_at
         }

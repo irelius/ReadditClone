@@ -29,7 +29,7 @@
         "user_id": 2,
         "subreddit_id": 11,
         "post_id": 43,
-        "replies_id": 63,
+        "replies_id": 65,
         "is_reply": true
     },
     {
@@ -38,7 +38,7 @@
         "user_id": 1,
         "subreddit_id": 11,
         "post_id": 43,
-        "replies_id": 64,
+        "replies_id": 66,
         "is_reply": true
     }
 ]
