@@ -64,6 +64,37 @@ export default function SinglePost({ post, likeStatus = null }) {
 	return (
 		load && (
 			<div
+				className="single-post-container font-white"
+				onClick={(e) => {
+					redirectToPostPage(e, navigate, post.id, subreddit.name);
+				}}>
+				<section className="font-white font-20">{post.title}</section>
+				{/* SinglePost - vote and comment section */}
+				<section className="dfr aic gap-1em post-bottom-section">
+					{/* vote aside */}
+					<aside className={`dfr aic jcc font-white background-gray vote-container post-${postLikeStatus}`}>
+						<aside>
+							<i
+								onClick={(e) => handlePostLike(e, "like")}
+								className={`pointer vote-arrow arrow-up-${postLikeStatus === "like"} fa-regular fa-circle-up`}
+							/>
+						</aside>
+						<aside className={`dfr aic jcc post-likes-total font-12`}>{millify(likesCount)}</aside>
+						<aside>
+							<i
+								onClick={(e) => handlePostLike(e, "dislike")}
+								className={`pointer vote-arrow arrow-down-${postLikeStatus === "dislike"} fa-regular fa-circle-down`}
+							/>
+						</aside>
+					</aside>
+				</section>
+			</div>
+		)
+	);
+
+	return (
+		load && (
+			<div
 				className="single-post-container"
 				onClick={(e) => {
 					redirectToPostPage(e, navigate, post.id, subreddit.name);
