@@ -6,7 +6,8 @@ import { useDispatch } from "react-redux";
 import { authenticate } from "./redux/session";
 import MainPage from "./views/MainPage";
 import NavBar from "./components/NavBar";
-import TestPage from "./views/TestPage"
+import TestPage from "./views/TestPage";
+import PostPage from "./views/PostPage/PostPage";
 // import SignUpForm from "./components/Modals/SignUpModal/SignUpForm";
 
 export default function App() {
@@ -24,9 +25,8 @@ export default function App() {
 				<div className="navbar-height-correction">
 					<Routes>
 						<Route exact path="/" element={<MainPage />} />
-					</Routes>
-					<Routes>
 						<Route exact path="/test" element={<TestPage />} />
+						<Route exact path="/r/:subredditName/:postId" element={<PostPage />} />
 					</Routes>
 				</div>
 			</>

@@ -1,0 +1,6 @@
+/* CSS - MainPage - last section, bottom border line */
+.post-border {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+	border-bottom: 1px solid #26282a;
+}

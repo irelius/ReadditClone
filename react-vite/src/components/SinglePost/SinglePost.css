@@ -1,3 +1,4 @@
+/* CSS - SinglePost - main container stuff */
 .single-post-container {
 	display: flex;
 	flex-direction: column;
@@ -6,6 +7,14 @@
 	width: 50em;
 
 	gap: 0.5em;
+
+	border-radius: 1em;
+	padding: 0.2em 1em 0.2em 1em;
+}
+
+.single-post-container:hover {
+	background-color: #181c1f;
+	cursor: pointer;
 }
 
 /* CSS - SinglePost - top row section (logo, subreddit, post date) */
@@ -63,8 +72,7 @@
 /* CSS - SinglePost - post body section (text stuff) */
 
 /* CSS - SinglePost - vote and comment section */
-.post-bottom-bar > * {
-	/* background-color: orange; */
+.post-bottom-section > * {
 	height: 2em;
 	border-radius: 2em;
 }
@@ -75,9 +83,9 @@
 	justify-content: center;
 	align-items: center;
 
-    gap: 3px;
-    width: fit-content;
-    max-width: 6em;
+	gap: 3px;
+	width: fit-content;
+	max-width: 6em;
 }
 
 .vote-arrow {
@@ -87,12 +95,8 @@
 	color: white;
 }
 
-.arrow-up-true {
-    color: #ff4500;
-}
-
-.arrow-down-true {
-    color: #6A5CFF;
+.vote-arrow:hover {
+    background-color: #223237;
 }
 
 .arrow-up-false:hover {
@@ -102,7 +106,15 @@
 
 .arrow-down-false:hover {
 	background-color: #333d42;
-	color: #6A5CFF;
+	color: #6a5cff;
+}
+
+.post-like {
+	background-color: #ff4500;
+}
+
+.post-dislike {
+	background-color: #6a5cff;
 }
 
 .post-likes-total {
@@ -124,12 +136,5 @@
 }
 
 .comments-container:hover {
-    background-color: #333d42
-}
-
-/* CSS - SinglePost - last section, bottom border line */
-.post-border {
-	margin-top: 0.5em;
-	margin-bottom: 0.5em;
-	border-bottom: 1px solid #26282a;
+	background-color: #333d42;
 }

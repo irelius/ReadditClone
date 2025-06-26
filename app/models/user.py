@@ -20,14 +20,13 @@ class User(db.Model, UserMixin):
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
-
     # One to Many Relationships, Unidirectional FROM User
     post_likes = db.relationship("PostLike", cascade="all, delete")
-    comments = db.relationship("Comment", cascade="all, delete")
     comment_likes = db.relationship("CommentLike", cascade="all, delete")
 
     # One to Many relationship, Bidirectional to Users
     posts = db.relationship("Post", back_populates="users", cascade="all, delete")
+    comments = db.relationship("Comment", back_populates="users", cascade="all, delete")
 
     # Many to Many Relationship. Bidirectional through join table UserSubreddit   
     subreddit_relationship = db.relationship("UserSubreddit", back_populates="user_join", cascade="all, delete")
