@@ -37,7 +37,7 @@
         "user_id": 3,
         "subreddit_id": 12,
         "post_id": 46,
-        "replies_id": 69,
+        "replies_id": 71,
         "is_reply": true
     },
     {
@@ -46,7 +46,7 @@
         "user_id": 2,
         "subreddit_id": 12,
         "post_id": 46,
-        "replies_id": 73,
+        "replies_id": 75,
         "is_reply": true
     },
     {
@@ -55,7 +55,7 @@
         "user_id": 1,
         "subreddit_id": 12,
         "post_id": 46,
-        "replies_id": 71,
+        "replies_id": 73,
         "is_reply": true
     }
 ]

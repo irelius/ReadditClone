@@ -116,8 +116,23 @@ def posts_comments(post_id):
         return {"errors": ["Post does not exist to get the comments of"]}, 404
     
     comments = Comment.query.options(joinedload(Comment.replies), joinedload(Comment.comment_likes)).filter(Comment.post_id == post_id).all()
-    return return_comments(comments)
 
+    if comments[0] == None:
+        return {"errors": ["Comment does not exist"]}, 404
+    
+    comment_by_id = []
+    all_comments = {}
+    
+    for comment in comments:
+        if comment.is_reply == False:
+            comment_by_id.append(comment.id)
+            all_comments[comment.id] = comment.to_dict()
+
+    return {
+        "comments_by_id": comment_by_id,
+        "all_comments": all_comments
+    }
+    
 
 # Create a new comment on a post
 @post_routes.route("/<int:post_id>/comments", methods=["POST"])

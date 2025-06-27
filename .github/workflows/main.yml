@@ -13,6 +13,10 @@ jobs:
         run: |
           if [[ ${GITHUB_HEAD_REF} != staging ]];
             then
+<<<<<<< HEAD
               echo "Error: Pull request to the 'main' branch must come from 'staging' branch"
+=======
+              echo "Error: Pull requests to the 'main' branch must come from 'staging' branch"
+>>>>>>> staging
               exit 1
             fi

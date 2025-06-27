@@ -37,8 +37,39 @@ class Comment(db.Model):
         total = likes - dislikes
         return likes, dislikes, total
         
+    def flat_to_dict(self):
+        likes, dislikes, total = self.calc_likes()
+        
+        replies_by_id = []
+        
+        for reply in self.replies:
+            replies_by_id.append(reply.id)
+        
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "users": self.users.safe_to_dict(),
+            "post_id": self.post_id,
+            "subreddit_id": self.subreddit_id,
+            "body": self.body,
+            "is_reply": self.is_reply,
+            "likes": likes,
+            "dislikes": dislikes,
+            "total_likes": total,
+            "replies_by_id": replies_by_id,
+            'created_at': self.created_at,
+            'updated_at': self.updated_at
+        }
+        
     def to_dict(self):
         likes, dislikes, total = self.calc_likes()
+
+        replies = {}
+        replies_by_id = []
+        
+        for reply in self.replies:
+            replies_by_id.append(reply.id)
+            replies[reply.id] = reply.to_dict()
 
         return {
             "id": self.id,
@@ -51,7 +82,8 @@ class Comment(db.Model):
             "likes": likes,
             "dislikes": dislikes,
             "total_likes": total,
-            "replies": {reply.id: reply.to_dict() for reply in self.replies},
+            "replies": replies,
+            "replies_by_id": replies_by_id,
             'created_at': self.created_at,
             'updated_at': self.updated_at
         }
