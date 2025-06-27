@@ -37,9 +37,17 @@ export const loadCommentLikesThunk = (commentId) => async (dispatch) => {
 	return dispatch(errorCommentLike(data));
 };
 
-// load like status for a comment made by current user
-export const loadCurrentUserCommentLikesThunk = (commentId) => async (dispatch) => {
+// load like status for one comment made by current user
+export const loadCurrentUserOneCommentLikesThunk = (commentId) => async (dispatch) => {
 	const res = await fetch(`/api/users/current/comments/${commentId}/likes`);
+	const data = await res.json();
+	if (res.ok) return dispatch(loadCommentLikes(res));
+	return dispatch(errorCommentLike(data));
+};
+
+// load all comment likes for all comments made by current user
+export const loadCurrentUserAllCommentsLikesThunk = (userId) => async (dispatch) => {
+	const res = await fetch(`/api/users/current/comment_likes`);
 	const data = await res.json();
 	if (res.ok) return dispatch(loadCommentLikes(res));
 	return dispatch(errorCommentLike(data));

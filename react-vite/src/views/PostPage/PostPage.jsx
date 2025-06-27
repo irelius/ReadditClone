@@ -51,7 +51,7 @@ export default function PostPage() {
 				</section>
 				{/* <section className="post-border" /> */}
 				<section>
-					<CommentSection comments={comments} commentsById={commentsById} />
+					<CommentSection comments={comments} commentsById={commentsById}/>
 				</section>
 			</div>
 		)
