@@ -14,7 +14,7 @@ import { loadPostCommentsThunk } from "../../redux/comment";
 export default function PostPage() {
 	const dispatch = useDispatch();
 	const params = useParams();
-	const subredditName = params.subredditName;
+	// const subredditName = params.subredditName;
 	const postId = Number(params.postId);
 
 	const [load, setLoad] = useState(false);
@@ -25,7 +25,7 @@ export default function PostPage() {
 			await dispatch(loadPostThunk(postId));
 			await dispatch(loadPostCommentsThunk(postId));
 			await dispatch(loadCurrentUserOnePostLikesThunk(postId)).then((res) => {
-				setPostLikeStatus((prev) => res);
+				setPostLikeStatus(res);
 			});
 		};
 
@@ -39,7 +39,7 @@ export default function PostPage() {
 	const post = useSelector((state) => state.post.posts[postId]);
 	const comments = useSelector((state) => state.comment.comments);
 	const commentsById = useSelector((state) => state.comment.commentsById);
-	const userLikeStatus = useSelector((state) => state.postLike.likedPosts);
+	// const userLikeStatus = useSelector((state) => state.postLike.likedPosts);
 
 	return (
 		load &&

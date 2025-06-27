@@ -1,10 +1,18 @@
 import "./CommentSection.css";
 
+// import { useState } from "react";
+
+import CommentNode from "../../../components/CommentNode";
+
 export default function CommentSection({ comments, commentsById }) {
 	return commentsById.length > 0 ? (
-		<div>
-			{commentsById.map((el, i) => {
-				return <div key={i}>{comments[el].body}</div>;
+		<div className="dfc gap-1em">
+			{commentsById.map((el) => {
+ 				return (
+					<div key={el}>
+						<CommentNode comment={comments[el]} />
+					</div>
+				);
 			})}
 		</div>
 	) : (
