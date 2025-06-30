@@ -15,14 +15,14 @@ post_routes = Blueprint("posts", __name__)
 # ----------------------------------------------- Post stuff -----------------------------------------------
 # Get all posts
 @post_routes.route("/")
-def posts_all():
+def posts_all():   
     posts = Post.query.options(joinedload(Post.users), joinedload(Post.subreddits), joinedload(Post.images), joinedload(Post.post_likes)).all()
     return return_posts(posts)
 
 # Get specific post
 @post_routes.route("/<int:post_id>")
 def posts_specific(post_id):
-    posts = Post.query.options(joinedload(Post.users), joinedload(Post.subreddits), joinedload(Post.images)).get(post_id)
+    posts = Post.query.options(joinedload(Post.users), joinedload(Post.subreddits), joinedload(Post.images), joinedload(Post.comments)).get(post_id)
     return return_posts([posts])
 
 # Create a post

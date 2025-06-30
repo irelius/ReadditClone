@@ -22,8 +22,8 @@ export default function PostPage() {
 
 	useEffect(() => {
 		const sendDispatches = async () => {
-			// await dispatch(loadPostThunk(postId));
-			await dispatch(loadPostCommentsThunk(postId));
+			await dispatch(loadPostThunk(postId));
+			// await dispatch(loadPostCommentsThunk(postId));
 			// await dispatch(loadCurrentUserOnePostLikesThunk(postId)).then((res) => {
 			// 	setPostLikeStatus(res);
 			// });
