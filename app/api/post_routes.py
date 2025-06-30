@@ -5,7 +5,10 @@ from app.forms import PostForm, LikeForm, PostCommentForm, UpdatePostForm
 from app.aws import (
     upload_file_to_s3, allowed_file, get_unique_filename)
 from app.helper import return_posts, return_post_likes, return_comments, validation_error_message
-from sqlalchemy.orm import joinedload
+from sqlalchemy.orm import joinedload, aliased, selectinload
+
+# a;lsdkfjal;ksdjfasdf
+from sqlalchemy import select, union_all
 
 post_routes = Blueprint("posts", __name__)
 
@@ -20,7 +23,6 @@ def posts_all():
 @post_routes.route("/<int:post_id>")
 def posts_specific(post_id):
     posts = Post.query.options(joinedload(Post.users), joinedload(Post.subreddits), joinedload(Post.images)).get(post_id)
-    
     return return_posts([posts])
 
 # Create a post
@@ -106,7 +108,6 @@ def posts_delete_specific(post_id):
         "message": "Post successfully deleted"
     }
 
-
 # ---------------------------------------------- Comment stuff ----------------------------------------------
 # Get all comments made to a post
 @post_routes.route("/<int:post_id>/comments")
@@ -116,8 +117,8 @@ def posts_comments(post_id):
         return {"errors": ["Post does not exist to get the comments of"]}, 404
     
     comments = Comment.query.options(joinedload(Comment.replies), joinedload(Comment.comment_likes)).filter(Comment.post_id == post_id).all()
-
-    if comments[0] == None:
+    
+    if len(comments) == 0:
         return {"errors": ["Comment does not exist"]}, 404
     
     comment_by_id = []

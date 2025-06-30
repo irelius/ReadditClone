@@ -3,12 +3,16 @@ import "./SingleComment.css";
 import TimeAgo from "javascript-time-ago";
 import millify from "millify";
 import en from "javascript-time-ago/locale/en";
-import { useState } from "react";
+
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 
 export default function SingleComment({ comment, depth = 1 }) {
 	if (!comment) {
 		return;
 	}
+
+    const dispatch = useDispatch()
 
 	TimeAgo.addLocale(en);
 	const timeAgo = new TimeAgo("en-US");
@@ -20,6 +24,10 @@ export default function SingleComment({ comment, depth = 1 }) {
 	const username = comment.users.username;
 
     const [commentLikeStatus, setCommentLikeStatus] = useState()
+
+    useEffect(() => {
+        // dispatch()
+    }, [])
 
 	const styling = {
 		marginLeft: `2em`,
