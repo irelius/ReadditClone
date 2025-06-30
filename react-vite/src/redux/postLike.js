@@ -51,8 +51,7 @@ export const loadCurrentUserOnePostLikesThunk = (postId) => async (dispatch) => 
         const likeStatus = data.liked_posts[likeId]?.like_status || "neutral"
         return likeStatus
 	}
-	dispatch(errorPostLike);
-    return
+	return dispatch(errorPostLike);
 };
 
 // Get all posts liked/disliked by current user

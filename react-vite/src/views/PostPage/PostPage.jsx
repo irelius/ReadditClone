@@ -23,10 +23,10 @@ export default function PostPage() {
 	useEffect(() => {
 		const sendDispatches = async () => {
 			await dispatch(loadPostThunk(postId));
-			// await dispatch(loadPostCommentsThunk(postId));
-			// await dispatch(loadCurrentUserOnePostLikesThunk(postId)).then((res) => {
-			// 	setPostLikeStatus(res);
-			// });
+			await dispatch(loadPostCommentsThunk(postId));
+			await dispatch(loadCurrentUserOnePostLikesThunk(postId)).then((res) => {
+				setPostLikeStatus(res);
+			});
 		};
 
 		if (postId) {
@@ -46,9 +46,9 @@ export default function PostPage() {
 		post &&
 		comments && (
 			<div className="post-page-container font-white dfc gap-2em">
-				{/* <section>
+				<section>
 					<PostSection post={post} postLikeStatus={postLikeStatus} setPostLikeStatus={setPostLikeStatus} />
-				</section> */}
+				</section>
 				{/* <section className="post-border" /> */}
 				<section>
 					<CommentSection comments={comments} commentsById={commentsById}/>

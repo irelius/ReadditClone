@@ -113,12 +113,12 @@ def current_user_post_likes(post_id):
         return {"errors": ["Post does not exist."]}, 404
     
     post_like = PostLike.query.options(joinedload(PostLike.posts)).filter(PostLike.post_id == post_id, PostLike.user_id == user_id).first()
-    
+        
     liked_posts_data = {
         "liked_posts_by_id": [],
         "liked_posts": {}
     }
-    
+
     if post_like == None:
         return liked_posts_data
 

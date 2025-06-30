@@ -116,7 +116,7 @@ def posts_comments(post_id):
     if post_check == None:
         return {"errors": ["Post does not exist to get the comments of"]}, 404
     
-    comments = Comment.query.options(joinedload(Comment.replies), joinedload(Comment.comment_likes)).filter(Comment.post_id == post_id).all()
+    comments = Comment.query.options(joinedload(Comment.users), joinedload(Comment.replies), joinedload(Comment.comment_likes)).filter(Comment.post_id == post_id).all()
     
     if len(comments) == 0:
         return {"errors": ["Comment does not exist"]}, 404
