@@ -12,7 +12,7 @@ comment_routes = Blueprint("comments", __name__)
 # Get all comments
 @comment_routes.route("/")
 def comments_all():
-    comments = Comment.query.options(joinedload(Comment.comment_likes), joinedload(Comment.replies)).all()
+    comments = Comment.query.options(joinedload(Comment.comment_likes), joinedload(Comment.users), joinedload(Comment.replies)).all()
     return return_comments_flat(comments)
 
 # Get specific comment by id
@@ -40,7 +40,7 @@ def comments_specific(comment_id):
         .where(Comment.id.in_(select(cte.c.id)))
         .options(selectinload(Comment.replies), selectinload(Comment.users), selectinload(Comment.comment_likes))
     )
-    comments = db.session.execute(final_query).scalars().all()
+    db.session.execute(final_query).scalars().all()
 
     comment_by_id = []
     all_comments = {}
