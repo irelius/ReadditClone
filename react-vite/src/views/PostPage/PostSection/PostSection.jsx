@@ -57,7 +57,7 @@ export default function PostSection({ post, postLikeStatus, setPostLikeStatus })
 		<div className="dfc post-section-container gap-05em">
 			{/* PostSection - post top section (subreddit and poster info) */}
 			<section className="dfr gap-05em">
-				<aside className="subreddit-icon dfr jcc aic pointer">
+				<aside className="small-icon dfr jcc aic pointer">
 					<i className="fa-brands fa-reddit-alien fa-xl"></i>
 				</aside>
 				<aside className="dfc jcc gap-3px">

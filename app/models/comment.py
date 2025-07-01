@@ -16,13 +16,13 @@ class Comment(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
-    # One to Many Relationship, Unidirectional FROM Comment
-    comment_likes = db.relationship("CommentLike", cascade="all, delete")
-    replies = db.relationship("Comment")
-    
     replies_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("comments.id")), nullable=True, default=None)
     user_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("users.id")), nullable=False)
     post_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("posts.id")), nullable=False)
+    
+    # One to Many Relationship, Unidirectional FROM Comment
+    comment_likes = db.relationship("CommentLike", cascade="all, delete")
+    replies = db.relationship("Comment")
     
     # Is this relationship necessary? Maybe for some advanced feature of searching for a comment within a subreddit
     subreddit_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("subreddits.id")), nullable=False)
@@ -31,10 +31,10 @@ class Comment(db.Model):
     users = db.relationship("User", back_populates="comments")
     
     
-    def calc_likes(self):
+    def calc_likes(self):       
         likes = len([like for like in self.comment_likes if like.like_status == "like"])
         dislikes = len([dislike for dislike in self.comment_likes if dislike.like_status == "dislike"])
-        total = likes - dislikes
+        total = likes - dislikes        
         return likes, dislikes, total
         
     def flat_to_dict(self):
@@ -60,6 +60,7 @@ class Comment(db.Model):
             'created_at': self.created_at,
             'updated_at': self.updated_at
         }
+        
         
     def to_dict(self):
         likes, dislikes, total = self.calc_likes()

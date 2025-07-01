@@ -33,6 +33,7 @@ json_file_path = [
     "app/seeds/comment_seed_data/46-comment.json",
     "app/seeds/comment_seed_data/47-comment.json",
     "app/seeds/comment_seed_data/49-comment.json",
+    "app/seeds/comment_seed_data/50-comment.json"
 ]
 comment_seed_data = []
 

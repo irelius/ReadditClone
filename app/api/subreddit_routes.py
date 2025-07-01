@@ -187,5 +187,5 @@ def subreddit_posts(subreddit_id):
     if subreddit_check == None:
         return {"errors": ["Subreddit does not exist"]}, 404
     
-    posts = Post.query.options(joinedload(Post.users), joinedload(Post.subreddits), joinedload(Post.post_likes), joinedload(Post.comments), joinedload(Post.images)).filter(Post.subreddit_id == subreddit_id).all()
+    posts = Post.query.options(joinedload(Post.users), joinedload(Post.subreddits), joinedload(Post.images), joinedload(Post.post_likes), joinedload(Post.comments)).filter(Post.subreddit_id == subreddit_id).all()
     return return_posts(posts)
