@@ -6,8 +6,6 @@ from app.aws import (
     upload_file_to_s3, allowed_file, get_unique_filename)
 from app.helper import return_posts, return_post_likes, return_comments, validation_error_message
 from sqlalchemy.orm import joinedload, aliased, selectinload
-
-# a;lsdkfjal;ksdjfasdf
 from sqlalchemy import select, union_all
 
 post_routes = Blueprint("posts", __name__)
@@ -16,13 +14,13 @@ post_routes = Blueprint("posts", __name__)
 # Get all posts
 @post_routes.route("/")
 def posts_all():   
-    posts = Post.query.options(joinedload(Post.users), joinedload(Post.subreddits), joinedload(Post.images), joinedload(Post.post_likes)).all()
+    posts = Post.query.options(joinedload(Post.users), joinedload(Post.subreddits), joinedload(Post.images), joinedload(Post.post_likes), joinedload(Post.comments)).all()
     return return_posts(posts)
 
 # Get specific post
 @post_routes.route("/<int:post_id>")
 def posts_specific(post_id):
-    posts = Post.query.options(joinedload(Post.users), joinedload(Post.subreddits), joinedload(Post.images), joinedload(Post.comments)).get(post_id)
+    posts = Post.query.options(joinedload(Post.users), joinedload(Post.subreddits), joinedload(Post.images), joinedload(Post.post_likes), joinedload(Post.comments)).get(post_id)
     return return_posts([posts])
 
 # Create a post
@@ -95,7 +93,10 @@ def posts_delete_specific(post_id):
     if post_to_delete == None:
         return {"errors": ["Post does not exist"]}, 404
     
-    admin_check = UserSubreddit.query.filter(UserSubreddit.user_id == user_id, UserSubreddit.subreddit_id == post_to_delete.subreddit_id, UserSubreddit.admin_status == True).first()
+    admin_check = (UserSubreddit.query
+                   .options(joinedload(UserSubreddit.user_join), joinedload(UserSubreddit.subreddit_join))
+                   .filter(UserSubreddit.user_id == user_id, UserSubreddit.subreddit_id == post_to_delete.subreddit_id, UserSubreddit.admin_status == True)
+                   .first())
         
     if admin_check == None:
         return {"errors": ["You do not have permission to delete this post"]}, 403

@@ -86,7 +86,7 @@ def user_posts(user_id):
     if user_check == None:
         return {"errors": ["User does not exist"]}, 404
     
-    posts = Post.query.options(joinedload(Post.post_likes), joinedload(Post.comments), joinedload(Post.images), joinedload(Post.users), joinedload(Post.subreddits)).filter(Post.user_id == user_id).all()
+    posts = Post.query.options(joinedload(Post.users), joinedload(Post.subreddits), joinedload(Post.images), joinedload(Post.post_likes), joinedload(Post.comments)).filter(Post.user_id == user_id).all()
 
     return return_posts(posts)
 
@@ -96,7 +96,7 @@ def user_posts(user_id):
 @login_required
 def current_user_posts():
     user_id = int(current_user.get_id())
-    posts = Post.query.options(joinedload(Post.post_likes), joinedload(Post.comments), joinedload(Post.images), joinedload(Post.users), joinedload(Post.subreddits)).filter(Post.user_id == user_id).all()
+    posts = Post.query.options(joinedload(Post.users), joinedload(Post.subreddits), joinedload(Post.images), joinedload(Post.post_likes), joinedload(Post.comments)).filter(Post.user_id == user_id).all()
     return return_posts(posts)
 
 
