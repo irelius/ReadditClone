@@ -18,10 +18,14 @@ def comments_all():
 # Get specific comment by id
 @comment_routes.route("/<int:comment_id>")
 def comments_specific(comment_id):
+    comment_check = Comment.query.get(comment_id)
+    
+    if comment_check == None:
+        return {"errors": ["Comment does not exist"]}, 404 
+    
     parent = aliased(Comment)
     child = aliased(Comment)
     
-    comment_check = Comment.query.get(comment_id)
     post_id = comment_check.post_id
 
     # have to use sqlalchemy core format because CTE doesn't work with the legacy sqlalchemy orm object format
