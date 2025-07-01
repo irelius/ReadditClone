@@ -3,21 +3,63 @@ from flask_login import current_user, login_required
 from app.models import db, Comment, User, Subreddit, CommentLike
 from app.forms import PostCommentForm, ReplyCommentForm, UpdateCommentForm, LikeForm
 from app.helper import return_comments, return_comments_flat, return_comment_likes, validation_error_message
-from sqlalchemy.orm import joinedload
+from sqlalchemy.orm import joinedload, selectinload, aliased
+from sqlalchemy import select, union_all
 
 comment_routes = Blueprint("comments", __name__)
+
 # ----------------------------------------------- Comment stuff -----------------------------------------------
 # Get all comments
 @comment_routes.route("/")
 def comments_all():
-    comments = Comment.query.options(joinedload(Comment.comment_likes), joinedload(Comment.replies)).all()
+    comments = Comment.query.options(joinedload(Comment.comment_likes), joinedload(Comment.users), joinedload(Comment.replies)).all()
     return return_comments_flat(comments)
 
 # Get specific comment by id
 @comment_routes.route("/<int:comment_id>")
 def comments_specific(comment_id):
-    comment = Comment.query.options(joinedload(Comment.comment_likes), joinedload(Comment.replies)).get(comment_id)
-    return return_comments([comment])
+    comment_check = Comment.query.get(comment_id)
+    
+    if comment_check == None:
+        return {"errors": ["Comment does not exist"]}, 404 
+    
+    parent = aliased(Comment)
+    child = aliased(Comment)
+    
+    post_id = comment_check.post_id
+
+    # have to use sqlalchemy core format because CTE doesn't work with the legacy sqlalchemy orm object format
+    #   could just use regular recursion to get the comment tree, but that hits database too many times
+    #   CTE allows for recursion in less database queries
+    initial_comment = select(Comment.id).where(Comment.id == comment_id, Comment.post_id == post_id)
+    
+    recursive = select(child.id).where(
+        child.replies_id == parent.id,
+        child.post_id == post_id
+    )
+
+    cte = initial_comment.union_all(recursive).cte(name="comment_tree", recursive=True)
+    
+    final_query = (
+        select(Comment)
+        .where(Comment.id.in_(select(cte.c.id)))
+        .options(selectinload(Comment.replies), selectinload(Comment.users), selectinload(Comment.comment_likes))
+    )
+    db.session.execute(final_query).scalars().all()
+
+    comment_by_id = []
+    all_comments = {}
+
+    initial_comment = Comment.query.filter(Comment.id == comment_id, Comment.replies_id == None).all()
+    for x in initial_comment:
+        comment = x.to_dict()
+        comment_by_id.append(comment['id'])
+        all_comments[comment["id"]] = comment
+    
+    return {
+        "comments_by_id": comment_by_id,
+        "all_comments": all_comments
+    }
 
 
 # Create a new comment on a comment

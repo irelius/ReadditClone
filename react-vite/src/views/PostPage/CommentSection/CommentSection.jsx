@@ -1,16 +1,17 @@
 import "./CommentSection.css";
 
-// import { useState } from "react";
-
-import CommentNode from "../../../components/CommentNode";
+import SingleComment from "../../../components/SingleComment";
 
 export default function CommentSection({ comments, commentsById }) {
 	return commentsById.length > 0 ? (
 		<div className="dfc gap-1em">
 			{commentsById.map((el) => {
- 				return (
-					<div key={el}>
-						<CommentNode comment={comments[el]} />
+				const currComment = comments[el];
+				return (
+					<div key={el} className="dfc gap-05em">
+						<section className="comment-node-container">
+							<SingleComment comment={currComment} />
+						</section>
 					</div>
 				);
 			})}

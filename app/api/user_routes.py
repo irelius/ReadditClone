@@ -86,7 +86,7 @@ def user_posts(user_id):
     if user_check == None:
         return {"errors": ["User does not exist"]}, 404
     
-    posts = Post.query.options(joinedload(Post.post_likes), joinedload(Post.comments), joinedload(Post.images), joinedload(Post.users), joinedload(Post.subreddits)).filter(Post.user_id == user_id).all()
+    posts = Post.query.options(joinedload(Post.users), joinedload(Post.subreddits), joinedload(Post.images), joinedload(Post.post_likes), joinedload(Post.comments)).filter(Post.user_id == user_id).all()
 
     return return_posts(posts)
 
@@ -96,7 +96,7 @@ def user_posts(user_id):
 @login_required
 def current_user_posts():
     user_id = int(current_user.get_id())
-    posts = Post.query.options(joinedload(Post.post_likes), joinedload(Post.comments), joinedload(Post.images), joinedload(Post.users), joinedload(Post.subreddits)).filter(Post.user_id == user_id).all()
+    posts = Post.query.options(joinedload(Post.users), joinedload(Post.subreddits), joinedload(Post.images), joinedload(Post.post_likes), joinedload(Post.comments)).filter(Post.user_id == user_id).all()
     return return_posts(posts)
 
 
@@ -113,12 +113,12 @@ def current_user_post_likes(post_id):
         return {"errors": ["Post does not exist."]}, 404
     
     post_like = PostLike.query.options(joinedload(PostLike.posts)).filter(PostLike.post_id == post_id, PostLike.user_id == user_id).first()
-    
+        
     liked_posts_data = {
         "liked_posts_by_id": [],
         "liked_posts": {}
     }
-    
+
     if post_like == None:
         return liked_posts_data
 
@@ -193,11 +193,30 @@ def current_user_comments():
 
 
 # --------------------------------------- Comment Likes stuff ---------------------------------------
-# Get all likes made to a comment by specific user
-@user_routes.route("/<int:user_id>/comment_likes")
+# Get all likes made to comments by specific user
+@user_routes.route("/<int:user_id>/comments/all/likes")
 def user_comment_likes(user_id):
     comment_likes = CommentLike.query.filter(CommentLike.user_id == user_id).all()
     return return_comment_likes(comment_likes)
+
+# Get all likes made to comments by current user
+@login_required
+@user_routes.route("/current/comments/all/likes")
+def current_user_comments_likes():
+    user_id = int(current_user.get_id())
+    
+    comment_likes = CommentLike.query.filter(CommentLike.user_id == user_id).all()
+    
+    liked_comments_data = {
+        "liked_comments_by_id": [],
+        "liked_comments": {},
+    }
+    
+    for comment_like in comment_likes:
+        liked_comments_data["liked_comments_by_id"].append(comment_like.comment_id)
+        liked_comments_data["liked_comments"][comment_like.comment_id] = comment_like.to_dict()
+    
+    return liked_comments_data
 
 # Get like status of a comment by current user
 @user_routes.route("/current/comments/<int:comment_id>/likes")
@@ -211,3 +230,4 @@ def current_user_comment_likes(comment_id):
 
     comment_likes = CommentLike.query.filter(CommentLike.comment_id == comment_id, CommentLike.user_id == user_id).all()
     return return_comment_likes(comment_likes)
+
