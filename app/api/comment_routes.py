@@ -25,7 +25,8 @@ def comments_specific(comment_id):
     post_id = comment_check.post_id
 
     # have to use sqlalchemy core format because CTE doesn't work with the legacy sqlalchemy orm object format
-    #   and CTE is necessary to perform recursion on the comments/replies without having to hit the database each time
+    #   could just use regular recursion to get the comment tree, but that hits database too many times
+    #   CTE allows for recursion in less database queries
     initial_comment = select(Comment.id).where(Comment.id == comment_id, Comment.post_id == post_id)
     
     recursive = select(child.id).where(
