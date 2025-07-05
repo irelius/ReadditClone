@@ -309,6 +309,16 @@ body #signup-modal-main-container {
 	padding-top: 5em;
 }
 
+/* ------------ Button ------------ */
+.button-disabled-true {
+    color: #4f5355;
+    background-color: #222629;
+}
+
+.button-disabled-true:hover {
+	cursor: default;
+}
+
 /* ------------ Font ------------ */
 .font-10 {
 	font-size: 10px;
@@ -364,6 +374,12 @@ body #signup-modal-main-container {
 
 .font-light-gray {
 	color: #b7cad4;
+}
+
+.noselect {
+	-webkit-user-select: none; /* Safari */
+	-ms-user-select: none; /* IE 10 and IE 11 */
+	user-select: none;
 }
 
 /* ------------ Color ------------ */

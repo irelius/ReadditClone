@@ -24,6 +24,7 @@ const LoginForm = ({ currUser, keepOpen }) => {
 
 	const handleLogin = async (e) => {
 		e.preventDefault();
+
 		dispatch(login({ email, password })).then((res) => {
 			errorSetter(res, setErrors);
 			if (res.type === "LOAD_SESSION") {
@@ -71,14 +72,11 @@ const LoginForm = ({ currUser, keepOpen }) => {
 						<aside
 							className={`login-modal-form-input-container login-modal-email-error-${
 								errors.email && errors.email.length > 0
-							} dfc jcc`}>
-							<aside
-								className={`email-input-focused-${emailFocus}`}
-								onClick={() => {
-									emailRef.current.focus();
-								}}>
-								Email
-							</aside>
+							} dfc jcc`}
+							onClick={() => {
+								emailRef.current.focus();
+							}}>
+							<aside className={`email-input-focused-${emailFocus} noselect`}>Email</aside>
 							{/* login modal - email input */}
 							<input
 								className={`login-modal-form-input`}
@@ -123,14 +121,11 @@ const LoginForm = ({ currUser, keepOpen }) => {
 						<aside
 							className={`login-modal-form-input-container login-modal-password-error-${
 								errors.password && errors.password.length > 0
-							} dfc jcc`}>
-							<aside
-								className={`password-input-focused-${passwordFocus}`}
-								onClick={() => {
-									passwordRef.current.focus();
-								}}>
-								Password
-							</aside>
+							} dfc jcc`}
+							onClick={() => {
+								passwordRef.current.focus();
+							}}>
+							<aside className={`password-input-focused-${passwordFocus} noselect`}>Password</aside>
 							{/* login modal - password input */}
 							<input
 								className={`login-modal-form-input`}
@@ -179,9 +174,21 @@ const LoginForm = ({ currUser, keepOpen }) => {
 					</section>
 
 					{/* login modal - log in buttons container */}
-					<section className="login-modal-form-buttons-container">
+					<section>
+						{/* login modal - log in button */}
+						<aside className="login-modal-form-login-container">
+							<button
+								className={`login-modal-form-button button-disabled-${
+									email.length === 0 || password.length === 0
+								} pointer font-14 font-bold`}
+								type="submit"
+								disabled={email.length === 0 || password.length === 0}>
+								Log In
+							</button>
+						</aside>
+
 						{/* login modal - demo user login button */}
-						<aside className="login-modal-form-demo-container">
+						<aside>
 							<button
 								className="login-modal-form-button modal-demo-user-button pointer font-14 font-bold"
 								onClick={() => {
@@ -191,13 +198,6 @@ const LoginForm = ({ currUser, keepOpen }) => {
 								}}
 								type="submit">
 								Demo User
-							</button>
-						</aside>
-
-						{/* login modal - log in button */}
-						<aside className="login-modal-form-login-container">
-							<button className="login-modal-form-button modal-login-button pointer font-14 font-bold" type="submit">
-								Log In
 							</button>
 						</aside>
 					</section>

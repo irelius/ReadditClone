@@ -6,8 +6,8 @@ import re
 
 def password_matches(form, field):
     # Checking if password matches
-    password = field.data.strip()
     email = form.data['email'].strip()
+    password = form.data["password"].strip()
     
     # return nothing if email is blank (prevents duplicate validation error message)
     if len(email) == 0:

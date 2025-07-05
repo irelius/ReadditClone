@@ -96,6 +96,7 @@
 
 .login-modal-form-input-container:hover {
 	background-color: #333d42;
+	cursor: text;
 }
 
 .login-modal-form-input {
@@ -135,8 +136,8 @@
 
 .email-input-focused-false {
 	position: relative;
-    top: 17.5px;
-    left: 25px;
+	top: 17.5px;
+	left: 25px;
 
 	font-size: 16px;
 
@@ -148,8 +149,8 @@
 
 .email-input-focused-true {
 	position: relative;
-    top: 7.5px;
-    left: 25px;
+	top: 7.5px;
+	left: 25px;
 
 	width: fit-content;
 
@@ -183,9 +184,9 @@
 }
 
 .password-input-focused-false {
-    position: relative;
-    top: 17.5px;
-    left: 25px;
+	position: relative;
+	top: 17.5px;
+	left: 25px;
 
 	font-size: 16px;
 
@@ -196,9 +197,9 @@
 }
 
 .password-input-focused-true {
-    position: relative;
-    top: 7.5px;
-    left: 25px;
+	position: relative;
+	top: 7.5px;
+	left: 25px;
 
 	width: fit-content;
 
@@ -227,12 +228,6 @@
 /* -----------------------------------------------------------------------*/
 /* Form Modal Demo User Login Section */
 
-.login-modal-form-demo-container {
-	display: flex;
-	justify-content: center;
-	margin-bottom: 10px;
-}
-
 .modal-demo-user-button {
 	border: 3px solid white;
 
@@ -245,19 +240,27 @@
 }
 
 /* -----------------------------------------------------------------------*/
-/* Form Modal Login Section */
+/* Form Modal Regular Login Section */
+.login-modal-form-login-container {
+	display: flex;
+	justify-content: center;
+	margin-bottom: 0.75em;
+}
 
-/* .login-modal-form-login-container {
-    display: flex;
-    justify-content: center;
+.button-disabled-true {
+	color: #4f5355;
+	background-color: #222629;
+	border: 2px solid #222629;
+}
 
-    width: 100%;
-} */
+.button-disabled-true:hover {
+    cursor: default;
+}
 
-/* .login-form-login-button:hover {
-    cursor: pointer;
+.button-disabled-false:hover {
+    background-color: #AE2C00;
+    border: 2px solid #AE2C00;
+}
 
-    background-color: #DC4A14;
-} */
 
 /* -----------------------------------------------------------------------*/
