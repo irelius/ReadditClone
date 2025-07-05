@@ -2,16 +2,19 @@
     {
         "like_status": "dislike",
         "user_id": 5,
-        "comment_id": 11
+        "comment_id": 11,
+        "post_id": 2
     },
     {
         "like_status": "dislike",
         "user_id": 6,
-        "comment_id": 11
+        "comment_id": 11,
+        "post_id": 2
     },
     {
         "like_status": "dislike",
         "user_id": 7,
-        "comment_id": 11
+        "comment_id": 11,
+        "post_id": 2
     }
 ]

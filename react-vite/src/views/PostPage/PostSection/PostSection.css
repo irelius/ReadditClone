@@ -1,8 +1,10 @@
+/* -----------------------------------------------------------------------*/
 /* CSS - PostSection - main container stuff */
 .post-section-container {
 	/* nothing for now */
 }
 
+/* -----------------------------------------------------------------------*/
 /* CSS - PostSection - post info section */
 .small-icon {
 	height: 2em;
@@ -12,6 +14,7 @@
 	background-color: #ff4500;
 }
 
+/* -----------------------------------------------------------------------*/
 /* CSS - PostSection - images icon */
 .post-section-image-container {
 	display: flex;
@@ -27,12 +30,14 @@
 	background-color: black;
 }
 
+/* -----------------------------------------------------------------------*/
 /* CSS - PostSection - post body section */
 .post-body-section {
 	margin-top: 0.5em;
 	margin-bottom: 1em;
 }
 
+/* -----------------------------------------------------------------------*/
 /* CSS - PostSection - create a comment on a post section */
 .create-comment-container {
 	margin-top: 0.5em;

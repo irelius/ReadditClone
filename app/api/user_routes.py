@@ -218,6 +218,26 @@ def current_user_comments_likes():
     
     return liked_comments_data
 
+# Get all comment likes of a specific post by current user
+@login_required
+@user_routes.route("/current/posts/<int:post_id>/comments/likes")
+def current_user_post_comments_likes(post_id):
+    user_id = int(current_user.get_id())
+    
+    comment_likes = CommentLike.query.filter(CommentLike.user_id == user_id, CommentLike.post_id == post_id).all()
+    
+    liked_comments_data = {
+        "liked_comments_by_id": [],
+        "liked_comments": {},
+    }
+    
+    for comment_like in comment_likes:
+        liked_comments_data["liked_comments_by_id"].append(comment_like.comment_id)
+        liked_comments_data["liked_comments"][comment_like.comment_id] = comment_like.to_dict()
+    
+    return liked_comments_data
+
+
 # Get like status of a comment by current user
 @user_routes.route("/current/comments/<int:comment_id>/likes")
 @login_required
@@ -230,4 +250,3 @@ def current_user_comment_likes(comment_id):
 
     comment_likes = CommentLike.query.filter(CommentLike.comment_id == comment_id, CommentLike.user_id == user_id).all()
     return return_comment_likes(comment_likes)
-

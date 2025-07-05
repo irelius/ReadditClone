@@ -196,7 +196,7 @@ def handle_like_on_post(post_id):
     # check if post exists
     post_check = Post.query.get(post_id)
     if post_check == None:
-        return {"errors": ["Post does not exist to like"]}, 404
+        return {"errors": ["Post does not exist to like/dislike"]}, 404
     
     # check if user has a like/dislike on the post already
     existing_like = PostLike.query.options(joinedload(PostLike.posts)).filter(PostLike.post_id == post_id, PostLike.user_id == user_id).first()

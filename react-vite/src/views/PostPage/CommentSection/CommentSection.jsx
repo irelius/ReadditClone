@@ -2,16 +2,14 @@ import "./CommentSection.css";
 
 import SingleComment from "../../../components/SingleComment";
 
-export default function CommentSection({ comments, commentsById }) {
+export default function CommentSection({ comments, commentsById, userCommentLikes }) {
 	return commentsById.length > 0 ? (
-		<div className="dfc gap-1em">
+		<div className="dfc">
 			{commentsById.map((el) => {
 				const currComment = comments[el];
 				return (
-					<div key={el} className="dfc gap-05em">
-						<section className="comment-node-container">
-							<SingleComment comment={currComment} />
-						</section>
+					<div key={el} className="dfc margin-b-1em">
+						<SingleComment comment={currComment} userCommentLikes={userCommentLikes}/>
 					</div>
 				);
 			})}

@@ -12,7 +12,7 @@ import { loadPostCommentsThunk } from "../../redux/comment";
 import { handlePostLikesThunk } from "../../redux/postLike";
 
 import redirectToPostPage from "../../helper/redirectToPostPage";
-import postLikeHandlerHelper from "../../helper/postLikeHandlerHelper";
+import likeHandlerHelper from "../../helper/likeHandlerHelper";
 
 export default function SinglePost({ post, likeStatus = null }) {
 	const dispatch = useDispatch();
@@ -53,7 +53,7 @@ export default function SinglePost({ post, likeStatus = null }) {
 		e.stopPropagation();
 		dispatch(handlePostLikesThunk(action, post.id)).then((res) => {
 			if (res) {
-				postLikeHandlerHelper(action, setLikesCount, postLikeStatus, setPostLikeStatus);
+				likeHandlerHelper(action, setLikesCount, postLikeStatus, setPostLikeStatus);
 			} else {
 				if (action === "like") setLikeError("Oops. There was an error liking this post.");
 				else setLikeError("Oops. There was an error disliking this post.");
@@ -117,18 +117,18 @@ export default function SinglePost({ post, likeStatus = null }) {
 				{/* SinglePost - vote and comment section */}
 				<section className="dfr aic gap-1em post-bottom-section">
 					{/* vote aside */}
-					<aside className={`dfr aic jcc font-white background-gray vote-container post-${postLikeStatus}`}>
+					<aside className={`dfr aic jcc font-white background-gray post-vote-container post-${postLikeStatus}`}>
 						<aside>
 							<i
 								onClick={(e) => handlePostLike(e, "like")}
-								className={`pointer vote-arrow arrow-up-${postLikeStatus === "like"} fa-regular fa-circle-up`}
+								className={`pointer post-vote-arrow liked-${postLikeStatus === "like"} fa-regular fa-circle-up`}
 							/>
 						</aside>
 						<aside className={`dfr aic jcc post-likes-total font-12`}>{millify(likesCount)}</aside>
 						<aside>
 							<i
 								onClick={(e) => handlePostLike(e, "dislike")}
-								className={`pointer vote-arrow arrow-down-${postLikeStatus === "dislike"} fa-regular fa-circle-down`}
+								className={`pointer post-vote-arrow disliked-${postLikeStatus === "dislike"} fa-regular fa-circle-down`}
 							/>
 						</aside>
 					</aside>

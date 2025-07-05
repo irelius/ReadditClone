@@ -35,7 +35,7 @@ body #signup-modal-main-container {
 }
 
 .underline:hover {
-    text-decoration: underline;
+	text-decoration: underline;
 }
 
 /* ------------ Display Flex ------------ */
@@ -107,6 +107,208 @@ body #signup-modal-main-container {
 	padding: 0px;
 }
 
+/* ------------ Margin ------------ */
+.margin-05em {
+	margin: 0.5em;
+}
+
+.margin-1em {
+	margin: 1em;
+}
+
+.margin-2em {
+	margin: 2em;
+}
+
+.margin-3em {
+	margin: 3em;
+}
+
+.margin-5em {
+	margin: 5em;
+}
+
+.margin-l-05em {
+	margin-left: 0.5em;
+}
+
+.margin-l-1em {
+	margin-left: 1em;
+}
+
+.margin-l-2em {
+	margin-left: 2em;
+}
+
+.margin-l-3em {
+	margin-left: 3em;
+}
+
+.margin-l-5em {
+	margin-left: 5em;
+}
+
+.margin-r-05em {
+	margin-right: 0.5em;
+}
+
+.margin-r-1em {
+	margin-right: 1em;
+}
+
+.margin-r-2em {
+	margin-right: 2em;
+}
+
+.margin-r-3em {
+	margin-right: 3em;
+}
+
+.margin-r-5em {
+	margin-right: 5em;
+}
+
+.margin-b-05em {
+	margin-bottom: 0.5em;
+}
+
+.margin-b-1em {
+	margin-bottom: 1em;
+}
+
+.margin-b-2em {
+	margin-bottom: 2em;
+}
+
+.margin-b-3em {
+	margin-bottom: 3em;
+}
+
+.margin-b-5em {
+	margin-bottom: 5em;
+}
+
+.margin-t-05em {
+	margin-top: 0.5em;
+}
+
+.margin-t-1em {
+	margin-top: 1em;
+}
+
+.margin-t-2em {
+	margin-top: 2em;
+}
+
+.margin-t-3em {
+	margin-top: 3em;
+}
+
+.margin-t-5em {
+	margin-top: 5em;
+}
+
+/* ------------ Padding ------------ */
+.padding-05em {
+	padding: 0.5em;
+}
+
+.padding-1em {
+	padding: 1em;
+}
+
+.padding-2em {
+	padding: 2em;
+}
+
+.padding-3em {
+	padding: 3em;
+}
+
+.padding-5em {
+	padding: 5em;
+}
+
+.padding-l-05em {
+	padding-left: 0.5em;
+}
+
+.padding-l-1em {
+	padding-left: 1em;
+}
+
+.padding-l-2em {
+	padding-left: 2em;
+}
+
+.padding-l-3em {
+	padding-left: 3em;
+}
+
+.padding-l-5em {
+	padding-left: 5em;
+}
+
+.padding-r-05em {
+	padding-right: 0.5em;
+}
+
+.padding-r-1em {
+	padding-right: 1em;
+}
+
+.padding-r-2em {
+	padding-right: 2em;
+}
+
+.padding-r-3em {
+	padding-right: 3em;
+}
+
+.padding-r-5em {
+	padding-right: 5em;
+}
+
+.padding-b-05em {
+	padding-bottom: 0.5em;
+}
+
+.padding-b-1em {
+	padding-bottom: 1em;
+}
+
+.padding-b-2em {
+	padding-bottom: 2em;
+}
+
+.padding-b-3em {
+	padding-bottom: 3em;
+}
+
+.padding-b-5em {
+	padding-bottom: 5em;
+}
+
+.padding-t-05em {
+	padding-top: 0.5em;
+}
+
+.padding-t-1em {
+	padding-top: 1em;
+}
+
+.padding-t-2em {
+	padding-top: 2em;
+}
+
+.padding-t-3em {
+	padding-top: 3em;
+}
+
+.padding-t-5em {
+	padding-top: 5em;
+}
+
 /* ------------ Font ------------ */
 .font-10 {
 	font-size: 10px;
@@ -134,6 +336,10 @@ body #signup-modal-main-container {
 
 .font-bold {
 	font-weight: bold;
+}
+
+.font-normal {
+    font-weight: 500;
 }
 
 .font-light {
@@ -178,14 +384,62 @@ body #signup-modal-main-container {
 	background-color: #2a3236;
 }
 
+/* ------------ General Post Stuff ------------ */
+.post-bottom-section > * {
+	height: 2em;
+	border-radius: 2em;
+}
+
+/* ------------ General Comment Stuff ------------ */
+
+
+/* ------------ General Vote Stuff ------------ */
+.liked-false:hover {
+	background-color: #333d42;
+	color: #ff4500;
+}
+
+.disliked-false:hover {
+	background-color: #333d42;
+	color: #6a5cff;
+}
+
+/* ------------ Post Vote Stuff ------------ */
+.post-vote-container {
+	gap: 3px;
+	width: fit-content;
+	max-width: 6em;
+}
+
+.post-vote-arrow {
+	font-size: 1.75em;
+	border-radius: 100%;
+	color: white;
+}
+
+.post-vote-arrow:hover {
+	background-color: #223237;
+}
+
+.post-like {
+	background-color: #ff4500;
+}
+
+.post-dislike {
+	background-color: #6a5cff;
+}
+
+.post-likes-total {
+	width: fit-content;
+	max-width: 3.5em;
+	padding-left: 0.25em;
+	padding-right: 0.25em;
+}
+
 /* ------------ temporary testing ------------ */
-.orange {
-	/* border: 1px solid red; */
+.test {
+	border: 1px solid white;
 	background-color: orange;
 
 	z-index: 10000;
-}
-
-.asdf {
-	font-size: 1.75em;
 }

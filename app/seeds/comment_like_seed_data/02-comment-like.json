@@ -2,6 +2,7 @@
     {
         "like_status": "like",
         "user_id": 1,
-        "comment_id": 2
+        "comment_id": 2,
+        "post_id": 1
     }
 ]
