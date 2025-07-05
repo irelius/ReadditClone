@@ -339,7 +339,7 @@ body #signup-modal-main-container {
 }
 
 .font-normal {
-    font-weight: 500;
+	font-weight: 500;
 }
 
 .font-light {
@@ -371,6 +371,10 @@ body #signup-modal-main-container {
 	color: #ff4500;
 }
 
+.color-darker-red {
+	color: #ae2c00;
+}
+
 .color-reddit-blue {
 	color: #6a5cff;
 }
@@ -391,7 +395,6 @@ body #signup-modal-main-container {
 }
 
 /* ------------ General Comment Stuff ------------ */
-
 
 /* ------------ General Vote Stuff ------------ */
 .liked-false:hover {

@@ -13,7 +13,7 @@ import { loadPostCommentsThunk } from "../../redux/comment";
 import { loadCurrentUserOnePostCommentLikesThunk } from "../../redux/commentLike";
 
 export default function PostPage() {
-	const dispatch = useDispatch();
+    const dispatch = useDispatch();
 	const params = useParams();
 	// const subredditName = params.subredditName;
 	const postId = Number(params.postId);

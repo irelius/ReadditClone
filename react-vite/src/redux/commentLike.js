@@ -55,7 +55,7 @@ export const loadCurrentUserOnePostCommentLikesThunk = (postId) => async (dispat
 }
 
 // load all comment likes for all comments made by current user
-export const loadCurrentUserAllCommentsLikesThunk = (userId) => async (dispatch) => {
+export const loadCurrentUserAllCommentsLikesThunk = () => async (dispatch) => {
 	const res = await fetch(`/api/users/current/comment_likes`);
 	const data = await res.json();
 	if (res.ok) return dispatch(loadCommentLikes(data));

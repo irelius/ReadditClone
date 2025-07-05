@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { loadPostCommentsThunk } from "../../redux/comment";
 import { handlePostLikesThunk } from "../../redux/postLike";
 
 import redirectToPostPage from "../../helper/redirectToPostPage";
@@ -24,20 +23,21 @@ export default function SinglePost({ post, likeStatus = null }) {
 
 	const [load, setLoad] = useState(false);
 	const [imageIndex, setImageIndex] = useState(0);
-	const [commentsCount, setCommentsCount] = useState(post.comments_count);
+	// const [commentsCount, setCommentsCount] = useState(post.comments_count);
 	const [postLikeStatus, setPostLikeStatus] = useState(likeStatus);
 	const [likesCount, setLikesCount] = useState(post.total_likes);
 	const [likeError, setLikeError] = useState(null);
 
-	useEffect(() => {
-		if (post.id) {
+    const subreddit = post.subreddits;
+    const imagesById = post.images.images_by_id;
+    const images = post.images.images;
+    const postId = post.id
+
+    useEffect(() => {
+		if (postId) {
 			setLoad(true);
 		}
-	}, []);
-
-	const subreddit = post.subreddits;
-	const imagesById = post.images.images_by_id;
-	const images = post.images.images;
+	}, [postId]);
 
 	// function to handle image rotation
 	const imageRotation = (dir) => {
@@ -51,7 +51,7 @@ export default function SinglePost({ post, likeStatus = null }) {
 	// handle liking a post. done with optimistic UI and backend confirmation
 	const handlePostLike = (e, action) => {
 		e.stopPropagation();
-		dispatch(handlePostLikesThunk(action, post.id)).then((res) => {
+		dispatch(handlePostLikesThunk(action, postId)).then((res) => {
 			if (res) {
 				likeHandlerHelper(action, setLikesCount, postLikeStatus, setPostLikeStatus);
 			} else {
@@ -66,7 +66,7 @@ export default function SinglePost({ post, likeStatus = null }) {
 			<div
 				className="single-post-container"
 				onClick={(e) => {
-					redirectToPostPage(e, navigate, post.id, subreddit.name);
+					redirectToPostPage(e, navigate, postId, subreddit.name);
 				}}>
 				{/* Single Post - top section (subreddit name & icon, post date) */}
 				<section className="dfr aic gap-5px">
@@ -138,7 +138,7 @@ export default function SinglePost({ post, likeStatus = null }) {
 						<aside>
 							<i className="fa-regular fa-comment fa-lg"></i>
 						</aside>
-						<aside className="font-12">{millify(commentsCount)}</aside>
+						<aside className="font-12">{millify(post.comments_count)}</aside>
 					</aside>
 					{/* <aside>share</aside> */}
 				</section>

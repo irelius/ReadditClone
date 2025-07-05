@@ -4,15 +4,13 @@ import TimeAgo from "javascript-time-ago";
 import millify from "millify";
 import en from "javascript-time-ago/locale/en";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { handleCommentLikesThunk } from "../../redux/commentLike";
 import likeHandlerHelper from "../../helper/likeHandlerHelper";
 
 export default function SingleComment({ comment, userCommentLikes, depth = 1 }) {
-	if (!comment) {
-		return;
-	}
+	if (!comment) return null;
 
 	const dispatch = useDispatch();
 

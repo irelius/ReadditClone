@@ -1,8 +1,8 @@
 import "./PostSection.css";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 import TimeAgo from "javascript-time-ago";
 import millify from "millify";
@@ -13,7 +13,7 @@ import likeHandlerHelper from "../../../helper/likeHandlerHelper";
 
 export default function PostSection({ post, postLikeStatus, setPostLikeStatus }) {
 	const dispatch = useDispatch();
-	const navigate = useNavigate();
+	// const navigate = useNavigate();
 
 	TimeAgo.addLocale(en);
 	const timeAgo = new TimeAgo("en-US");
@@ -148,7 +148,7 @@ export default function PostSection({ post, postLikeStatus, setPostLikeStatus })
 							autoFocus
 							className="create-comment-input"
 							onClick={() => setInputFocused(true)}
-							onBlur={(e) => setInputFocused(false)}
+							onBlur={() => setInputFocused(false)}
 							onChange={(e) => setNewComment(e.target.value)}
 						/>
 						<section
