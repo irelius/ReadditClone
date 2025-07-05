@@ -61,13 +61,12 @@ def comments_specific(comment_id):
         "all_comments": all_comments
     }
 
-
 # Create a new comment on a comment
 # int:comment_id is the id of the comment that is being responded to
 @comment_routes.route("/<int:comment_id>", methods=["POST"])
 @login_required
 def create_comment_on_comment(comment_id):
-    user_id = int(current_user.get_id())
+    user_id = int(current_user.get_id() or 0)
 
     comment_check = Comment.query.options(joinedload(Comment.replies)).get(comment_id)
     if comment_check == None:
@@ -102,7 +101,7 @@ def create_comment_on_comment(comment_id):
 @comment_routes.route("/<int:comment_id>", methods=["PUT"])
 @login_required
 def comments_update_specific(comment_id):
-    user_id = int(current_user.get_id())
+    user_id = int(current_user.get_id() or 0)
     comment_to_edit = Comment.query.options(joinedload(Comment.comment_likes), joinedload(Comment.replies)).get(comment_id)
 
     if comment_to_edit == None:
@@ -131,7 +130,7 @@ def comments_update_specific(comment_id):
 @comment_routes.route("/<int:comment_id>", methods=["DELETE"])
 @login_required
 def comments_delete_specific(comment_id):
-    user_id = int(current_user.get_id())
+    user_id = int(current_user.get_id() or 0)
     comment_to_delete = Comment.query.options(joinedload(Comment.comment_likes), joinedload(Comment.replies)).get(comment_id)
 
     subreddit = Subreddit.query.get(comment_to_delete.subreddit_id)
@@ -172,7 +171,7 @@ def get_comment_likes(comment_id):
 @comment_routes.route("/<int:comment_id>/likes", methods=["POST"])
 @login_required
 def handle_like_on_comment(comment_id):
-    user_id = int(current_user.get_id())
+    user_id = int(current_user.get_id() or 0)
     
     # check if comment exists
     comment_check = Comment.query.get(comment_id)

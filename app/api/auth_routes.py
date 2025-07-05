@@ -32,7 +32,7 @@ def login():
 @auth_routes.route('/logout', methods=["DELETE"])
 @login_required
 def logout():
-    user_id = int(current_user.get_id())
+    user_id = int(current_user.get_id() or 0)
     logout_user()
     return {
         "id": user_id,
