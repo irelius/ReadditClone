@@ -1,6 +1,6 @@
 import "./LoginForm.css";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../../redux/session";
@@ -9,6 +9,9 @@ import errorSetter from "../../../helper/error";
 const LoginForm = ({ currUser, keepOpen }) => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const emailRef = useRef(null);
+	const passwordRef = useRef(null);
+
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [errors, setErrors] = useState({
@@ -16,18 +19,21 @@ const LoginForm = ({ currUser, keepOpen }) => {
 		password: [],
 	});
 
-	const onLogin = async (e) => {
+	const [emailFocus, setEmailFocus] = useState(false);
+	const [passwordFocus, setPasswordFocus] = useState(false);
+
+	const handleLogin = async (e) => {
 		e.preventDefault();
 		dispatch(login({ email, password })).then((res) => {
-            errorSetter(res, setErrors);
-            if(res.type === "LOAD_SESSION") {
-                keepOpen(false)
-            }
+			errorSetter(res, setErrors);
+			if (res.type === "LOAD_SESSION") {
+				keepOpen(false);
+			}
 		});
 	};
 
 	if (currUser) {
-        keepOpen(false)
+		keepOpen(false);
 		return navigate("/");
 	}
 
@@ -40,68 +46,161 @@ const LoginForm = ({ currUser, keepOpen }) => {
 
 	return (
 		<div className="login-modal-main-container">
+			{/* login modal - exit button container */}
 			<section className="login-modal-exit-container">
-				<button onClick={() => keepOpen(false)} className="login-modal-exit-button">
+				<button onClick={() => keepOpen(false)} className="login-modal-exit-button pointer">
 					<i className="fa-solid fa-xmark fa-lg"></i>
 				</button>
 			</section>
+
+			{/* login modal - main form container */}
 			<section>
-				<form onSubmit={(e) => onLogin(e)} className="login-form-modal-main-container">
-					<div className="login-form-modal-text-container">
-						<h2>Log In</h2>
-						<p>
+				<form onSubmit={(e) => handleLogin(e)} className="login-modal-form-container">
+					{/* login modal - login blurb */}
+					<section className="login-modal-form-blurb-container dfc aic gap-05em">
+						<h2 className="font-24 font-bold font-white">Log In</h2>
+						<p className="font-14">
 							By continuing, you agree are setting up a Readdit account and gree to our User Agreement and Privacy
 							Policy.
 						</p>
-					</div>
-					<div className="login-form-modal-email-container">
-						<input
-							className="login-form-modal-email-input"
-							name="email"
-							type="text"
-							placeholder="Email"
-							value={email}
-							onChange={(e) => {
-								filterErrors("email");
-								setEmail(e.target.value);
-							}}
-						/>
-					</div>
-					<div className="login-form-modal-errors-container">
-						{errors.email && errors.email.map((error, i) => <div key={i}>{error}</div>)}
-						{errors.password && errors.password.map((error, i) => <div key={i}>{error}</div>)}
-					</div>
-					<div className="login-form-modal-password-container">
-						<input
-							className="login-form-modal-password-input"
-							name="password"
-							type="password"
-							placeholder="Password"
-							value={password}
-							onChange={(e) => {
-								filterErrors("password");
-								setPassword(e.target.value);
-							}}
-						/>
-					</div>
+					</section>
 
-					<div className="login-form-modal-demo-container">
-						<button
-							className="login-form-modal-demo-button"
-							onClick={() => {
-								setErrors({ email: [], password: [] });
-								setEmail("demo@user.io");
-								setPassword("password");
-							}}
-							type="submit">
-							Demo User
-						</button>
-					</div>
-					<div className="login-form-modal-login-container">
-						<button className="login-form-login-button" type="submit">
-							Log In
-						</button>
-					</div>
+					{/* login modal - email section*/}
+					<section className="login-modal-form-email-container">
+						{/* login modal - email input container */}
+						<aside
+							className={`login-modal-form-input-container login-modal-email-error-${
+								errors.email && errors.email.length > 0
+							} dfc jcc`}>
+							<aside
+								className={`email-input-focused-${emailFocus}`}
+								onClick={() => {
+									emailRef.current.focus();
+								}}>
+								Email
+							</aside>
+							{/* login modal - email input */}
+							<input
+								className={`login-modal-form-input`}
+								name="email"
+								type="text"
+								autoComplete="off"
+								value={email}
+								ref={emailRef}
+								onChange={(e) => {
+									filterErrors("email");
+									setEmail(e.target.value);
+								}}
+								onFocus={() => setEmailFocus(true)}
+								onBlur={() => {
+									if (email.length === 0) {
+										setEmailFocus(false);
+									}
+								}}
+							/>
+							{errors.email && errors.email.length > 0 ? (
+								<aside className="login-modal-form-error-icon">
+									<i className="fa-solid fa-circle-exclamation"></i>
+								</aside>
+							) : (
+								<></>
+							)}
+						</aside>
+
+						{/* login modal - email input error message */}
+						<aside className="login-modal-form-errors-container">
+							{errors.email &&
+								errors.email.map((error, i) => (
+									<div key={i} className="font-11">
+										{error}
+									</div>
+								))}
+						</aside>
+					</section>
+
+					{/* login modal - password section */}
+					<section className="login-modal-form-password-container">
+						<aside
+							className={`login-modal-form-input-container login-modal-password-error-${
+								errors.password && errors.password.length > 0
+							} dfc jcc`}>
+							<aside
+								className={`password-input-focused-${passwordFocus}`}
+								onClick={() => {
+									passwordRef.current.focus();
+								}}>
+								Password
+							</aside>
+							{/* login modal - password input */}
+							<input
+								className={`login-modal-form-input`}
+								name="password"
+								type="password"
+								autoComplete="off"
+								value={password}
+								ref={passwordRef}
+								onChange={(e) => {
+									filterErrors("password");
+									setPassword(e.target.value);
+								}}
+								onFocus={() => setPasswordFocus(true)}
+								onBlur={() => {
+									if (password.length === 0) {
+										setPasswordFocus(false);
+									}
+								}}
+							/>
+
+							{errors.password && errors.password.length > 0 ? (
+								<aside className="login-modal-form-error-icon">
+									<i className="fa-solid fa-circle-exclamation"></i>
+								</aside>
+							) : (
+								<></>
+							)}
+						</aside>
+
+						{/* login modal - password input error message */}
+						<div className="login-modal-form-errors-container">
+							{errors.password &&
+								errors.password.map((error, i) => (
+									<div key={i} className="font-11">
+										{error}
+									</div>
+								))}
+						</div>
+					</section>
+
+					{/* login modal - sign up modal shortcut */}
+					<section className="login-modal-form-sign-up-shortcut-container dfr">
+						<p>
+							New to Reddit? <span className="login-modal-form-sign-up-link pointer">Sign Up</span>
+						</p>
+					</section>
+
+					{/* login modal - log in buttons container */}
+					<section className="login-modal-form-buttons-container">
+						{/* login modal - demo user login button */}
+						<aside className="login-modal-form-demo-container">
+							<button
+								className="login-modal-form-button modal-demo-user-button pointer font-14 font-bold"
+								onClick={() => {
+									setErrors({ email: [], password: [] });
+									setEmail("demo@user.io");
+									setPassword("password");
+								}}
+								type="submit">
+								Demo User
+							</button>
+						</aside>
+
+						{/* login modal - log in button */}
+						<aside className="login-modal-form-login-container">
+							<button className="login-modal-form-button modal-login-button pointer font-14 font-bold" type="submit">
+								Log In
+							</button>
+						</aside>
+					</section>
 				</form>
 			</section>
 		</div>
