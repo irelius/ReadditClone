@@ -1,4 +1,4 @@
-export default function postLikeHandlerHelper(action, setLikesCount, likeStatus, setLikeStatus) {
+export default function likeHandlerHelper(action, setLikesCount, likeStatus, setLikeStatus) {
 	const likeAdjustments = {
 		like: {
 			like: -1,
@@ -16,7 +16,6 @@ export default function postLikeHandlerHelper(action, setLikesCount, likeStatus,
 
 	const adjustment = likeStatus === null ? likeAdjustments["neutral"][action] : likeAdjustments[likeStatus][action];
     setLikesCount((prev) => prev + adjustment);
-
 
 	const newStatus = likeStatus === action ? "neutral" : action;
 	setLikeStatus(newStatus);

@@ -4,59 +4,138 @@ import TimeAgo from "javascript-time-ago";
 import millify from "millify";
 import en from "javascript-time-ago/locale/en";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
+import { handleCommentLikesThunk } from "../../redux/commentLike";
+import likeHandlerHelper from "../../helper/likeHandlerHelper";
 
-export default function SingleComment({ comment, depth = 1 }) {
-	if (!comment) {
-		return;
-	}
+export default function SingleComment({ comment, userCommentLikes, depth = 1 }) {
+	if (!comment) return null;
 
-    const dispatch = useDispatch()
+	const dispatch = useDispatch();
 
 	TimeAgo.addLocale(en);
 	const timeAgo = new TimeAgo("en-US");
 	const time = timeAgo.format(new Date(comment.created_at), "round");
 
+	const commentId = comment.id;
+	const postId = comment.post_id;
 	const replies = comment.replies;
 	const repliesById = comment.replies_by_id;
 	const profileImage = comment.users.profile_image;
 	const username = comment.users.username;
 
-    const [commentLikeStatus, setCommentLikeStatus] = useState()
-
-    useEffect(() => {
-        // dispatch()
-    }, [])
+	const [display, setDisplay] = useState(true);
+	const [commentLikeStatus, setCommentLikeStatus] = useState(
+		commentId in userCommentLikes ? userCommentLikes[commentId].like_status : "neutral"
+	);
+	const [commentLikesCount, setCommentsLikeCount] = useState(comment.total_likes);
+	const [likeError, setLikeError] = useState(null);
 
 	const styling = {
-		marginLeft: `2em`,
+		marginLeft: `2.3em`,
+	};
+
+	const handleCommentDisplay = (e) => {
+		e.stopPropagation();
+		setDisplay((prev) => !prev);
+	};
+
+	const handleCommentLike = (e, action) => {
+		e.stopPropagation();
+		dispatch(handleCommentLikesThunk(action, commentId, postId)).then((res) => {
+			if (res) {
+				likeHandlerHelper(action, setCommentsLikeCount, commentLikeStatus, setCommentLikeStatus);
+			} else {
+				if (action === "like") setLikeError("Oops. There was an error liking this comment.");
+				else setLikeError("Oops. There was an error disliking this comment.");
+			}
+		});
 	};
 
 	return (
-		<div className="dfc gap-1em">
-			<section className="dfr aic gap-05em">
-				<img className="small-icon" src={profileImage} />
-				<aside className="font-14 font-bold">{username}</aside>
-				<aside className="dfr aic">
-					<i className="fa-solid fa-circle dot font-gray"></i>
-				</aside>
-				<aside className="font-14 font-gray jcc">{time}</aside>
-			</section>
-			<section>{comment.body}</section>
-			<section style={styling}>
-				{repliesById.map((el) => {
-					const reply = replies[el];
-					return (
-						<div key={el} className="dfc gap-05em">
-							{/* <section>{username}</section> */}
-							<section>
-								<SingleComment comment={reply} depth={depth + 1} />
-							</section>
+		<div className="">
+			{/* single comment - comment container */}
+			<section className="dfc gap-05em margin-b-1em">
+				{/* single comment - header row (profile name, image, time posted) */}
+				<section className="dfr aic gap-05em" onClick={(e) => handleCommentDisplay(e)}>
+					{display ? (
+						<img className="small-icon" src={profileImage} />
+					) : (
+						<div className="dfc aic jcc comment-profile-plus-icon pointer">
+							<i className="fa-solid fa-circle-plus"></i>
 						</div>
-					);
-				})}
+					)}
+					<aside className="font-14 font-bold">{username}</aside>
+					<aside className="dfr aic">
+						<i className="fa-solid fa-circle dot font-gray"></i>
+					</aside>
+					<aside className="font-14 font-gray">{time}</aside>
+				</section>
+
+				{/* single comment - comment body (comment and vote/comment/etc. section) */}
+				{display ? (
+					<section className="dfc gap-05em">
+						{/* single comment - comment body */}
+						<section className="comment-body">{comment.body}</section>
+
+						{/* single comment - comment bar (likes, replies, etc.) */}
+						<section className="dfr aic gap-05em comment-status-bar">
+							{/* single comment - comment bar VOTE section */}
+							<aside className="dfr aic font-gray comment-vote-container">
+								<aside>
+									<i
+										onClick={(e) => handleCommentLike(e, "like")}
+										className={`pointer comment-vote-arrow
+                                            comment-liked-${commentLikeStatus === "like"}
+                                            liked-${commentLikeStatus === "like"}
+                                            fa-regular fa-circle-up fa-xl`}></i>
+								</aside>
+								<aside className="comment-likes-total font-12">{millify(commentLikesCount)}</aside>
+								<aside>
+									<i
+										onClick={(e) => handleCommentLike(e, "dislike")}
+										className={`pointer comment-vote-arrow 
+                                            comment-disliked-${commentLikeStatus === "dislike"}
+                                            disliked-${commentLikeStatus === "dislike"}
+                                            fa-regular fa-circle-down fa-xl`}></i>
+								</aside>
+							</aside>
+
+							{/* single comment - comment bar REPLY section */}
+							<aside className="dfr jcc aic gap-05em pointer comment-reply-container">
+								<aside>
+									<i className="fa-solid fa-comment"></i>
+								</aside>
+								<aside>Reply</aside>
+							</aside>
+
+							{/* single comment - comment bar ETC section */}
+							<aside></aside>
+						</section>
+					</section>
+				) : (
+					<></>
+				)}
 			</section>
+
+			{/* single comment - comment replies (recursion) */}
+			{display ? (
+				<section style={styling}>
+					{repliesById.map((el) => {
+						const reply = replies[el];
+						return (
+							<div key={el} className="dfc">
+								<section>
+									<SingleComment comment={reply} userCommentLikes={userCommentLikes} depth={depth + 1} />
+								</section>
+							</div>
+						);
+					})}
+				</section>
+			) : (
+				<></>
+			)}
 		</div>
 	);
 }

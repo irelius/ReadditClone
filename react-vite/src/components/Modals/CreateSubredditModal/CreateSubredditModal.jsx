@@ -1,13 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import "./CreateSubredditModal.css";
 import { useDispatch } from "react-redux";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { createSubredditThunk } from "../../../redux/subreddit";
 import errorSetter from "../../../helper/error";
 
 export default function CreateSubredditModal({ isOpen, keepOpen, currUser }) {
-	if (!isOpen) return null;
-
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
@@ -18,6 +16,9 @@ export default function CreateSubredditModal({ isOpen, keepOpen, currUser }) {
 		name: [],
 		description: [],
 	});
+    
+	if (!isOpen) return null;
+
 
 	const createSubreddit = async (e) => {
 		e.preventDefault();

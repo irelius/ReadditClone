@@ -21,8 +21,8 @@ def password_matches(form, field):
     # if user is trying to use an email for an account that doesn't exist or if password is incorrect
     user = User.query.filter(User.email == email).first()
     if user == None or not user.check_password(password):
-        raise ValidationError('Invalid credentials')
+        raise ValidationError('Invalid email or password')
 
 class LoginForm(FlaskForm):
-    email = EmailField('email', validators=[DataRequired(message="Email is required"), Email('Invalid email provided')])
+    email = EmailField('email', validators=[DataRequired(message="Email is required"), Email('Invalid email provided'), password_matches])
     password = StringField('password', validators=[DataRequired(message="Password is required"), password_matches])

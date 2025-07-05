@@ -25,7 +25,7 @@ def subreddit_by_id(subreddit_id):
 @subreddit_routes.route("/", methods=["POST"])
 # @login_required
 def subreddits_create_new():
-    user_id = int(current_user.get_id())
+    user_id = int(current_user.get_id() or 0)
     
     form = SubredditForm()
     form['csrf_token'].data = request.cookies['csrf_token']
@@ -64,7 +64,7 @@ def subreddits_create_new():
 @subreddit_routes.route("/<int:subreddit_id>", methods=["PUT"])
 @login_required
 def subreddits_update_specific(subreddit_id):
-    user_id = int(current_user.get_id())
+    user_id = int(current_user.get_id() or 0)
 
     admin_check = UserSubreddit.query.filter(UserSubreddit.user_id == user_id, UserSubreddit.subreddit_id == subreddit_id, UserSubreddit.admin_status == True).first()
         
@@ -91,7 +91,7 @@ def subreddits_update_specific(subreddit_id):
 @subreddit_routes.route("/<int:subreddit_id>", methods=["DELETE"])
 @login_required
 def subreddits_delete_specific(subreddit_id):   
-    user_id = int(current_user.get_id())
+    user_id = int(current_user.get_id() or 0)
 
     subreddit_to_delete = Subreddit.query.get(subreddit_id)
     if subreddit_to_delete == None:
@@ -127,7 +127,7 @@ def subreddit_users(subreddit_id):
 @subreddit_routes.route("<int:subreddit_id>/join", methods=["POST"])
 @login_required
 def subreddits_join(subreddit_id):
-    user_id = int(current_user.get_id())
+    user_id = int(current_user.get_id() or 0)
       
     subreddit = Subreddit.query.get(subreddit_id)
     if subreddit == None:
@@ -160,7 +160,7 @@ def subreddits_join(subreddit_id):
 @subreddit_routes.route('<int:subreddit_id>/leave', methods=["DELETE"])
 @login_required
 def subreddits_leave(subreddit_id):
-    user_id = int(current_user.get_id())
+    user_id = int(current_user.get_id() or 0)
         
     subreddit_check = Subreddit.query.get(subreddit_id)
     if subreddit_check == None:

@@ -1,0 +1,73 @@
+/* -----------------------------------------------------------------------*/
+
+/* Single Comment CSS */
+
+/* -----------------------------------------------------------------------*/
+/* Single Comment - Comment Header Row */
+.comment-profile-plus-icon {
+	height: 2em;
+	width: 2em;
+}
+
+/* -----------------------------------------------------------------------*/
+/* Single Comment - Comment Body Container */
+.comment-body {
+	margin-left: 2.7em;
+	font-size: 15px;
+}
+
+.comment-status-bar {
+	margin-left: 2.5em;
+}
+
+/* -----------------------------------------------------------------------*/
+/* Single Comment - Reply Button Container */
+.comment-reply-container {
+	height: 2em;
+	width: 6em;
+	border-radius: 20px;
+	color: #697b84;
+}
+
+.comment-reply-container:hover {
+	background-color: #2a3236;
+	color: #eef1f3;
+}
+
+/* -----------------------------------------------------------------------*/
+/* Single Comment - Vote Arrows */
+.comment-vote-container {
+	gap: 0.5em;
+	width: fit-content;
+	max-width: 6em;
+}
+
+.comment-vote-arrow {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+    
+	height: 1em;
+	width: 1em;
+	border-radius: 100%;
+}
+
+.comment-vote-arrow:hover {
+	background-color: #223237;
+}
+
+.comment-likes-total {
+	width: fit-content;
+	max-width: 3.5em;
+}
+
+.comment-liked-true {
+    color: #ff4500;
+    background-color: transparent;
+}
+
+.comment-disliked-true {
+    color: #6a5cff;
+    background-color: transparent;
+}

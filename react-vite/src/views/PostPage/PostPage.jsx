@@ -10,9 +10,10 @@ import CommentSection from "./CommentSection";
 import { loadPostThunk } from "../../redux/post";
 import { loadCurrentUserOnePostLikesThunk } from "../../redux/postLike";
 import { loadPostCommentsThunk } from "../../redux/comment";
+import { loadCurrentUserOnePostCommentLikesThunk } from "../../redux/commentLike";
 
 export default function PostPage() {
-	const dispatch = useDispatch();
+    const dispatch = useDispatch();
 	const params = useParams();
 	// const subredditName = params.subredditName;
 	const postId = Number(params.postId);
@@ -24,6 +25,7 @@ export default function PostPage() {
 		const sendDispatches = async () => {
 			await dispatch(loadPostThunk(postId));
 			await dispatch(loadPostCommentsThunk(postId));
+			await dispatch(loadCurrentUserOnePostCommentLikesThunk(postId));
 			await dispatch(loadCurrentUserOnePostLikesThunk(postId)).then((res) => {
 				setPostLikeStatus(res);
 			});
@@ -39,7 +41,7 @@ export default function PostPage() {
 	const post = useSelector((state) => state.post.posts[postId]);
 	const comments = useSelector((state) => state.comment.comments);
 	const commentsById = useSelector((state) => state.comment.commentsById);
-	// const userLikeStatus = useSelector((state) => state.postLike.likedPosts);
+	const userCommentLikes = useSelector((state) => state.commentLike.likedComments);
 
 	return (
 		load &&
@@ -51,7 +53,7 @@ export default function PostPage() {
 				</section>
 				{/* <section className="post-border" /> */}
 				<section>
-					<CommentSection comments={comments} commentsById={commentsById}/>
+					<CommentSection comments={comments} commentsById={commentsById} userCommentLikes={userCommentLikes}/>
 				</section>
 			</div>
 		)

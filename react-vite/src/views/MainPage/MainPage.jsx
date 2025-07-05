@@ -1,20 +1,14 @@
 import "./MainPage.css";
 
-import Modal from "../../components/Modals/Modal";
 import { useEffect, useState } from "react";
 
-// import ReactDOM from "react-dom";
-// import SignUpForm from "../../components/Modals/SignUpModal/SignUpForm";
-import LoginForm from "../../components/Modals/LoginModal/LoginForm";
 import SinglePost from "../../components/SinglePost/SinglePost";
 import { useDispatch, useSelector } from "react-redux";
 import { loadPostsThunk } from "../../redux/post";
 import { loadCurrentUserAllPostLikesThunk } from "../../redux/postLike";
-import { useNavigate } from "react-router-dom";
 
 export default function MainPage() {
 	const dispatch = useDispatch();
-	const navigate = useNavigate();
 
 	const [load, setLoad] = useState(false);
 	// const [openModal, setOpenModal] = useState(false);

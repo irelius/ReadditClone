@@ -1,6 +1,6 @@
 import "./ProfileDropDown.css";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../../redux/session";
@@ -9,12 +9,11 @@ import CreateSubredditModal from "../CreateSubredditModal";
 // import SubredditCreateModal from "../SubredditCreateModal";
 
 const ProfileDropDown = ({ isOpen, keepOpen, currUser }) => {
-	if (!isOpen) return null;
-
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-
 	const [openCreateSubredditModal, setOpenCreateSubredditModal] = useState(false);
+
+	if (!isOpen) return null;
 
 	// Redirect to User's Profile page
 	const profileRedirect = (e) => {

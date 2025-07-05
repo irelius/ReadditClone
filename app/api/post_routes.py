@@ -27,7 +27,7 @@ def posts_specific(post_id):
 @post_routes.route("/", methods=["POST"])
 @login_required
 def posts_create_new():
-    user_id = int(current_user.get_id())
+    user_id = int(current_user.get_id() or 0)
 
     form = PostForm()
     form["csrf_token"].data = request.cookies["csrf_token"]
@@ -63,7 +63,7 @@ def posts_create_new():
 @post_routes.route("/<int:post_id>", methods=["PUT"])
 @login_required
 def posts_update_specific(post_id):
-    user_id = int(current_user.get_id())
+    user_id = int(current_user.get_id() or 0)
     
     post_to_edit = Post.query.options(joinedload(Post.users), joinedload(Post.subreddits), joinedload(Post.images)).get(post_id)
     
@@ -86,7 +86,7 @@ def posts_update_specific(post_id):
 @post_routes.route("/<int:post_id>", methods=["DELETE"])
 @login_required
 def posts_delete_specific(post_id):
-    user_id = int(current_user.get_id())
+    user_id = int(current_user.get_id() or 0)
         
     post_to_delete = Post.query.options(joinedload(Post.users), joinedload(Post.subreddits), joinedload(Post.images)).get(post_id)
 
@@ -140,7 +140,7 @@ def posts_comments(post_id):
 @post_routes.route("/<int:post_id>/comments", methods=["POST"])
 @login_required
 def create_comment_on_post(post_id):
-    user_id = int(current_user.get_id())
+    user_id = int(current_user.get_id() or 0)
 
     post_check = Post.query.options(joinedload(Post.users), joinedload(Post.subreddits), joinedload(Post.images)).get(post_id)
     if post_check == None:
@@ -191,12 +191,12 @@ def create_comment_on_post(post_id):
 @post_routes.route("/<int:post_id>/likes", methods=["POST"])
 @login_required
 def handle_like_on_post(post_id):
-    user_id = int(current_user.get_id())
+    user_id = int(current_user.get_id() or 0)
     
     # check if post exists
     post_check = Post.query.get(post_id)
     if post_check == None:
-        return {"errors": ["Post does not exist to like"]}, 404
+        return {"errors": ["Post does not exist to like/dislike"]}, 404
     
     # check if user has a like/dislike on the post already
     existing_like = PostLike.query.options(joinedload(PostLike.posts)).filter(PostLike.post_id == post_id, PostLike.user_id == user_id).first()

@@ -1,4 +1,12 @@
-/* CSS - CommentSection - container for SingleComment components */
-.comment-node-container {
-    margin-left: 2.5em;
+/* -----------------------------------------------------------------------*/
+/* CSS - CommentSection - comment vote arrow css stuff */
+.comment-vote-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+
+	gap: 0.5em;
+	width: fit-content;
+	max-width: 6em;
 }

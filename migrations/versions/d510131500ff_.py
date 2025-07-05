@@ -1,23 +1,23 @@
 """empty message
 
-Revision ID: 44631e906524
+Revision ID: d510131500ff
 Revises: 
-Create Date: 2025-03-04 13:45:06.140442
+Create Date: 2025-07-05 02:10:20.773550
 
 """
 from alembic import op
 import sqlalchemy as sa
 
+import os
+environment = os.environ.get("FLASK_ENV")
+SCHEMA = os.environ.get("SCHEMA")
+
 
 # revision identifiers, used by Alembic.
-revision = '44631e906524'
+revision = 'd510131500ff'
 down_revision = None
 branch_labels = None
 depends_on = None
-
-import os
-environment = os.environ.get("FLASK_ENV")
-schema_name = os.environ.get("SCHEMA")
 
 
 def upgrade():
@@ -70,8 +70,8 @@ def upgrade():
     op.create_table('comments',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('body', sa.String(), nullable=False),
-    sa.Column('is_reply', sa.Boolean(), nullable=False),
-    sa.Column('deleted', sa.Boolean(), nullable=False),
+    sa.Column('is_reply', sa.Boolean(), nullable=True),
+    sa.Column('deleted', sa.Boolean(), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
     sa.Column('replies_id', sa.Integer(), nullable=True),
@@ -107,23 +107,25 @@ def upgrade():
     sa.Column('like_status', sa.String(), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
+    sa.Column('post_id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('comment_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['comment_id'], ['comments.id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
+    # ### end Alembic commands ###
     
     if environment == "production":
-        op.execute(f"ALTER TABLE subreddits SET SCHEMA {schema_name};")
-        op.execute(f"ALTER TABLE users SET SCHEMA {schema_name};")
-        op.execute(f"ALTER TABLE posts SET SCHEMA {schema_name};")
-        op.execute(f"ALTER TABLE users_subreddits SET SCHEMA {schema_name};")
-        op.execute(f"ALTER TABLE comments SET SCHEMA {schema_name};")
-        op.execute(f"ALTER TABLE images SET SCHEMA {schema_name};")
-        op.execute(f"ALTER TABLE post_likes SET SCHEMA {schema_name};")
-        op.execute(f"ALTER TABLE comment_likes SET SCHEMA {schema_name};")
-    # ### end Alembic commands ###
+        op.execute(f"ALTER TABLE subreddits SET SCHEMA {SCHEMA};")
+        op.execute(f"ALTER TABLE users SET SCHEMA {SCHEMA};")
+        op.execute(f"ALTER TABLE posts SET SCHEMA {SCHEMA};")
+        op.execute(f"ALTER TABLE user_subreddits SET SCHEMA {SCHEMA};")
+        op.execute(f"ALTER TABLE comments SET SCHEMA {SCHEMA};")
+        op.execute(f"ALTER TABLE images SET SCHEMA {SCHEMA};")
+        op.execute(f"ALTER TABLE post_likes SET SCHEMA {SCHEMA};")
+        op.execute(f"ALTER TABLE comment_likes SET SCHEMA {SCHEMA};")
+        
 
 
 def downgrade():

@@ -1,8 +1,9 @@
+/* -----------------------------------------------------------------------*/
 /* CSS - PostPage - main container stuff */
 .post-page-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    
-    width: 50em;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+
+	width: 50em;
 }

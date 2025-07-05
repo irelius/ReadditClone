@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 // import { ModalProvider, Modal } from "../context/Modal";
 
 import { authenticate } from "./redux/session";
@@ -15,7 +15,9 @@ export default function App() {
 	const [load, setLoad] = useState(false);
 
 	useEffect(() => {
-		dispatch(authenticate()).then(() => setLoad(true));
+		dispatch(authenticate()).then(() => {
+			setLoad(true);
+		});
 	}, [dispatch]);
 
 	return (
@@ -27,6 +29,7 @@ export default function App() {
 						<Route exact path="/" element={<MainPage />} />
 						<Route exact path="/test" element={<TestPage />} />
 						<Route exact path="/r/:subredditName/:postId" element={<PostPage />} />
+                        <Route path="/search/:searchTerm" element={<TestPage />} />
 					</Routes>
 				</div>
 			</>

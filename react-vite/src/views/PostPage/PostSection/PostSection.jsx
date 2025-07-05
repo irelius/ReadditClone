@@ -1,19 +1,19 @@
 import "./PostSection.css";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 import TimeAgo from "javascript-time-ago";
 import millify from "millify";
 import en from "javascript-time-ago/locale/en";
 
 import { handlePostLikesThunk } from "../../../redux/postLike";
-import postLikeHandlerHelper from "../../../helper/postLikeHandlerHelper";
+import likeHandlerHelper from "../../../helper/likeHandlerHelper";
 
 export default function PostSection({ post, postLikeStatus, setPostLikeStatus }) {
 	const dispatch = useDispatch();
-	const navigate = useNavigate();
+	// const navigate = useNavigate();
 
 	TimeAgo.addLocale(en);
 	const timeAgo = new TimeAgo("en-US");
@@ -31,6 +31,7 @@ export default function PostSection({ post, postLikeStatus, setPostLikeStatus })
 	const [createNewComment, setCreateNewComment] = useState(false);
 	const [inputFocused, setInputFocused] = useState(false);
 	const [newComment, setNewComment] = useState("");
+	const [likeError, setLikeError] = useState(null);
 
 	// function to handle image rotation
 	const imageRotation = (dir) => {
@@ -45,7 +46,7 @@ export default function PostSection({ post, postLikeStatus, setPostLikeStatus })
 		// e.stopPropagation();
 		dispatch(handlePostLikesThunk(action, post.id)).then((res) => {
 			if (res) {
-				postLikeHandlerHelper(action, setPostLikesCount, postLikeStatus, setPostLikeStatus);
+				likeHandlerHelper(action, setPostLikesCount, postLikeStatus, setPostLikeStatus);
 			} else {
 				if (action === "like") setLikeError("Oops. There was an error liking this post.");
 				else setLikeError("Oops. There was an error disliking this post.");
@@ -100,18 +101,22 @@ export default function PostSection({ post, postLikeStatus, setPostLikeStatus })
 			{/* PostSection - vote and comment section */}
 			<section className="dfr aic gap-1em post-bottom-section">
 				{/* vote aside */}
-				<aside className={`dfr aic jcc font-white background-gray vote-container post-${postLikeStatus}`}>
+				<aside className={`dfr aic jcc font-white background-gray post-vote-container post-${postLikeStatus}`}>
 					<aside>
 						<i
 							onClick={(e) => handlePostLike(e, "like")}
-							className={`pointer vote-arrow arrow-up-${postLikeStatus === "like"} fa-regular fa-circle-up`}
+							className={`pointer post-vote-arrow
+                                liked-${postLikeStatus === "like"}
+                                fa-regular fa-circle-up`}
 						/>
 					</aside>
 					<aside className={`dfr aic jcc post-likes-total font-12`}>{millify(postLikesCount)}</aside>
 					<aside>
 						<i
 							onClick={(e) => handlePostLike(e, "dislike")}
-							className={`pointer vote-arrow arrow-down-${postLikeStatus === "dislike"} fa-regular fa-circle-down`}
+							className={`pointer post-vote-arrow 
+                                disliked-${postLikeStatus === "dislike"}
+                                fa-regular fa-circle-down`}
 						/>
 					</aside>
 				</aside>
@@ -143,7 +148,7 @@ export default function PostSection({ post, postLikeStatus, setPostLikeStatus })
 							autoFocus
 							className="create-comment-input"
 							onClick={() => setInputFocused(true)}
-							onBlur={(e) => setInputFocused(false)}
+							onBlur={() => setInputFocused(false)}
 							onChange={(e) => setNewComment(e.target.value)}
 						/>
 						<section

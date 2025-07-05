@@ -1,175 +1,263 @@
 /* -----------------------------------------------------------------------*/
 
-
 /* Login Modal Form CSS */
-
 
 /* -----------------------------------------------------------------------*/
 /* Modal Main Container */
 
 .login-modal-main-container {
-    display: flex;
-    flex-direction: column;
+	display: flex;
+	flex-direction: column;
 
-    width: 400px;
+	width: 30em;
 
-    border-radius: 10px;
+	border-radius: 15px;
 
-    background-color: white;
+	background-color: #181c1f;
 }
-
 
 /* -----------------------------------------------------------------------*/
 /* Form Modal Exit Container */
 
 .login-modal-exit-container {
-    display: flex;
-    justify-content: flex-end;
+	display: flex;
+	justify-content: flex-end;
 }
 
 .login-modal-exit-button {
-    margin: 10px;
+	position: fixed;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 1em;
 
-    border: none;
+	height: 2em;
+	width: 2em;
 
-    color: #878A8C;
-    background-color: inherit;
+	border-radius: 100%;
+
+	color: white;
+	background-color: #2a3236;
 }
 
 .login-modal-exit-button:hover {
-    cursor: pointer;
+	background-color: #333d42;
 }
-
-
 
 /* -----------------------------------------------------------------------*/
-/* Form Modal Main Container */
+/* Form Modal Form Container */
 
-.login-form-modal-main-container {
-    display: flex;
-    flex-direction: column;
+.login-modal-form-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 
-    margin: 50px;
-    margin-top: 15px;
+	margin: 3em;
+	margin-left: 5em;
+	margin-right: 5em;
+	/* gap: 0.75em; */
 }
 
-.login-form-modal-text-container {
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    font-size: 14px;
+/* -----------------------------------------------------------------------*/
+/* Form Modal Intro Blurb Container */
+
+.login-modal-form-blurb-container {
+	margin-bottom: 1.5em;
+	color: #b7cad4;
 }
 
+/* -----------------------------------------------------------------------*/
+/* Form Modal Intro Blurb Container */
+.login-modal-form-sign-up-shortcut-container {
+	font-size: 14px;
+	color: #b7cad4;
+
+	margin-top: 0.5em;
+	margin-bottom: 1.5em;
+}
+
+.login-modal-form-sign-up-link {
+	color: #5d83e7;
+}
+
+/* -----------------------------------------------------------------------*/
+/* Form Modal Both */
+
+.login-modal-form-input-container {
+	height: 3.75em;
+	width: 100%;
+
+	border: 2px solid transparent;
+	border-radius: 20px;
+
+	color: #b7cad4;
+	background-color: #2a3236;
+}
+
+.login-modal-form-input-container:hover {
+	background-color: #333d42;
+}
+
+.login-modal-form-input {
+	padding-left: 25px;
+
+	height: 300%;
+
+	border-radius: 20px;
+}
+
+.login-modal-form-error-icon {
+	position: fixed;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	margin-left: 17.5em;
+	color: #ff4f40;
+}
 
 /* -----------------------------------------------------------------------*/
 /* Form Modal Email Section */
 
-.login-form-modal-email-container {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 15px;
+.login-modal-form-email-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 
-    width: 100%;
+	gap: 0.3em;
+	margin-bottom: 0.5em;
 }
 
-.login-form-modal-email-input {
-    padding-left: 20px;
-
-    height: 35px;
-    width: 100%;
-
-    border: 1px solid white;
-    border-radius: 35px;
-
-    background-color: #F6F7F8;
+.login-modal-email-error-true {
+	border: 2px solid #ff4f40;
 }
 
-.login-form-modal-email-input:hover {
-    border: 1px solid #C5C6C6;
+.email-input-focused-false {
+	position: relative;
+    top: 17.5px;
+    left: 25px;
+
+	font-size: 16px;
+
+	width: fit-content;
+	pointer-events: none;
+
+	transition: all 0.25s ease-in-out;
 }
 
+.email-input-focused-true {
+	position: relative;
+    top: 7.5px;
+    left: 25px;
+
+	width: fit-content;
+
+	font-size: 12px;
+	pointer-events: none;
+
+	transition: all 0.25s ease-in-out;
+}
+
+.login-modal-form-errors-container {
+	height: 0.75em;
+	margin-left: 1em;
+
+	color: #ff4f40;
+}
 
 /* -----------------------------------------------------------------------*/
 /* Form Modal Password Section */
 
-.login-form-modal-password-container {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 40px;
+.login-modal-form-password-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 
-    width: 100%;
+	gap: 0.3em;
+	margin-bottom: 0.5em;
 }
 
-.login-form-modal-password-input {
-    padding-left: 20px;
-
-    height: 35px;
-    width: 100%;
-
-    border: 1px solid white;
-    border-radius: 35px;
-
-    background-color: #F6F7F8;
+.login-modal-password-error-true {
+	border: 2px solid #ff4f40;
 }
 
-.login-form-modal-password-input:hover{
-    border: 1px solid #C5C6C6;
+.password-input-focused-false {
+    position: relative;
+    top: 17.5px;
+    left: 25px;
+
+	font-size: 16px;
+
+	width: fit-content;
+	pointer-events: none;
+
+	transition: all 0.25s ease-in-out;
 }
 
+.password-input-focused-true {
+    position: relative;
+    top: 7.5px;
+    left: 25px;
+
+	width: fit-content;
+
+	font-size: 12px;
+	pointer-events: none;
+
+	transition: all 0.25s ease-in-out;
+}
+
+/* -----------------------------------------------------------------------*/
+.login-modal-form-button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	height: 3em;
+	width: 100%;
+
+	border: 2px solid #d93a00;
+	border-radius: 35px;
+
+	color: white;
+	background-color: #d93a00;
+}
 
 /* -----------------------------------------------------------------------*/
 /* Form Modal Demo User Login Section */
 
-.login-form-modal-demo-container {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 10px;
-
-    width: 100%
+.login-modal-form-demo-container {
+	display: flex;
+	justify-content: center;
+	margin-bottom: 10px;
 }
 
-.login-form-modal-demo-button {
-    height: 35px;
-    width: 100%;
+.modal-demo-user-button {
+	border: 3px solid white;
 
-    border: none;
-    border-radius: 35px;
-
-    color: white;
-    background-color: #D93A00;
+	color: white;
+	background-color: transparent;
 }
 
-.login-form-modal-demo-button:hover {
-    cursor: pointer;
-
-    background-color: #DC4A14;
+.modal-demo-user-button:hover {
+	background-color: #2a3236;
 }
-
 
 /* -----------------------------------------------------------------------*/
 /* Form Modal Login Section */
 
-.login-form-modal-login-container {
+/* .login-modal-form-login-container {
     display: flex;
     justify-content: center;
 
     width: 100%;
-}
+} */
 
-.login-form-login-button {
-    height: 35px;
-    width: 100%;
-
-    border: none;
-    border-radius: 35px;
-
-    color: white;
-    background-color: #D93A00;
-}
-
-.login-form-login-button:hover {
+/* .login-form-login-button:hover {
     cursor: pointer;
 
     background-color: #DC4A14;
-}
-
+} */
 
 /* -----------------------------------------------------------------------*/
