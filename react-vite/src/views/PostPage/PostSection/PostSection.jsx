@@ -87,14 +87,13 @@ export default function PostSection({ postId, setNewCommentCreated }) {
 				errorSetter(res, commentError);
 				if (res.type !== "ERROR_COMMENT") {
 					setNewCommentCreated((prev) => !prev);
-                    setCommentsCount(prev => prev + 1)
+					setCommentsCount((prev) => prev + 1);
 				}
 			});
+            setNewComment("");
+            setInputFocused(false);
+            setCreateNewComment(false);
 		}
-
-        setNewComment("")
-        setInputFocused(false)
-        setCreateNewComment(false)
 	};
 
 	return (
@@ -187,6 +186,7 @@ export default function PostSection({ postId, setNewCommentCreated }) {
 							<div className="create-comment-textholder">Join the conversation</div>
 						</div>
 					) : (
+						// PostSection - comment form
 						<form
 							onSubmit={(e) => handleComment(e)}
 							className={`create-comment-section-${createNewComment} border-highlight-${inputFocused} comment-error-border-${
