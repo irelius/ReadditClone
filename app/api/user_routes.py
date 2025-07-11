@@ -208,13 +208,13 @@ def current_user_comments_likes():
     comment_likes = CommentLike.query.filter(CommentLike.user_id == user_id).all()
     
     liked_comments_data = {
-        "liked_comments_by_id": [],
-        "liked_comments": {},
+        "comment_likes_by_id": [],
+        "all_comment_likes": {},
     }
     
     for comment_like in comment_likes:
-        liked_comments_data["liked_comments_by_id"].append(comment_like.comment_id)
-        liked_comments_data["liked_comments"][comment_like.comment_id] = comment_like.to_dict()
+        liked_comments_data["comment_likes_by_id"].append(comment_like.comment_id)
+        liked_comments_data["all_comment_likes"][comment_like.comment_id] = comment_like.to_dict()
     
     return liked_comments_data
 
@@ -227,13 +227,13 @@ def current_user_post_comments_likes(post_id):
     comment_likes = CommentLike.query.filter(CommentLike.user_id == user_id, CommentLike.post_id == post_id).all()
     
     liked_comments_data = {
-        "liked_comments_by_id": [],
-        "liked_comments": {},
+        "comment_likes_by_id": [],
+        "all_comment_likes": {},
     }
     
     for comment_like in comment_likes:
-        liked_comments_data["liked_comments_by_id"].append(comment_like.comment_id)
-        liked_comments_data["liked_comments"][comment_like.comment_id] = comment_like.to_dict()
+        liked_comments_data["comment_likes_by_id"].append(comment_like.comment_id)
+        liked_comments_data["all_comment_likes"][comment_like.comment_id] = comment_like.to_dict()
     
     return liked_comments_data
 

@@ -55,7 +55,7 @@ export const loadPostsThunk = () => async (dispatch) => {
 
 // load a specific post
 export const loadPostThunk = (postId) => async (dispatch) => {
-	const res = await fetch(`/api/posts/${postId}`);
+    const res = await fetch(`/api/posts/${postId}`);
 	const data = await res.json();
 	if (res.ok) return dispatch(loadPosts(data));
 	return dispatch(errorPost(data));

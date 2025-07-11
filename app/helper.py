@@ -122,7 +122,7 @@ def return_post_likes(post_likes, action_type):
 
 #  ---------------------------- Comment Helper Function ----------------------------
 # returns "comments_by_id" and "all_comments"
-def return_comments(comments):
+def return_comments(comments):    
     if comments[0] == None:
         return {"errors": ["Comment does not exist"]}, 404
     

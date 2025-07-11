@@ -83,7 +83,7 @@ export const handleCommentLikesThunk = (likeInfo, commentId, postId) => async (d
 
 	const data = await res.json();
 	if (res.ok) {
-		dispatch(handleCommentLikes(data));
+		dispatch(handleCommentLikes(data, data.action_type));
 		return data;
 	}
 	dispatch(errorCommentLike(data));
@@ -102,27 +102,22 @@ const commentLikesReducer = (state = initialState, action) => {
 
 	// gets the id that would be returned from a single post query
 	const commentLikeId =
-		action.payload && "liked_comments_by_id" in action.payload ? action.payload.liked_comments_by_id[0] : null;
+		action.payload && "comment_likes_by_id" in action.payload ? action.payload.comment_likes_by_id[0] : null;
 
 	switch (action.type) {
 		case LOAD_COMMENT_LIKES:
-			newState.likedCommentsById = action.payload.liked_comments_by_id;
-			newState.likedComments = action.payload.liked_comments;
+			newState.likedCommentsById = action.payload.comment_likes_by_id;
+			newState.likedComments = action.payload.all_comment_likes;
 			return newState;
-		// case HANDLE_COMMENT_LIKES:
-		// 	newState.likedCommentsById.push(commentLikeId);
-		// 	newState.likedComments[commentLikeId] = action.payload.liked_comments;
-		// 	return newState;
-
         case CREATE_COMMENT_LIKE:
 			newState.likedCommentsById.push(commentLikeId);
-			newState.likedComments[commentLikeId] = action.payload.liked_comments[commentLikeId];
+			newState.likedComments[commentLikeId] = action.payload.all_comment_likes[commentLikeId];
 			newState.likedCommentsById.push(commentLikeId);
-			newState.likedComments[commentLikeId] = action.payload.liked_comments[commentLikeId];
+			newState.likedComments[commentLikeId] = action.payload.all_comment_likes[commentLikeId];
 			return newState;
 		case UPDATE_COMMENT_LIKE:
-			newState.likedComments[commentLikeId] = action.payload.liked_comments[commentLikeId];
-			newState.likedComments[commentLikeId] = action.payload.liked_comments[commentLikeId];
+			newState.likedComments[commentLikeId] = action.payload.all_comment_likes[commentLikeId];
+			newState.likedComments[commentLikeId] = action.payload.all_comment_likes[commentLikeId];
 			return newState;
 		case DELETE_COMMENT_LIKE:
 			newState.likedCommentsById = newState.likedCommentsById.filter((el) => el !== action.payload.id);

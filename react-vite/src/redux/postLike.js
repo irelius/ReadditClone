@@ -72,10 +72,10 @@ export const loadUserPostLikesThunk = (userId) => async (dispatch) => {
 
 // create a like/dislike on a post
 export const handlePostLikesThunk = (likeInfo, postId) => async (dispatch) => {
-	const res = await fetch(`/api/posts/${postId}/likes`, {
-		method: "POST",
+    const res = await fetch(`/api/posts/${postId}/likes`, {
+        method: "POST",
 		headers: {
-			"Content-Type": "application/json",
+            "Content-Type": "application/json",
 		},
 		body: JSON.stringify({ like_status: likeInfo }),
 	});

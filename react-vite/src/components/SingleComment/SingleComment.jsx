@@ -10,7 +10,7 @@ import { handleCommentLikesThunk } from "../../redux/commentLike";
 import likeHandlerHelper from "../../helper/likeHandlerHelper";
 
 export default function SingleComment({ comment, userCommentLikes, depth = 1 }) {
-	if (!comment) return null;
+	if (!("id" in comment)) return null;
 
 	const dispatch = useDispatch();
 
