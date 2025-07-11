@@ -36,11 +36,6 @@ export default function SingleComment({ comment, userCommentLikes, depth = 1 }) 
 		marginLeft: `2.3em`,
 	};
 
-	const handleCommentDisplay = (e) => {
-		e.stopPropagation();
-		setDisplay((prev) => !prev);
-	};
-
 	const handleCommentLike = (e, action) => {
 		e.stopPropagation();
 		dispatch(handleCommentLikesThunk(action, commentId, postId)).then((res) => {
@@ -54,11 +49,11 @@ export default function SingleComment({ comment, userCommentLikes, depth = 1 }) 
 	};
 
 	return (
-		<div className="">
-			{/* single comment - comment container */}
-			<section className="dfc gap-05em margin-b-1em">
+		<div>
+			{/* single comment - comment itself (not replies) */}
+			<section>
 				{/* single comment - header row (profile name, image, time posted) */}
-				<section className="dfr aic gap-05em" onClick={(e) => handleCommentDisplay(e)}>
+				<section className="dfr aic gap-05em comment-header-section" onClick={() => setDisplay((prev) => !prev)}>
 					{display ? (
 						<img className="small-icon" src={profileImage} />
 					) : (
@@ -67,52 +62,59 @@ export default function SingleComment({ comment, userCommentLikes, depth = 1 }) 
 						</div>
 					)}
 					<aside className="font-14 font-bold">{username}</aside>
-					<aside className="dfr aic">
-						<i className="fa-solid fa-circle dot font-gray"></i>
-					</aside>
+					<i className="fa-solid fa-circle dot font-gray"></i>
 					<aside className="font-14 font-gray">{time}</aside>
 				</section>
 
 				{/* single comment - comment body (comment and vote/comment/etc. section) */}
 				{display ? (
-					<section className="dfc gap-05em">
-						{/* single comment - comment body */}
-						<section className="comment-body">{comment.body}</section>
+					<section className="comment-body-container">
+						{/* single comment - collapse line */}
+						<aside onClick={() => setDisplay((prev) => !prev)} className="comment-collapse-container pointer">
+							<i className="fa-solid fa-circle-minus comment-collapse-icon"></i>
+							<section className="comment-collapse-line"></section>
+						</aside>
 
-						{/* single comment - comment bar (likes, replies, etc.) */}
-						<section className="dfr aic gap-05em comment-status-bar">
-							{/* single comment - comment bar VOTE section */}
-							<aside className="dfr aic font-gray comment-vote-container">
-								<aside>
-									<i
-										onClick={(e) => handleCommentLike(e, "like")}
-										className={`pointer comment-vote-arrow
+						{/* */}
+						<aside className="dfc gap-05em comment-body-section">
+							{/* single comment - comment body */}
+							<section className="comment-body">{comment.body}</section>
+
+							{/* single comment - comment bar (likes, replies, etc.) */}
+							<section className="dfr aic comment-status-bar">
+								{/* single comment - comment bar VOTE section */}
+								<aside className="dfr aic font-gray comment-vote-container">
+									<aside>
+										<i
+											onClick={(e) => handleCommentLike(e, "like")}
+											className={`pointer comment-vote-arrow
                                             comment-liked-${commentLikeStatus === "like"}
                                             liked-${commentLikeStatus === "like"}
                                             fa-regular fa-circle-up fa-xl`}></i>
-								</aside>
-								<aside className="comment-likes-total font-12">{millify(commentLikesCount)}</aside>
-								<aside>
-									<i
-										onClick={(e) => handleCommentLike(e, "dislike")}
-										className={`pointer comment-vote-arrow 
+									</aside>
+									<aside className="comment-likes-total font-12">{millify(commentLikesCount)}</aside>
+									<aside>
+										<i
+											onClick={(e) => handleCommentLike(e, "dislike")}
+											className={`pointer comment-vote-arrow 
                                             comment-disliked-${commentLikeStatus === "dislike"}
                                             disliked-${commentLikeStatus === "dislike"}
                                             fa-regular fa-circle-down fa-xl`}></i>
+									</aside>
 								</aside>
-							</aside>
 
-							{/* single comment - comment bar REPLY section */}
-							<aside className="dfr jcc aic gap-05em pointer comment-reply-container">
-								<aside>
-									<i className="fa-solid fa-comment"></i>
+								{/* single comment - comment bar REPLY section */}
+								<aside className="dfr jcc aic gap-05em pointer comment-reply-container">
+									<aside>
+										<i className="fa-solid fa-comment"></i>
+									</aside>
+									<aside>Reply</aside>
 								</aside>
-								<aside>Reply</aside>
-							</aside>
 
-							{/* single comment - comment bar ETC section */}
-							<aside></aside>
-						</section>
+								{/* single comment - comment bar ETC section */}
+								<aside></aside>
+							</section>
+						</aside>
 					</section>
 				) : (
 					<></>
@@ -126,7 +128,7 @@ export default function SingleComment({ comment, userCommentLikes, depth = 1 }) 
 						const reply = replies[el];
 						return (
 							<div key={el} className="dfc">
-								<section>
+								<section className="margin-t-05em">
 									<SingleComment comment={reply} userCommentLikes={userCommentLikes} depth={depth + 1} />
 								</section>
 							</div>

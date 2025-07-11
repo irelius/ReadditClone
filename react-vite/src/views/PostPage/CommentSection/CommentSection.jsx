@@ -23,7 +23,7 @@ export default function CommentSection({ postId, newCommentCreated }) {
 			{commentsById.map((el) => {
 				const currComment = comments[el];
 				return (
-					<div key={el} className="dfc margin-b-1em">
+					<div key={el} className="dfc margin-b-2em">
 						<SingleComment comment={currComment} userCommentLikes={userCommentLikes} />
 					</div>
 				);
