@@ -11,7 +11,7 @@ export default function CreateSubredditModal({ isOpen, keepOpen, currUser }) {
 
 	const [subredditName, setSubredditName] = useState("");
 	const [subredditDescription, setSubredditDescription] = useState("");
-	const [subredditDescriptionLength, setSubbredditDescriptionLength] = useState(0);
+	const [subredditDescriptionLength, setSubredditDescriptionLength] = useState(0);
 	const [errors, setErrors] = useState({
 		name: [],
 		description: [],
@@ -68,7 +68,7 @@ export default function CreateSubredditModal({ isOpen, keepOpen, currUser }) {
 					value={subredditName}
 					onChange={(e) => {
 						setSubredditName(e.target.value);
-						setSubbredditDescriptionLength(e.target.value.length);
+						setSubredditDescriptionLength(e.target.value.length);
 					}}
 				/>
 			</section>

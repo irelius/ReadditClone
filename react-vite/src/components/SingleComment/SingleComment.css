@@ -4,6 +4,11 @@
 
 /* -----------------------------------------------------------------------*/
 /* Single Comment - Comment Header Row */
+.comment-header-section {
+	height: 2em;
+	min-height: 2em;
+}
+
 .comment-profile-plus-icon {
 	height: 2em;
 	width: 2em;
@@ -11,13 +16,90 @@
 
 /* -----------------------------------------------------------------------*/
 /* Single Comment - Comment Body Container */
+.comment-body-container {
+	display: flex;
+	flex-direction: row;
+	padding-bottom: 0.5em;
+	gap: 0.5em;
+}
+
+.comment-body-section {
+	margin-top: 0.75em;
+}
+
 .comment-body {
-	margin-left: 2.7em;
 	font-size: 15px;
 }
 
+/* Single Comment - Comment Collapse Container */
+.comment-collapse-container {
+	display: flex;
+	justify-content: center;
+	align-items: flex-end;
+	width: 2em;
+	min-width: 2em;
+}
+
+.comment-collapse-icon {
+	position: absolute;
+	margin-bottom: 0.5em;
+
+	color: #2c3033;
+	border-radius: 100%;
+	background-color: black;
+}
+
+.comment-collapse-container:hover > .comment-collapse-icon {
+	color: #a1aeb5;
+}
+
+.comment-collapse-line {
+	height: 85%;
+	width: 1px;
+	background-color: #2c3033;
+}
+
+.comment-collapse-container:hover > .comment-collapse-line {
+	background-color: #a1aeb5;
+}
+
+/* -----------------------------------------------------------------------*/
+/* Single Comment - Vote Arrows */
 .comment-status-bar {
-	margin-left: 2.5em;
+	gap: 1.5em;
+}
+
+.comment-vote-container {
+	width: fit-content;
+	max-width: 6em;
+}
+
+.comment-vote-arrow {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+
+	border-radius: 100%;
+}
+
+.comment-vote-arrow:hover {
+	background-color: #223237;
+}
+
+.comment-likes-total {
+	width: fit-content;
+	max-width: 3.5em;
+}
+
+.comment-liked-true {
+	color: #ff4500;
+	background-color: transparent;
+}
+
+.comment-disliked-true {
+	color: #6a5cff;
+	background-color: transparent;
 }
 
 /* -----------------------------------------------------------------------*/
@@ -32,42 +114,4 @@
 .comment-reply-container:hover {
 	background-color: #2a3236;
 	color: #eef1f3;
-}
-
-/* -----------------------------------------------------------------------*/
-/* Single Comment - Vote Arrows */
-.comment-vote-container {
-	gap: 0.5em;
-	width: fit-content;
-	max-width: 6em;
-}
-
-.comment-vote-arrow {
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	align-items: center;
-    
-	height: 1em;
-	width: 1em;
-	border-radius: 100%;
-}
-
-.comment-vote-arrow:hover {
-	background-color: #223237;
-}
-
-.comment-likes-total {
-	width: fit-content;
-	max-width: 3.5em;
-}
-
-.comment-liked-true {
-    color: #ff4500;
-    background-color: transparent;
-}
-
-.comment-disliked-true {
-    color: #6a5cff;
-    background-color: transparent;
 }

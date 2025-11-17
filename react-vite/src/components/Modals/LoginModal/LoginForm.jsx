@@ -25,7 +25,12 @@ const LoginForm = ({ currUser, keepOpen }) => {
 	const handleLogin = async (e) => {
 		e.preventDefault();
 
-		dispatch(login({ email, password })).then((res) => {
+		const demoUser = {
+			email: "demo@user.io",
+			password: "password",
+		};
+
+		dispatch(login(demoUser)).then((res) => {
 			errorSetter(res, setErrors);
 			if (res.type === "LOAD_SESSION") {
 				keepOpen(false);
@@ -193,8 +198,6 @@ const LoginForm = ({ currUser, keepOpen }) => {
 								className="login-modal-form-button modal-demo-user-button pointer font-14 font-bold"
 								onClick={() => {
 									setErrors({ email: [], password: [] });
-									setEmail("demo@user.io");
-									setPassword("password");
 								}}
 								type="submit">
 								Demo User

@@ -1,6 +1,6 @@
 from flask import Blueprint, request
 from flask_login import current_user, login_required
-from app.models import db, Post, Comment, Subreddit, User, PostLike, UserSubreddit
+from app.models import db, Post, PostLike, Comment, CommentLike, Subreddit, User, UserSubreddit
 from app.forms import PostForm, LikeForm, PostCommentForm, UpdatePostForm
 from app.aws import (
     upload_file_to_s3, allowed_file, get_unique_filename)
@@ -149,6 +149,7 @@ def create_comment_on_post(post_id):
     form = PostCommentForm()
     form["csrf_token"].data = request.cookies["csrf_token"]
 
+
     if form.validate_on_submit():
         new_comment = Comment(
             body = form.data["body"],
@@ -164,8 +165,20 @@ def create_comment_on_post(post_id):
 
         db.session.add(new_comment)
         db.session.commit()
+                
+        # Auto like the post by the creator
+        post_data = new_comment.to_dict()
+        auto_comment_like = CommentLike(
+            like_status = "like",
+            comment_id = new_comment.id,
+            user_id = user_id,
+            post_id = post_id
+        )
+        
+        db.session.add(auto_comment_like)
+        db.session.commit()
 
-        return return_comments(new_comment)
+        return return_comments([new_comment])
 
     return {"errors": validation_error_message(form.errors)}, 401
 
