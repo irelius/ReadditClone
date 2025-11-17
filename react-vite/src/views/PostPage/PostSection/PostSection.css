@@ -1,8 +1,10 @@
+/* -----------------------------------------------------------------------*/
 /* CSS - PostSection - main container stuff */
 .post-section-container {
 	/* nothing for now */
 }
 
+/* -----------------------------------------------------------------------*/
 /* CSS - PostSection - post info section */
 .small-icon {
 	height: 2em;
@@ -12,6 +14,7 @@
 	background-color: #ff4500;
 }
 
+/* -----------------------------------------------------------------------*/
 /* CSS - PostSection - images icon */
 .post-section-image-container {
 	display: flex;
@@ -27,12 +30,14 @@
 	background-color: black;
 }
 
+/* -----------------------------------------------------------------------*/
 /* CSS - PostSection - post body section */
 .post-body-section {
 	margin-top: 0.5em;
 	margin-bottom: 1em;
 }
 
+/* -----------------------------------------------------------------------*/
 /* CSS - PostSection - create a comment on a post section */
 .create-comment-container {
 	margin-top: 0.5em;
@@ -85,6 +90,9 @@
 	width: 100%;
 }
 
+/* -----------------------------------------------------------------------*/
+/* CSS - PostSection - create comment buttons */
+
 /* create comment section buttons */
 .create-comment-buttons-container {
 	display: flex;
@@ -100,9 +108,32 @@
 	border-radius: 1.5em;
 }
 
+.create-comment-cancel:hover {
+    background-color: #2a3236;
+}
+
 .create-comment-confirm {
 	padding: 0.75em;
 	color: white;
 	background-color: #0045ac;
 	border-radius: 1.5em;
+}
+
+.create-comment-confirm:hover {
+    background-color: #3077CC;
+}
+
+
+/* -----------------------------------------------------------------------*/
+/* CSS - PostSection - create comment error section */
+
+.create-comment-error-container {
+    margin-top: 1em;
+    margin-left: 1em;
+
+    color: #ff0000;
+}
+
+.comment-error-border-true {
+    border: 2px solid #ff0000 !important;
 }

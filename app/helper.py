@@ -122,7 +122,7 @@ def return_post_likes(post_likes, action_type):
 
 #  ---------------------------- Comment Helper Function ----------------------------
 # returns "comments_by_id" and "all_comments"
-def return_comments(comments):
+def return_comments(comments):    
     if comments[0] == None:
         return {"errors": ["Comment does not exist"]}, 404
     
@@ -157,15 +157,18 @@ def return_comments_flat(comments):
     
 #  ------------------------- Comment Likes Helper Function -------------------------
 # returns "comment_likes_by_id" and "all_comment_likes"
-def return_comment_likes(comment_likes):
-    comment_likes_by_id = []
-    all_comment_likes = {}
-    
-    for comment in comment_likes:
-        comment_likes_by_id.append(comment.id)
-        all_comment_likes[comment.id] = comment.to_dict()
-    
-    return {
-        "comment_likes_by_id": comment_likes_by_id,
-        "all_comment_likes": all_comment_likes
+def return_comment_likes(comment_likes, action_type):
+    like_info = {
+        "action_type": action_type,
+        "comment_likes_by_id": [],
+        "all_comment_likes": {},
     }
+    
+    if len(comment_likes) == 0:
+        return like_info
+    
+    for comment_like in comment_likes:
+        like_info["comment_likes_by_id"].append(comment_like.id)
+        like_info["all_comment_likes"][comment_like.id] = comment_like.to_dict()
+    
+    return like_info

@@ -1,23 +1,24 @@
 import { useNavigate } from "react-router-dom";
 import "./CreateSubredditModal.css";
 import { useDispatch } from "react-redux";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { createSubredditThunk } from "../../../redux/subreddit";
 import errorSetter from "../../../helper/error";
 
 export default function CreateSubredditModal({ isOpen, keepOpen, currUser }) {
-	if (!isOpen) return null;
-
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
 	const [subredditName, setSubredditName] = useState("");
 	const [subredditDescription, setSubredditDescription] = useState("");
-	const [subredditDescriptionLength, setSubbredditDescriptionLength] = useState(0);
+	const [subredditDescriptionLength, setSubredditDescriptionLength] = useState(0);
 	const [errors, setErrors] = useState({
 		name: [],
 		description: [],
 	});
+    
+	if (!isOpen) return null;
+
 
 	const createSubreddit = async (e) => {
 		e.preventDefault();
@@ -67,7 +68,7 @@ export default function CreateSubredditModal({ isOpen, keepOpen, currUser }) {
 					value={subredditName}
 					onChange={(e) => {
 						setSubredditName(e.target.value);
-						setSubbredditDescriptionLength(e.target.value.length);
+						setSubredditDescriptionLength(e.target.value.length);
 					}}
 				/>
 			</section>

@@ -12,6 +12,11 @@ class CommentLike(db.Model):
     like_status = db.Column(db.String, nullable=False, default="neutral")
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    
+    # No relationship set because this is only to allow for a query to work more efficiently
+    #   There should be no need to query Posts and filter by a specific CommentLike
+    #   If there is, then this should be a relationship
+    post_id = db.Column(db.Integer, nullable=False)
 
     # Many to One Relationships, Undirection TO Like
     user_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("users.id")), nullable=False)
@@ -21,6 +26,7 @@ class CommentLike(db.Model):
         return {
             "id": self.id,
             "user_id": self.user_id,
+            "post_id": self.post_id,
             "comment_id": self.comment_id,
             "like_status": self.like_status,
             'created_at': self.created_at,

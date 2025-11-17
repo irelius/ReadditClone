@@ -7,7 +7,8 @@ def seed_comment_likes():
         new_comment_like = CommentLike(
             like_status= x["like_status"],
             user_id= x["user_id"],
-            comment_id= x["comment_id"] 
+            comment_id= x["comment_id"],
+            post_id = x["post_id"]
         )
         db.session.add(new_comment_like)
 

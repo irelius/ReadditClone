@@ -2,11 +2,13 @@
     {
         "like_status": "like",
         "user_id": 1,
-        "comment_id": 10
+        "comment_id": 10,
+        "post_id": 2
     },
     {
         "like_status": "dislike",
         "user_id": 2,
-        "comment_id": 10
+        "comment_id": 10,
+        "post_id": 2
     }
 ]

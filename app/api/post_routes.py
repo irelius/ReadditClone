@@ -1,6 +1,6 @@
 from flask import Blueprint, request
 from flask_login import current_user, login_required
-from app.models import db, Post, Comment, Subreddit, User, PostLike, UserSubreddit
+from app.models import db, Post, PostLike, Comment, CommentLike, Subreddit, User, UserSubreddit
 from app.forms import PostForm, LikeForm, PostCommentForm, UpdatePostForm
 from app.aws import (
     upload_file_to_s3, allowed_file, get_unique_filename)
@@ -27,7 +27,7 @@ def posts_specific(post_id):
 @post_routes.route("/", methods=["POST"])
 @login_required
 def posts_create_new():
-    user_id = int(current_user.get_id())
+    user_id = int(current_user.get_id() or 0)
 
     form = PostForm()
     form["csrf_token"].data = request.cookies["csrf_token"]
@@ -63,7 +63,7 @@ def posts_create_new():
 @post_routes.route("/<int:post_id>", methods=["PUT"])
 @login_required
 def posts_update_specific(post_id):
-    user_id = int(current_user.get_id())
+    user_id = int(current_user.get_id() or 0)
     
     post_to_edit = Post.query.options(joinedload(Post.users), joinedload(Post.subreddits), joinedload(Post.images)).get(post_id)
     
@@ -86,7 +86,7 @@ def posts_update_specific(post_id):
 @post_routes.route("/<int:post_id>", methods=["DELETE"])
 @login_required
 def posts_delete_specific(post_id):
-    user_id = int(current_user.get_id())
+    user_id = int(current_user.get_id() or 0)
         
     post_to_delete = Post.query.options(joinedload(Post.users), joinedload(Post.subreddits), joinedload(Post.images)).get(post_id)
 
@@ -140,7 +140,7 @@ def posts_comments(post_id):
 @post_routes.route("/<int:post_id>/comments", methods=["POST"])
 @login_required
 def create_comment_on_post(post_id):
-    user_id = int(current_user.get_id())
+    user_id = int(current_user.get_id() or 0)
 
     post_check = Post.query.options(joinedload(Post.users), joinedload(Post.subreddits), joinedload(Post.images)).get(post_id)
     if post_check == None:
@@ -148,6 +148,7 @@ def create_comment_on_post(post_id):
 
     form = PostCommentForm()
     form["csrf_token"].data = request.cookies["csrf_token"]
+
 
     if form.validate_on_submit():
         new_comment = Comment(
@@ -164,8 +165,20 @@ def create_comment_on_post(post_id):
 
         db.session.add(new_comment)
         db.session.commit()
+                
+        # Auto like the post by the creator
+        post_data = new_comment.to_dict()
+        auto_comment_like = CommentLike(
+            like_status = "like",
+            comment_id = new_comment.id,
+            user_id = user_id,
+            post_id = post_id
+        )
+        
+        db.session.add(auto_comment_like)
+        db.session.commit()
 
-        return return_comments(new_comment)
+        return return_comments([new_comment])
 
     return {"errors": validation_error_message(form.errors)}, 401
 
@@ -191,12 +204,12 @@ def create_comment_on_post(post_id):
 @post_routes.route("/<int:post_id>/likes", methods=["POST"])
 @login_required
 def handle_like_on_post(post_id):
-    user_id = int(current_user.get_id())
+    user_id = int(current_user.get_id() or 0)
     
     # check if post exists
     post_check = Post.query.get(post_id)
     if post_check == None:
-        return {"errors": ["Post does not exist to like"]}, 404
+        return {"errors": ["Post does not exist to like/dislike"]}, 404
     
     # check if user has a like/dislike on the post already
     existing_like = PostLike.query.options(joinedload(PostLike.posts)).filter(PostLike.post_id == post_id, PostLike.user_id == user_id).first()

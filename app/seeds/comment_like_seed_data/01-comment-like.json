@@ -1,12 +1,14 @@
 [
-    {
-        "like_status": "dislike",
-        "user_id": 1,
-        "comment_id": 1
-    },
-    {
-        "like_status": "like",
-        "user_id": 2,
-        "comment_id": 1
-    }
+	{
+		"like_status": "dislike",
+		"user_id": 1,
+		"comment_id": 1,
+		"post_id": 1
+	},
+	{
+		"like_status": "like",
+		"user_id": 2,
+		"comment_id": 1,
+		"post_id": 1
+	}
 ]

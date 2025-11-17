@@ -7,6 +7,10 @@ from flask import current_app
 
 from alembic import context
 
+import os
+environment = os.environ.get("FLASK_ENV")
+SCHEMA = os.environ.get("SCHEMA")
+
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
@@ -96,6 +100,9 @@ def run_migrations_online():
         )
 
         with context.begin_transaction():
+            if environment == "production":
+                connection.execute(f"CREATE SCHEMA IF NOT EXISTS {SCHEMA};")
+                context.execute(f"SET search_path TO {SCHEMA};")
             context.run_migrations()
 
 
