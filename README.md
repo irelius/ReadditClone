@@ -26,7 +26,7 @@ ___
    3. Run `pipenv shell` to start the virtual environment
 2. Run the following commands to create start a local session
    1. In the `RedditClone` directory, run `flask run`
-   2. In the `react-app` directory, run `npm start`
+   2. In the `react-vite` directory, run `npm start`
 
 ___
 
