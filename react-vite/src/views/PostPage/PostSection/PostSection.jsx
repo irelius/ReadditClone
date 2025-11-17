@@ -7,17 +7,18 @@ import TimeAgo from "javascript-time-ago";
 import millify from "millify";
 import en from "javascript-time-ago/locale/en";
 
-import { handlePostLikesThunk, loadCurrentUserOnePostLikesThunk } from "../../../redux/postLike";
-import likeHandlerHelper from "../../../helper/likeHandlerHelper";
 import { createCommentOnPostThunk } from "../../../redux/comment";
-import errorSetter from "../../../helper/error";
 import { loadPostThunk } from "../../../redux/post";
+import { handlePostLikesThunk, loadCurrentUserOnePostLikesThunk } from "../../../redux/postLike";
+
+import likeHandlerHelper from "../../../helper/likeHandlerHelper";
+import errorSetter from "../../../helper/error";
 
 export default function PostSection({ postId, setNewCommentCreated }) {
 	const dispatch = useDispatch();
 
-	TimeAgo.addLocale(en);
-	const timeAgo = new TimeAgo("en-US");
+	// TimeAgo.addLocale(en);
+	// const timeAgo = new TimeAgo("en-US");
 
 	// post stuff
 	const [postLikeStatus, setPostLikeStatus] = useState("neutral");
@@ -40,7 +41,7 @@ export default function PostSection({ postId, setNewCommentCreated }) {
 		dispatch(loadCurrentUserOnePostLikesThunk(postId)).then((res) => {
 			setPostLikeStatus(res);
 		});
-	}, []);
+	}, [dispatch, postId]);
 
 	const post = useSelector((state) => state.post.posts[postId]);
 
@@ -48,6 +49,8 @@ export default function PostSection({ postId, setNewCommentCreated }) {
 		if (post) {
 			setPostLikesCount(post.total_likes);
 			setCommentsCount(post.comments_count);
+			TimeAgo.addLocale(en);
+			const timeAgo = new TimeAgo("en-US");
 			setTime(timeAgo.format(new Date(post.created_at), "round"));
 		}
 	}, [post]);
@@ -57,7 +60,7 @@ export default function PostSection({ postId, setNewCommentCreated }) {
 		if (dir === "left") {
 			setImageIndex((prev) => Math.max(prev - 1, 0));
 		} else if (dir === "right") {
-			setImageIndex((prev) => Math.min(prev + 1, imagesById.length - 1));
+			setImageIndex((prev) => Math.min(prev + 1, post.images.images_by_id.length - 1));
 		}
 	};
 
@@ -90,50 +93,21 @@ export default function PostSection({ postId, setNewCommentCreated }) {
 					setCommentsCount((prev) => prev + 1);
 				}
 			});
-            setNewComment("");
-            setInputFocused(false);
-            setCreateNewComment(false);
+			setNewComment("");
+			setInputFocused(false);
+			setCreateNewComment(false);
 		}
 	};
 
 	return (
-<<<<<<< HEAD
-		<div className="dfc post-section-container gap-05em">
-			{/* PostSection - post top section (subreddit and poster info) */}
-			<section className="dfr gap-05em">
-				<aside className="small-icon dfr jcc aic pointer">
-					<i className="fa-brands fa-reddit-alien fa-xl"></i>
-				</aside>
-				<aside className="dfc jcc gap-3px">
-					<section className="dfr aic gap-5px">
-						<aside className="font-12 font-light-gray pointer">r/{subreddit}</aside>
-						<aside className="dfr aic">
-							<i className="fa-solid fa-circle dot font-gray"></i>
-						</aside>
-						<aside className="font-12 font-gray">{time}</aside>
-					</section>
-					<section className="font-12 pointer">u/{poster}</section>
-				</aside>
-			</section>
-
-			{/* PostSection - post title */}
-			<section className="font-bold font-24">{title}</section>
-
-			{/* PostSection - image section (if images exist) */}
-			{imagesById.length > 0 ? (
-				<section className="post-section-image-container dfr aic">
-					<aside
-						className={`image-arrow-container image-arrow-${imageIndex === 0}`}
-						onClick={() => imageRotation("left")}>
-						<i className={`fa-solid fa-chevron-left fa-xl`}></i>
-=======
 		post && (
 			<div className="dfc post-section-container gap-05em">
+				{/* Temporarily set `likeError` here, will need to apply CSS */}
+				<section>{likeError}</section>
 				{/* PostSection - post top section (subreddit and poster info) */}
 				<section className="dfr gap-05em">
 					<aside className="small-icon dfr jcc aic pointer">
 						<i className="fa-brands fa-reddit-alien fa-xl"></i>
->>>>>>> staging
 					</aside>
 					<aside className="dfc jcc gap-3px">
 						<section className="dfr aic gap-5px">
@@ -158,9 +132,14 @@ export default function PostSection({ postId, setNewCommentCreated }) {
 							onClick={() => imageRotation("left")}>
 							<i className={`fa-solid fa-chevron-left fa-xl`}></i>
 						</aside>
-						<img className="post-image" src={`${post.images.images[post.images.images_by_id[imageIndex]].image_url}`} />
+						<img
+							className="post-image"
+							src={`${post.images.images[post.images.images_by_id[imageIndex]].image_url}`}
+						/>
 						<aside
-							className={`image-arrow-container image-arrow-${imageIndex === post.images.images_by_id.length - 1}`}
+							className={`image-arrow-container image-arrow-${
+								imageIndex === post.images.images_by_id.length - 1
+							}`}
 							onClick={() => imageRotation("right")}>
 							<i className={`fa-solid fa-chevron-right fa-xl`}></i>
 						</aside>
@@ -175,7 +154,8 @@ export default function PostSection({ postId, setNewCommentCreated }) {
 				{/* PostSection - vote and comment section */}
 				<section className="dfr aic gap-1em post-bottom-section">
 					{/* vote aside */}
-					<aside className={`dfr aic jcc font-white background-gray post-vote-container post-${postLikeStatus}`}>
+					<aside
+						className={`dfr aic jcc font-white background-gray post-vote-container post-${postLikeStatus}`}>
 						<aside>
 							<i
 								onClick={() => handlePostLike("like")}

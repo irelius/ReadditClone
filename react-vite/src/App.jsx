@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-// import { ModalProvider, Modal } from "../context/Modal";
+import { useDispatch } from "react-redux";
 
 import { authenticate } from "./redux/session";
 import MainPage from "./views/MainPage";
 import NavBar from "./components/NavBar";
 import TestPage from "./views/TestPage";
 import PostPage from "./views/PostPage/PostPage";
-// import SignUpForm from "./components/Modals/SignUpModal/SignUpForm";
 
 export default function App() {
 	const dispatch = useDispatch();

@@ -27,42 +27,6 @@ def comments_specific(comment_id):
     child = aliased(Comment)
     
     post_id = comment_check.post_id
-<<<<<<< HEAD
-
-    # have to use sqlalchemy core format because CTE doesn't work with the legacy sqlalchemy orm object format
-    #   could just use regular recursion to get the comment tree, but that hits database too many times
-    #   CTE allows for recursion in less database queries
-    initial_comment = select(Comment.id).where(Comment.id == comment_id, Comment.post_id == post_id)
-    
-    recursive = select(child.id).where(
-        child.replies_id == parent.id,
-        child.post_id == post_id
-    )
-
-    cte = initial_comment.union_all(recursive).cte(name="comment_tree", recursive=True)
-    
-    final_query = (
-        select(Comment)
-        .where(Comment.id.in_(select(cte.c.id)))
-        .options(selectinload(Comment.replies), selectinload(Comment.users), selectinload(Comment.comment_likes))
-    )
-    db.session.execute(final_query).scalars().all()
-
-    comment_by_id = []
-    all_comments = {}
-
-    initial_comment = Comment.query.filter(Comment.id == comment_id, Comment.replies_id == None).all()
-    for x in initial_comment:
-        comment = x.to_dict()
-        comment_by_id.append(comment['id'])
-        all_comments[comment["id"]] = comment
-    
-    return {
-        "comments_by_id": comment_by_id,
-        "all_comments": all_comments
-    }
-=======
->>>>>>> staging
 
     # have to use sqlalchemy core format because CTE doesn't work with the legacy sqlalchemy orm object format
     #   could just use regular recursion to get the comment tree, but that hits database too many times

@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-/* CSS - CommentSection - container for SingleComment components */
-.comment-node-container {
-    margin-left: 2.5em;
-}
-=======
 /* -----------------------------------------------------------------------*/
 /* CSS - CommentSection - comment vote arrow css stuff */
 .comment-vote-container {
@@ -16,4 +10,3 @@
 	width: fit-content;
 	max-width: 6em;
 }
->>>>>>> staging

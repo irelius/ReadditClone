@@ -21,7 +21,7 @@ export default function MainPage() {
 		sendDispatches().then(() => {
 			setLoad(true);
 		});
-	}, []);
+	}, [dispatch]);
 
 	const posts = useSelector((state) => state.post.posts);
 	const postsById = useSelector((state) => state.post.postsById);

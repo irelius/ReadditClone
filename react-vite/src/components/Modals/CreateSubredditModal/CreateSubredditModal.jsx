@@ -5,7 +5,7 @@ import { useState } from "react";
 import { createSubredditThunk } from "../../../redux/subreddit";
 import errorSetter from "../../../helper/error";
 
-export default function CreateSubredditModal({ isOpen, keepOpen, currUser }) {
+export default function CreateSubredditModal({ isOpen, keepOpen }) {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
@@ -16,9 +16,8 @@ export default function CreateSubredditModal({ isOpen, keepOpen, currUser }) {
 		name: [],
 		description: [],
 	});
-    
-	if (!isOpen) return null;
 
+	if (!isOpen) return null;
 
 	const createSubreddit = async (e) => {
 		e.preventDefault();
@@ -32,7 +31,7 @@ export default function CreateSubredditModal({ isOpen, keepOpen, currUser }) {
 			errorSetter(res, setErrors);
 			if (res.type === "CREATE_SUBREDDIT") {
 				keepOpen(false);
-                return navigate(`/r/${subredditName}`)
+				return navigate(`/r/${subredditName}`);
 			}
 		});
 	};
@@ -55,7 +54,9 @@ export default function CreateSubredditModal({ isOpen, keepOpen, currUser }) {
 			</section>
 			<section className="header-name-container">
 				<section className="header-name">Name</section>
-				<section className="header-warning">Community names including capitalization cannot be changed.</section>
+				<section className="header-warning">
+					Community names including capitalization cannot be changed.
+				</section>
 			</section>
 			<section className="subreddit-name-input-main-container">
 				<aside className="subreddit-name-input-r">r/</aside>
@@ -82,7 +83,9 @@ export default function CreateSubredditModal({ isOpen, keepOpen, currUser }) {
 			</div>
 			<section className="header-description-container">
 				<section className="header-description">Description (Optional)</section>
-				<section className="header-warning">Give your community a description. This can be changed later.</section>
+				<section className="header-warning">
+					Give your community a description. This can be changed later.
+				</section>
 			</section>
 			<section className="subreddit-description-input-main-container">
 				<textarea

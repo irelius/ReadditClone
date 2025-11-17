@@ -46,11 +46,6 @@ export const loadCurrentUserOneCommentLikesThunk = (commentId) => async (dispatc
 	return dispatch(errorCommentLike(data));
 };
 
-<<<<<<< HEAD
-// load like status for one comment made by current user
-export const loadCurrentUserOneCommentLikesThunk = (commentId) => async (dispatch) => {
-	const res = await fetch(`/api/users/current/comments/${commentId}/likes`);
-=======
 // load all comments likes on a specific post by current user
 export const loadCurrentUserOnePostCommentLikesThunk = (postId) => async (dispatch) => {
     const res = await fetch(`/api/users/current/posts/${postId}/comments/likes`)
@@ -62,17 +57,8 @@ export const loadCurrentUserOnePostCommentLikesThunk = (postId) => async (dispat
 // load all comment likes for all comments made by current user
 export const loadCurrentUserAllCommentsLikesThunk = () => async (dispatch) => {
 	const res = await fetch(`/api/users/current/comment_likes`);
->>>>>>> staging
 	const data = await res.json();
 	if (res.ok) return dispatch(loadCommentLikes(data));
-	return dispatch(errorCommentLike(data));
-};
-
-// load all comment likes for all comments made by current user
-export const loadCurrentUserAllCommentsLikesThunk = (userId) => async (dispatch) => {
-	const res = await fetch(`/api/users/current/comment_likes`);
-	const data = await res.json();
-	if (res.ok) return dispatch(loadCommentLikes(res));
 	return dispatch(errorCommentLike(data));
 };
 

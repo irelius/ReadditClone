@@ -23,17 +23,16 @@ export default function SinglePost({ post, likeStatus = null }) {
 
 	const [load, setLoad] = useState(false);
 	const [imageIndex, setImageIndex] = useState(0);
-	// const [commentsCount, setCommentsCount] = useState(post.comments_count);
 	const [postLikeStatus, setPostLikeStatus] = useState(likeStatus);
 	const [likesCount, setLikesCount] = useState(post.total_likes);
 	const [likeError, setLikeError] = useState(null);
 
-    const subreddit = post.subreddits;
-    const imagesById = post.images.images_by_id;
-    const images = post.images.images;
-    const postId = post.id
+	const subreddit = post.subreddits;
+	const imagesById = post.images.images_by_id;
+	const images = post.images.images;
+	const postId = post.id;
 
-    useEffect(() => {
+	useEffect(() => {
 		if (postId) {
 			setLoad(true);
 		}
@@ -68,6 +67,8 @@ export default function SinglePost({ post, likeStatus = null }) {
 				onClick={(e) => {
 					redirectToPostPage(e, navigate, postId, subreddit.name);
 				}}>
+				{/* Temporarily set `likeError` here, will need to apply CSS */}
+				<section>{likeError}</section>
 				{/* Single Post - top section (subreddit name & icon, post date) */}
 				<section className="dfr aic gap-5px">
 					<aside className="reddit-logo-container dfr jcc aic color-white">
@@ -117,18 +118,23 @@ export default function SinglePost({ post, likeStatus = null }) {
 				{/* SinglePost - vote and comment section */}
 				<section className="dfr aic gap-1em post-bottom-section">
 					{/* vote aside */}
-					<aside className={`dfr aic jcc font-white background-gray post-vote-container post-${postLikeStatus}`}>
+					<aside
+						className={`dfr aic jcc font-white background-gray post-vote-container post-${postLikeStatus}`}>
 						<aside>
 							<i
 								onClick={(e) => handlePostLike(e, "like")}
-								className={`pointer post-vote-arrow liked-${postLikeStatus === "like"} fa-regular fa-circle-up`}
+								className={`pointer post-vote-arrow liked-${
+									postLikeStatus === "like"
+								} fa-regular fa-circle-up`}
 							/>
 						</aside>
 						<aside className={`dfr aic jcc post-likes-total font-12`}>{millify(likesCount)}</aside>
 						<aside>
 							<i
 								onClick={(e) => handlePostLike(e, "dislike")}
-								className={`pointer post-vote-arrow disliked-${postLikeStatus === "dislike"} fa-regular fa-circle-down`}
+								className={`pointer post-vote-arrow disliked-${
+									postLikeStatus === "dislike"
+								} fa-regular fa-circle-down`}
 							/>
 						</aside>
 					</aside>

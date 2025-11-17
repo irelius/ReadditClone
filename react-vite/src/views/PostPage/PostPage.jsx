@@ -19,21 +19,6 @@ export default function PostPage() {
 	const [newCommentCreated, setNewCommentCreated] = useState(false);
 
 	return (
-<<<<<<< HEAD
-		load &&
-		post &&
-		comments && (
-			<div className="post-page-container font-white dfc gap-2em">
-				<section>
-					<PostSection post={post} postLikeStatus={postLikeStatus} setPostLikeStatus={setPostLikeStatus} />
-				</section>
-				{/* <section className="post-border" /> */}
-				<section>
-					<CommentSection comments={comments} commentsById={commentsById}/>
-				</section>
-			</div>
-		)
-=======
 		<div className="post-page-container font-white dfc gap-2em">
 			<section>
 				<PostSection postId={postId} setNewCommentCreated={setNewCommentCreated} />
@@ -46,6 +31,5 @@ export default function PostPage() {
 				/>
 			</section>
 		</div>
->>>>>>> staging
 	);
 }

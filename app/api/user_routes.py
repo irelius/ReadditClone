@@ -95,11 +95,7 @@ def user_posts(user_id):
 @user_routes.route("/current/posts")
 @login_required
 def current_user_posts():
-<<<<<<< HEAD
-    user_id = int(current_user.get_id())
-=======
     user_id = int(current_user.get_id() or 0)
->>>>>>> staging
     posts = Post.query.options(joinedload(Post.users), joinedload(Post.subreddits), joinedload(Post.images), joinedload(Post.post_likes), joinedload(Post.comments)).filter(Post.user_id == user_id).all()
     return return_posts(posts)
 
@@ -207,27 +203,11 @@ def user_comment_likes(user_id):
 @login_required
 @user_routes.route("/current/comments/all/likes")
 def current_user_comments_likes():
-<<<<<<< HEAD
-    user_id = int(current_user.get_id())
-=======
     user_id = int(current_user.get_id() or 0)
->>>>>>> staging
     
     comment_likes = CommentLike.query.filter(CommentLike.user_id == user_id).all()
     
     liked_comments_data = {
-<<<<<<< HEAD
-        "liked_comments_by_id": [],
-        "liked_comments": {},
-    }
-    
-    for comment_like in comment_likes:
-        liked_comments_data["liked_comments_by_id"].append(comment_like.comment_id)
-        liked_comments_data["liked_comments"][comment_like.comment_id] = comment_like.to_dict()
-    
-    return liked_comments_data
-
-=======
         "comment_likes_by_id": [],
         "all_comment_likes": {},
     }
@@ -258,7 +238,6 @@ def current_user_post_comments_likes(post_id):
     return liked_comments_data
 
 
->>>>>>> staging
 # Get like status of a comment by current user
 @user_routes.route("/current/comments/<int:comment_id>/likes")
 @login_required
@@ -270,9 +249,4 @@ def current_user_comment_likes(comment_id):
         return {"errors": ["Comment does not exist."]}, 404
 
     comment_likes = CommentLike.query.filter(CommentLike.comment_id == comment_id, CommentLike.user_id == user_id).all()
-<<<<<<< HEAD
     return return_comment_likes(comment_likes)
-
-=======
-    return return_comment_likes(comment_likes)
->>>>>>> staging

@@ -4,78 +4,25 @@ import TimeAgo from "javascript-time-ago";
 import millify from "millify";
 import en from "javascript-time-ago/locale/en";
 
-<<<<<<< HEAD
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-
-export default function SingleComment({ comment, depth = 1 }) {
-	if (!comment) {
-		return;
-	}
-
-    const dispatch = useDispatch()
-=======
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { handleCommentLikesThunk } from "../../redux/commentLike";
 import likeHandlerHelper from "../../helper/likeHandlerHelper";
 
 export default function SingleComment({ comment, userCommentLikes, depth = 1 }) {
-	if (!("id" in comment)) return null;
-
 	const dispatch = useDispatch();
->>>>>>> staging
 
 	TimeAgo.addLocale(en);
 	const timeAgo = new TimeAgo("en-US");
 	const time = timeAgo.format(new Date(comment.created_at), "round");
 
-<<<<<<< HEAD
-=======
 	const commentId = comment.id;
 	const postId = comment.post_id;
->>>>>>> staging
 	const replies = comment.replies;
 	const repliesById = comment.replies_by_id;
 	const profileImage = comment.users.profile_image;
 	const username = comment.users.username;
 
-<<<<<<< HEAD
-    const [commentLikeStatus, setCommentLikeStatus] = useState()
-
-    useEffect(() => {
-        // dispatch()
-    }, [])
-
-	const styling = {
-		marginLeft: `2em`,
-	};
-
-	return (
-		<div className="dfc gap-1em">
-			<section className="dfr aic gap-05em">
-				<img className="small-icon" src={profileImage} />
-				<aside className="font-14 font-bold">{username}</aside>
-				<aside className="dfr aic">
-					<i className="fa-solid fa-circle dot font-gray"></i>
-				</aside>
-				<aside className="font-14 font-gray jcc">{time}</aside>
-			</section>
-			<section>{comment.body}</section>
-			<section style={styling}>
-				{repliesById.map((el) => {
-					const reply = replies[el];
-					return (
-						<div key={el} className="dfc gap-05em">
-							{/* <section>{username}</section> */}
-							<section>
-								<SingleComment comment={reply} depth={depth + 1} />
-							</section>
-						</div>
-					);
-				})}
-			</section>
-=======
 	const [display, setDisplay] = useState(true);
 	const [commentLikeStatus, setCommentLikeStatus] = useState(
 		commentId in userCommentLikes ? userCommentLikes[commentId].like_status : "neutral"
@@ -99,12 +46,20 @@ export default function SingleComment({ comment, userCommentLikes, depth = 1 }) 
 		});
 	};
 
+	if (!("id" in comment)) {
+		return null;
+	}
+
 	return (
 		<div>
+            {/* Temporarily set `likeError` here, will need to apply CSS */}
+			<section>{likeError}</section>
 			{/* single comment - comment itself (not replies) */}
 			<section>
 				{/* single comment - header row (profile name, image, time posted) */}
-				<section className="dfr aic gap-05em comment-header-section" onClick={() => setDisplay((prev) => !prev)}>
+				<section
+					className="dfr aic gap-05em comment-header-section"
+					onClick={() => setDisplay((prev) => !prev)}>
 					{display ? (
 						<img className="small-icon" src={profileImage} />
 					) : (
@@ -121,7 +76,9 @@ export default function SingleComment({ comment, userCommentLikes, depth = 1 }) 
 				{display ? (
 					<section className="comment-body-container">
 						{/* single comment - collapse line */}
-						<aside onClick={() => setDisplay((prev) => !prev)} className="comment-collapse-container pointer">
+						<aside
+							onClick={() => setDisplay((prev) => !prev)}
+							className="comment-collapse-container pointer">
 							<i className="fa-solid fa-circle-minus comment-collapse-icon"></i>
 							<section className="comment-collapse-line"></section>
 						</aside>
@@ -180,7 +137,11 @@ export default function SingleComment({ comment, userCommentLikes, depth = 1 }) 
 						return (
 							<div key={el} className="dfc">
 								<section className="margin-t-05em">
-									<SingleComment comment={reply} userCommentLikes={userCommentLikes} depth={depth + 1} />
+									<SingleComment
+										comment={reply}
+										userCommentLikes={userCommentLikes}
+										depth={depth + 1}
+									/>
 								</section>
 							</div>
 						);
@@ -189,7 +150,6 @@ export default function SingleComment({ comment, userCommentLikes, depth = 1 }) 
 			) : (
 				<></>
 			)}
->>>>>>> staging
 		</div>
 	);
 }
